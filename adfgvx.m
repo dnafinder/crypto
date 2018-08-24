@@ -1,5 +1,5 @@
 function out=adfgvx(text,key,direction,varargin)
-% ADFGVX cipher encoder/decoder
+% ADFGVX Cipher encoder/decoder
 % In cryptography, the ADFGVX cipher was a field cipher used by the German
 % Army on the Western Front during World War I. ADFGVX was in fact an
 % extension of an earlier cipher called ADFGX. Invented by Lieutenant Fritz
@@ -59,7 +59,7 @@ function out=adfgvx(text,key,direction,varargin)
 %     encrypted: 'DGDDDAGDDGAFADDFDADVDVFAADVX'
 %         plain: 'ATTACKAT1200AM'
 %
-% See also adfgx, polybius
+% See also adfvgx, foursquare, nihilist, playfair, polybius
 %
 %           Created by Giuseppe Cardillo
 %           giuseppe.cardillo-edta@poste.it

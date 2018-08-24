@@ -1,5 +1,5 @@
 function out=keyword(text,key,direction)
-% KEYWORD CIPHER encoder/decoder
+% KEYWORD Cipher encoder/decoder
 % A keyword cipher is a form of monoalphabetic substitution. A keyword is
 % used as the key, and it determines the letter matchings of the cipher
 % alphabet to the plain alphabet. Repeats of letters in the word are

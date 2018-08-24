@@ -1,5 +1,5 @@
 function out=autokey(text,key,direction)
-% AUTOKEY CIPHER encoder/decoder
+% AUTOKEY Cipher encoder/decoder
 % An autokey cipher is a cipher which incorporates the message (the
 % plaintext) into the key. The key is generated from the message in some
 % automated fashion, sometimes by selecting certain letters from the text,

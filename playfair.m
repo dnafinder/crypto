@@ -1,5 +1,5 @@
 function out=playfair(text,key,direction)
-% PLAYFAIR CIPHER encoder/decoder
+% PLAYFAIR Cipher encoder/decoder
 % The Playfair cipher was the first cipher to encrypt pairs of letters in
 % cryptologic history. Wheatstone invented the cipher for secrecy in
 % telegraphy, but it carries the name of his friend Lord Playfair, first
@@ -45,7 +45,7 @@ function out=playfair(text,key,direction)
 %           key: 'PLAYFAIREXAMPLE'
 %         plain: 'HIDETHEGOLDINTHETREESTUMP'
 %
-% See also polybius, adfgx, adfvgx, nihilist
+% See also adfgx, adfvgx, foursquare, nihilist, polybius
 %
 %           Created by Giuseppe Cardillo
 %           giuseppe.cardillo-edta@poste.it
@@ -86,10 +86,8 @@ ckey=unique(ckey,'stable');
 % 5  T   U   V   W   Z
 
 A=[65:1:73 75:1:90];
-[~,locb]=ismember(ckey,A);
-A(locb)=[];
-PS=reshape([ckey A],[5,5])';
-clear A locb ckey
+PS=reshape([ckey A(~ismember(A,ckey))],[5,5])';
+clear ckey A
 
 switch direction
     case 1 %Encrypt

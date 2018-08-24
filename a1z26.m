@@ -1,5 +1,5 @@
 function out=a1z26(x)
-% A1Z26 CIPHER encoder/decoder
+% A1Z26 Cipher encoder/decoder
 % A1Z26 is very simple direct substitution cypher, where each alphabet
 % letter is replaced by its number in the alphabet. English, 26 letters,
 % alphabet is used and all non-alphabet symbols are not transformed.  

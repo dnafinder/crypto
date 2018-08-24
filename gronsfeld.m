@@ -1,5 +1,5 @@
 function out=gronsfeld(text,key,direction)
-% GRONSFELD CIPHER encoder/decoder
+% GRONSFELD Cipher encoder/decoder
 % Gronsfeld encryption uses the Vigenere method, the difference being that
 % the key is directly numeric, no need to calculate the rank of the letters
 % of the key in the alphabet. However, the corresponding shifts have to be

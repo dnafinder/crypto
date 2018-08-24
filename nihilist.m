@@ -62,7 +62,7 @@ function out=nihilist(x,key1,key2,ms)
 %          key2: 'OCTOBER'
 %         plain: 'DYNAMITEATTHEWINTERPALACE'
 %
-% See also adfgx, adfvgx, playfair, polybius, vigenere
+% See also adfgx, adfvgx, foursquare, playfair, polybius, vigenere
 %
 %           Created by Giuseppe Cardillo
 %           giuseppe.cardillo-edta@poste.it
@@ -137,10 +137,8 @@ ckey1=unique(ckey1,'stable');
 % 3  B   C   D   G   H
 % 4  K   N   O   Q   S
 % 5  T   U   V   W   Z
-[~,locb]=ismember(ckey1,A);
-A(locb)=[];
-PS=reshape([ckey1 A],[ms,ms])';
-clear A locb ckey1
+PS=reshape([ckey1 A(~ismember(A,ckey1))],[ms,ms])';
+clear ckey1
 
 %Key2 encoding
 %key2='OCTOBER'

@@ -1,5 +1,5 @@
 function out=trithemius(text,direction)
-% TRITHEMIUS CIPHER encoder/decoder
+% TRITHEMIUS Cipher encoder/decoder
 % The Trithemius cipher is a polyalphabetic encryption method invented by
 % the German abbot Trithemius during the Renaissance. This code is a
 % sequence of shifts: the first letter is not shifted, the second is

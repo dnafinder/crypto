@@ -1,5 +1,5 @@
 function out=affine(text,key,direction)
-% AFFINE CIPHER encoder/decoder
+% AFFINE Cipher encoder/decoder
 % The affine cipher is a type of monoalphabetic substitution cipher,
 % wherein each letter in an alphabet is mapped to its numeric equivalent,
 % encrypted using a simple mathematical function, and converted back to a

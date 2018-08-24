@@ -1,5 +1,5 @@
 function out=railfence(text,key,direction)
-% RAIL FENCE CIPHER encoder/decoder
+% RAIL FENCE Cipher encoder/decoder
 % The rail fence cipher (also called a zigzag cipher) is a form of
 % transposition cipher. It derives its name from the way in which it is
 % encoded. In the rail fence cipher, the plain text is written downwards

@@ -1,5 +1,5 @@
 function out=adfgx(text,key,direction,varargin)
-% ADFGX cipher encoder/decoder
+% ADFGX Cipher encoder/decoder
 % In cryptography, the ADFGX cipher was a field cipher used by the German
 % Army on the Western Front during World War I. Invented by Lieutenant Fritz
 % Nebel (1891–1977) and introduced in March 1918, the cipher was a
@@ -51,7 +51,7 @@ function out=adfgx(text,key,direction,varargin)
 %     encrypted: 'FAXDFADDDGDGFFFAFAXAFAFX'
 %         plain: 'ATTACKATONCE'
 %
-% See also adfgvx, polybius
+% See also adfgx, foursquare, nihilist, playfair, polybius
 %
 %           Created by Giuseppe Cardillo
 %           giuseppe.cardillo-edta@poste.it

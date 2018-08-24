@@ -1,5 +1,5 @@
 function out=beaufort(text,key,direction)
-% BEAUFORT CIPHER encoder/decoder
+% BEAUFORT Cipher encoder/decoder
 % The Beaufort cipher is a substitution cipher similar to the Vigenère
 % cipher, with a slightly modified enciphering mechanism and tableau. The
 % Beaufort cipher is based on the Beaufort square which is essentially the

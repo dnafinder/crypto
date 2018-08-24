@@ -1,5 +1,5 @@
 function out=vigenere(text,key,direction)
-% VIGENERE CIPHER encoder/decoder
+% VIGENERE Cipher encoder/decoder
 % The Vigenère cipher is a method of encrypting alphabetic text by using a
 % series of interwoven Caesar ciphers based on the letters of a keyword. It
 % is a form of polyalphabetic substitution. Though the cipher is easy to

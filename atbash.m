@@ -1,5 +1,5 @@
 function out=atbash(text)
-% ATBASH CIPHER encoder/decoder
+% ATBASH Cipher encoder/decoder
 % The Atbash cipher is a particular type of monoalphabetic cipher formed by
 % taking the alphabet and mapping it to its reverse, so that the first
 % letter becomes the last letter, the second letter becomes the second to

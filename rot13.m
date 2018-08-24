@@ -1,5 +1,5 @@
 function out=rot13(text)
-% ROT13 CIPHER encoder/decoder
+% ROT13 Cipher encoder/decoder
 % ROT13 ("rotate by 13 places") is a simple letter substitution cipher that
 % replaces a letter with the 13th letter after it, in the alphabet. ROT13
 % is a special case of ROT Cipher. 
