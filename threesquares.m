@@ -51,41 +51,43 @@ PSB=reshape([ckey2 A(~ismember(A,ckey2))],[5,5])';
 PSC=reshape([ckey3 A(~ismember(A,ckey3))],[5,5])';
 clear A ckey*
 
-% To encrypt or decrypt a message, one would break the message into
-% digrams(groups of 2 letters) such that, for example, "HelloWorld" becomes
-% "HE LL OW OR LD".  
-L=length(ctext);
-if mod(L,2)==1 %if plaintext has and odd length
-    ctext(end+1)=88; %add an 'X'
-end
-L=ceil(L/2);
-ctext=reshape(ctext,2,L)';
-ctext2=zeros(L,3);
-
-for I=1:L
-    switch direction
-        case 1 %encrypt
+switch direction
+    case 1 %encrypt
+        % To encrypt a message, one would break the message into
+        % digrams(groups of 2 letters) such that, for example, "HelloWorld" becomes
+        % "HE LL OW OR LD".
+        L=length(ctext);
+        if mod(L,2)==1 %if plaintext has and odd length
+            ctext(end+1)=88; %add an 'X'
+        end
+        L=ceil(L/2);
+        ctext=reshape(ctext,2,L)';
+        ctext2=zeros(L,3);
+        for I=1:L
             [R1,C1]=find(PSA==ctext(I,1)); %find row and column of the 1st digram letter into the Polybius Square A
             [R2,C2]=find(PSB==ctext(I,2)); %find row and column of the 2nd digram letter into the Polybius Square B
             ctext2(I,:)=[PSA(randi([1 5]),C1) PSC(R1,C2) PSB(R2,randi([1 5]))];
-        case -1 %decrypt
-            [R1,C1]=find(PSA==ctext(I,1)); %find row and column of the 1st digram letter into the Polybius Square A
-            [R2,C2]=find(PSB==ctext(I,2)); %find row and column of the 2nd digram letter into the Polybius Square B
-            ctext(I,:)=[PS(R1,C2) PS(R2,C1)];
-    end
-end
-clear PS* R* C* I ctext
-
-switch direction
-    case 1 %encrypt
+        end
+        clear PS* R* C* I ctext
         out.encrypted=char(reshape(ctext2',1,L*3));
+        clear ctext2
     case -1 %decrypt
-        out.plain=char(reshape(ctext',1,L*2));
+        % To decrypt a message, one would break the message into trigrams (groups of 3 letters)
+        L=length(ctext)/3;
+        ctext=reshape(ctext,3,L)';
+        ctext2=zeros(L,2);
+        for I=1:L
+            [~,C1]=find(PSA==ctext(I,1)); %find row and column of the 1st trigram letter into the Polybius Square A
+            [R2,~]=find(PSB==ctext(I,3)); %find row and column of the 3rd trigram letter into the Polybius Square B
+            [R3,C3]=find(PSC==ctext(I,2)); %find row and column of the 2nd trigram letter into the Polybius Square C
+            ctext2(I,:)=[PSA(R3,C1) PSB(R2,C3)];
+        end
+        clear PS* R* C* I ctext
+        out.plain=char(reshape(ctext2',1,L*2));
+        clear ctext2
         if out.plain(end)=='X' && ~ismember(out.plain(end-1),'AEIOUY')
             %if last letter is 'X' and the second last is not a vowel then
             %erase the 'X': it was added to pad text.
             out.plain(end)=[];
         end
 end
-
-
