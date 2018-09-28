@@ -51,7 +51,7 @@ function out=adfgx(text,key,direction,varargin)
 %     encrypted: 'FAXDFADDDGDGFFFAFAXAFAFX'
 %         plain: 'ATTACKATONCE'
 %
-% See also adfgx, foursquare, nihilist, playfair, polybius, twosquare
+% See also adfgx, foursquares, nihilist, playfair, polybius, threesquares, twosquares
 %
 %           Created by Giuseppe Cardillo
 %           giuseppe.cardillo-edta@poste.it
