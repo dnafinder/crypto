@@ -1,32 +1,21 @@
-function out=foursquare(text,key1,key2,direction)
-% FOURSQUARE Cipher encoder/decoder
-% The four-square cipher is a manual symmetric encryption technique.It
-% was invented by the famous French cryptographer Felix Delastelle. The
-% technique encrypts pairs of letters (digraphs), and thus falls into a
-% category of ciphers known as polygraphic substitution ciphers. This adds
-% significant strength to the encryption when compared with monographic
-% substitution ciphers which operate on single characters. The use of
-% digraphs makes the four-square technique less susceptible to frequency
-% analysis attacks, as the analysis must be done on 676 possible digraphs
-% rather than just 26 for monographic substitution. The frequency analysis
-% of digraphs is possible, but considerably more difficult - and it
-% generally requires a much larger ciphertext in order to be useful. The
-% four-square cipher uses four 5x5 Polybius Squares.
-% In general, the upper-left and lower-right matrices are the "plaintext
-% squares" and each contain a standard alphabet. The upper-right and
-% lower-left squares are the "ciphertext squares" and contain a mixed
-% alphabetic sequence. To generate the ciphertext squares, one would first
-% fill in the spaces in the matrix with the letters of a keyword or phrase
-% (dropping any duplicate letters), then fill the remaining spaces with the
-% rest of the letters of the alphabet in order. The key can be
-% written in the top rows of the table, from left to right, or in some
-% other pattern, such as a spiral beginning in the upper-left-hand corner
-% and ending in the center. The keyword together with the conventions for
-% filling in the 5x5 table constitute the cipher key. The four-square
-% algorithm allows for two separate keys, one for each of the two
-% ciphertext matrices.           
+function out=twosquare(text,key1,key2,direction)
+% TWOSQUARE Cipher encoder/decoder
+% The Two-square cipher, also called double Playfair, is a manual symmetric
+% encryption technique. It was developed to ease the cumbersome nature
+% of the large encryption/decryption matrix used in the four-square cipher
+% while still being slightly stronger than the single-square Playfair
+% cipher. The technique encrypts pairs of letters (digraphs), and thus
+% falls into a category of ciphers known as polygraphic substitution
+% ciphers. This adds significant strength to the encryption when compared
+% with monographic substitution ciphers, which operate on single
+% characters. The use of digraphs makes the two-square technique less
+% susceptible to frequency analysis attacks, as the analysis must be done
+% on 676 possible digraphs rather than just 26 for monographic
+% substitution. The frequency analysis of digraphs is possible, but
+% considerably more difficult, and it generally requires a much larger
+% ciphertext in order to be useful.
 % 
-% Syntax: 	out=foursquare(text,key1,key2,direction)
+% Syntax: 	out=twosquare(text,key1,key2,direction)
 %
 %     Input:
 %           text - It is a characters array to encode or decode
@@ -44,7 +33,7 @@ function out=foursquare(text,key1,key2,direction)
 %
 % Examples:
 %
-% out=foursquare('Hide the gold in the tree stump','leprachaun','goblin secret',1)
+% out=twosquare('Hide the gold in the tree stump','leprachaun','goblin secret',1)
 %
 % out = 
 % 
@@ -53,24 +42,23 @@ function out=foursquare(text,key1,key2,direction)
 %         plain: 'HIDETHEGOLDINTHETREESTUMP'
 %          key1: 'LEPRACHAUN'
 %          key2: 'GOBLINSECRET'
-%     encrypted: 'NEALQCERDFRCIPBBOQAISPOHGZ'
+%     encrypted: 'REDCUKGEQEHLNIEHUBBHKISQBX'
 %
-% out=foursquare('NEALQCERDFRCIPBBOQAISPOHGZ','leprachaun','goblin secret',-1)
+% out=twosquare('REDCUKGEQEHLNIEHUBBHKISQBX','leprachaun','goblin secret',-1)
 % 
 % out = 
 % 
 %   struct with fields:
 % 
-%     encrypted: 'NEALQCERDFRCIPBBOQAISPOHGZ'
+%     encrypted: 'REDCUKGEQEHLNIEHUBBHKISQBX'
 %          key1: 'LEPRACHAUN'
 %          key2: 'GOBLINSECRET'
 %         plain: 'HIDETHEGOLDINTHETREESTUMP'
 %
-% See also adfgx, adfvgx, nihilist, playfair, polybius, twosquare
+% See also adfgx, adfvgx, foursquare, nihilist, playfair, polybius
 %
 %           Created by Giuseppe Cardillo
 %           giuseppe.cardillo-edta@poste.it'
-
 
 p = inputParser;
 addRequired(p,'text',@(x) ischar(x));
@@ -99,7 +87,6 @@ out.key2=char(ckey2);
 
 %PS=ASCII CODES FOR [ABCDEFGHIKLMNOPQRSTUVWXYZ]
 A=[65:1:73 75:1:90]; 
-PS=reshape(A,5,5)'; %5x5 Polybius Square
 % Polybius squares generation from Key1 and Key2
 % Using the key "PLAYFAIR EXAMPLE"
 % Chars of the key must be choosen only once
@@ -114,8 +101,14 @@ ckey2=unique(ckey2,'stable');
 % 3  B   C   D   G   H
 % 4  K   N   O   Q   S
 % 5  T   U   V   W   Z
-PSA=reshape([ckey1 A(~ismember(A,ckey1))],[5,5])';
-PSB=reshape([ckey2 A(~ismember(A,ckey2))],[5,5])';
+switch direction
+    case 1
+        PS1=reshape([ckey1 A(~ismember(A,ckey1))],[5,5])'; %5x5 Polybius Square 1
+        PS2=reshape([ckey2 A(~ismember(A,ckey2))],[5,5])'; %5x5 Polybius Square 2
+    case -1
+        PS1=reshape([ckey2 A(~ismember(A,ckey2))],[5,5])'; %5x5 Polybius Square 1
+        PS2=reshape([ckey1 A(~ismember(A,ckey1))],[5,5])'; %5x5 Polybius Square 2
+end
 clear A ckey*
 
 % To encrypt or decrypt a message, one would break the message into
@@ -127,19 +120,18 @@ if mod(L,2)==1 %if plaintext has and odd length
 end
 L=ceil(L/2);
 ctext=reshape(ctext,2,L)';
+
 for I=1:L
-    switch direction
-        case 1 %encrypt
-            [R1,C1]=find(PS==ctext(I,1)); %find row and column of the 1st digram letter into the Polybius Square
-            [R2,C2]=find(PS==ctext(I,2)); %find row and column of the 2nd digram letter into the Polybius Square
-            ctext(I,:)=[PSA(R1,C2) PSB(R2,C1)];
-        case -1 %decrypt
-            [R1,C1]=find(PSA==ctext(I,1)); %find row and column of the 1st digram letter into the Polybius Square A
-            [R2,C2]=find(PSB==ctext(I,2)); %find row and column of the 2nd digram letter into the Polybius Square B
-            ctext(I,:)=[PS(R1,C2) PS(R2,C1)];
+    [R1,C1]=find(PS1==ctext(I,1)); %find row and column of the 1st digram letter into the Polybius Square 1
+    [R2,C2]=find(PS2==ctext(I,2)); %find row and column of the 2nd digram letter into the Polybius Square 2
+    if R1~=R2
+        ctext(I,:)=[PS2(R1,C2) PS1(R2,C1)];
+    else
+        tmp=ctext(I,1); ctext(I,1)=ctext(I,2); ctext(I,2)=tmp; 
     end
 end
-clear PS* R1 R2 C1 C2 I
+clear I R1 C1 R2 C2 PS1 PS2 tmp
+
 switch direction
     case 1 %encrypt
         out.encrypted=char(reshape(ctext',1,L*2));

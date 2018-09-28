@@ -45,7 +45,7 @@ function out=playfair(text,key,direction)
 %           key: 'PLAYFAIREXAMPLE'
 %         plain: 'HIDETHEGOLDINTHETREESTUMP'
 %
-% See also adfgx, adfvgx, foursquare, nihilist, polybius
+% See also adfgx, adfvgx, foursquare, nihilist, polybius, twosquare
 %
 %           Created by Giuseppe Cardillo
 %           giuseppe.cardillo-edta@poste.it
