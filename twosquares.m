@@ -20,7 +20,7 @@ function out=twosquares(text,key1,key2,direction)
 %     Input:
 %           text - It is a characters array to encode or decode
 %           key1 - It is the keyword used to generate Polybius Square A. 
-%           key1 - It is the keyword used to generate Polybius Square B. 
+%           key2 - It is the keyword used to generate Polybius Square B. 
 %           direction - this parameter can assume only two values: 
 %                   1 to encrypt
 %                  -1 to decrypt.

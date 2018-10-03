@@ -22,7 +22,7 @@ function out=foursquares(text,key1,key2,direction)
 % written in the top rows of the table, from left to right, or in some
 % other pattern, such as a spiral beginning in the upper-left-hand corner
 % and ending in the center. The keyword together with the conventions for
-% filling in the 5x5 table constitute the cipher key. The four-square
+% filling in the 5x5 table constitute the cipher key. The four-squares
 % algorithm allows for two separate keys, one for each of the two
 % ciphertext matrices.           
 % 
@@ -31,7 +31,7 @@ function out=foursquares(text,key1,key2,direction)
 %     Input:
 %           text - It is a characters array to encode or decode
 %           key1 - It is the keyword used to generate Polybius Square A. 
-%           key1 - It is the keyword used to generate Polybius Square B. 
+%           key2 - It is the keyword used to generate Polybius Square B. 
 %           direction - this parameter can assume only two values: 
 %                   1 to encrypt
 %                  -1 to decrypt.
