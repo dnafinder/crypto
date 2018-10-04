@@ -82,7 +82,7 @@ function out=threesquares(text,key1,key2,key3,direction)
 %          key3: 'RAINBOW'
 %         plain: 'HIDETHEGOLDINTHETREESTUMP'
 %
-% See also adfgx, adfvgx, foursquares, nihilist, playfair, polybius, threesquares, twosquares
+% See also adfgx, adfvgx, bifid, foursquares, nihilist, playfair, polybius, threesquares, trifid, twosquares
 %
 %           Created by Giuseppe Cardillo
 %           giuseppe.cardillo-edta@poste.it'

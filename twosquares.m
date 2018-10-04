@@ -55,7 +55,7 @@ function out=twosquares(text,key1,key2,direction)
 %          key2: 'GOBLINSECRET'
 %         plain: 'HIDETHEGOLDINTHETREESTUMP'
 %
-% See also adfgx, adfvgx, foursquares, nihilist, playfair, polybius, threesquares
+% See also adfgx, adfvgx, bifid, foursquares, nihilist, playfair, polybius, threesquares, trifid
 %
 %           Created by Giuseppe Cardillo
 %           giuseppe.cardillo-edta@poste.it'
