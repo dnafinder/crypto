@@ -1,5 +1,5 @@
 function out=nihilist(x,key1,key2,ms)
-% NIHILIST Cipher encoder/decoder
+% NIHILIST SUBSTITUTION Cipher encoder/decoder
 % In the history of cryptography, the Nihilist cipher is a manually
 % operated symmetric encryption cipher, originally used by Russian
 % Nihilists in the 1880s to organize terrorism against the tsarist regime.
@@ -62,7 +62,7 @@ function out=nihilist(x,key1,key2,ms)
 %          key2: 'OCTOBER'
 %         plain: 'DYNAMITEATTHEWINTERPALACE'
 %
-% See also adfgx, adfvgx, bifid, foursquare, playfair, polybius, trifid, twosquare, vigenere
+% See also adfgx, adfvgx, bifid, foursquare, nihilist2, playfair, polybius, trifid, twosquare, vigenere
 %
 %           Created by Giuseppe Cardillo
 %           giuseppe.cardillo-edta@poste.it
