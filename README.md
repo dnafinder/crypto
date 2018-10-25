@@ -1,5 +1,5 @@
 # crypto
-A journey into cryptographic algorithms.
+A journey into cryptographic algorithms. <br/>
 We are developing MatLab algorithms to deal ciphers that are all solvable
 by pencil and paper methods, using, as guide and resource, the website of 
 the American Cryptogram Association (ACA)
