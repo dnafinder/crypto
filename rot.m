@@ -54,7 +54,7 @@ function out=rot(text,key,direction)
 %           key: 7
 %         plain: 'GIUSEPPECARDILLO'
 %
-% See also rot13, affine, atbash
+% See also rot13, affine, atbash, ragbaby
 %
 %           Created by Giuseppe Cardillo
 %           giuseppe.cardillo-edta@poste.it
