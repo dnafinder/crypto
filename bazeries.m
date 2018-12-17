@@ -62,9 +62,9 @@ nk=str2double(key);
 assert(nk<1e6,'Key must be less than 1 million')
 
 % ASCII codes for Uppercase letters ranges between 65 and 90;
-ctext=double(upper(text)); ctext(ctext<65 | ctext>90)=[]; ctext=char(ctext);
+ctext=double(upper(text)); ctext(ctext<65 | ctext>90)=[]; 
 % Convert J (ASCII code 74) into I (ASCII code 73)
-ctext(ctext==74)=73;
+ctext(ctext==74)=73; ctext=char(ctext);
 LT=length(ctext);
 % Convert key into a vector
 K=double(key)-48;
