@@ -51,7 +51,7 @@ function out=trifid(text,key,period,direction)
 %        period: 7
 %         plain: 'HIDETHEGOLDINTHETREESTUMP'
 %
-% See also adfgx, adfvgx, bifid, foursquares, nihilist, playfair, polybius, threesquares, twosquares
+% See also adfgx, adfgvx, bifid, checkerboard1, checkerboard2, foursquares, nihilist, playfair, polybius, threesquares, twosquares
 %
 %           Created by Giuseppe Cardillo
 %           giuseppe.cardillo-edta@poste.it

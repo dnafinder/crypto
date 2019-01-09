@@ -67,7 +67,7 @@ function out=polybius(x,ms)
 %         plain: 'GIUSEPPECARDILLO'
 %
 % Many other algorithms are based onto Polybius Square.
-% See also adfgx, adfvgx, bazeries, bifid, foursquares, nihilist, playfair, threesquares, trifid, twosquares
+% See also adfgx, adfgvx, bazeries, bifid, checkerboard1, checkerboard2, foursquares, nihilist, playfair, threesquares, trifid, twosquares
 %
 %           Created by Giuseppe Cardillo
 %           giuseppe.cardillo-edta@poste.it

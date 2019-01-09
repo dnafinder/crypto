@@ -45,7 +45,7 @@ function out=playfair(text,key,direction)
 %           key: 'PLAYFAIREXAMPLE'
 %         plain: 'HIDETHEGOLDINTHETREESTUMP'
 %
-% See also adfgx, adfvgx, bifid, foursquares, nihilist, polybius, threesquares, trifid, twosquares
+% See also adfgx, adfgvx, bifid, checkerboard1, checkerboard2, foursquares, nihilist, polybius, threesquares, trifid, twosquares
 %
 %           Created by Giuseppe Cardillo
 %           giuseppe.cardillo-edta@poste.it

@@ -62,7 +62,7 @@ function out=nihilist(x,key1,key2,ms)
 %          key2: 'OCTOBER'
 %         plain: 'DYNAMITEATTHEWINTERPALACE'
 %
-% See also adfgx, adfvgx, bifid, foursquare, nihilist2, playfair, polybius, trifid, twosquare, vigenere
+% See also adfgx, adfgvx, bifid, checkerboard1, checkerboard2, foursquares, nihilist2, playfair, polybius, trifid, twosquares, vigenere
 %
 %           Created by Giuseppe Cardillo
 %           giuseppe.cardillo-edta@poste.it

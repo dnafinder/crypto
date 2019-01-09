@@ -59,7 +59,7 @@ function out=adfgvx(text,key,direction,varargin)
 %     encrypted: 'DGDDDAGDDGAFADDFDADVDVFAADVX'
 %         plain: 'ATTACKAT1200AM'
 %
-% See also adfvgx, bidif, foursquares, nihilist, playfair, polybius, threesquares, trifid, twosquares
+% See also adfgx, bidif, checkerboard1, checkerboard2, foursquares, nihilist, playfair, polybius, threesquares, trifid, twosquares
 %
 %           Created by Giuseppe Cardillo
 %           giuseppe.cardillo-edta@poste.it
