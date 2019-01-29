@@ -25,23 +25,23 @@ function out=atbash(text)
 %
 % Examples:
 %
-% out=atbash('Holy horn')
-%
+% out=atbash('Hide the gold into the tree stump')
+% 
 % out = 
 % 
 %   struct with fields:
 % 
-%      input: 'Holy horn'
-%     output: 'SLOBSLIM'
+%      input: 'Hide the gold into the tree stump'
+%     output: 'SRWVGSVTLOWRMGLGSVGIVVHGFNK'
 %
-% out=atbash('Slobslim')
-%
+% out=atbash('SRWVGSVTLOWRMGLGSVGIVVHGFNK')
+% 
 % out = 
 % 
 %   struct with fields:
 % 
-%      input: 'Slobslim'
-%     output: 'HOLYHORN'
+%      input: 'SRWVGSVTLOWRMGLGSVGIVVHGFNK'
+%     output: 'HIDETHEGOLDINTOTHETREESTUMP'
 %
 % See also rot, rot13, affine
 %

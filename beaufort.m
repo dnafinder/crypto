@@ -7,7 +7,7 @@ function out=beaufort(text,key,direction)
 % "Z" in the first row, where the first row and the last column serve the
 % same purpose.
 %
-% Syntax: 	out=vigenere(text,key,direction)
+% Syntax: 	out=beaufort(text,key,direction)
 %
 %     Input:
 %           text - It is a characters array to encode or decode
@@ -23,25 +23,25 @@ function out=beaufort(text,key,direction)
 %
 % Examples:
 %
-% out=beaufort('We are discovered flee at once','kingstonpower',1)
+% out=beaufort('Hide the gold into the tree stump','leprachaun',1)
+% 
+% out = 
+% 
+%   struct with fields:
+% 
+%         plain: 'HIDETHEGOLDINTOTHETREESTUMP'
+%           key: 'LEPRACHAUN'
+%     encrypted: 'EWMNHVDUGCIWCYMJAWBWHAXYGQS'
+%
+% out=beaufort('EWMNHVDUGCIWCYMJAWBWHAXYGQS','leprachaun',-1)
 %
 % out = 
 % 
 %   struct with fields:
 % 
-%        plain: 'WEAREDISCOVEREDFLEEATONCE'
-%          key: 'KINGSTONPOWER'
-%    encrypted: 'OENPOQGVNABAAGFIVOPOUBBUA'
-%
-% out=beaufort('OENPOQGVNABAAGFIVOPOUBBUA','KINGSTONPOWER',-1)
-%
-% out = 
-% 
-%   struct with fields:
-% 
-%     encrypted: 'OENPOQGVNABAAGFIVOPOUBBUA'
-%           key: 'KINGSTONPOWER'
-%         plain: 'WEAREDISCOVEREDFLEEATONCE'
+%     encrypted: 'EWMNHVDUGCIWCYMJAWBWHAXYGQS'
+%           key: 'LEPRACHAUN'
+%         plain: 'HIDETHEGOLDINTOTHETREESTUMP'
 %
 % See also autokey, dellaporta, gronsfeld, trithemius, vigenere
 %
@@ -53,6 +53,7 @@ addRequired(p,'text',@(x) ischar(x));
 addRequired(p,'key',@(x) ischar(x));
 addRequired(p,'direction',@(x) validateattributes(x,{'numeric'},{'scalar','real','finite','nonnan','nonempty','integer','nonzero','>=',-1,'<=',1}));
 parse(p,text,key,direction);
+clear p
 
 % Set all letters in uppercase and convert into ASCII Code.
 ctext=double(upper(text)); 

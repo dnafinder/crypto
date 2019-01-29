@@ -21,25 +21,25 @@ function out=amsco(text,key,direction)
 %
 % Examples:
 %
-% out=amsco('Hide the gold in the tree stump','3142',1)
-%
-% out =
-%
-%   struct with fields:
-%
-%         plain: 'Hide the gold in the tree stump'
-%           key: '3142'
-%     encrypted: 'DOHSHIRMHIEGNTEEPETLDETTU'
-%
-% out=amsco('DOHSHIRMHIEGNTEEPETLDETTU','3142',-1)
+% out=amsco('Hide the gold into the tree stump','3142',1)
 %
 % out = 
 % 
 %   struct with fields:
 % 
-%     encrypted: 'DOHSHIRMHIEGNTEEPETLDETTU'
+%         plain: 'Hide the gold into the tree stump'
 %           key: '3142'
-%         plain: 'HIDETHEGOLDINTHETREESTUMP'
+%     encrypted: 'DOOEPHIETHIEGNTTRUMETLDTHES'
+%
+% out=amsco('DOOEPHIETHIEGNTTRUMETLDTHES','3142',-1)
+%
+% out = 
+% 
+%   struct with fields:
+% 
+%     encrypted: 'DOOEPHIETHIEGNTTRUMETLDTHES'
+%           key: '3142'
+%         plain: 'HIDETHEGOLDINTOTHETREESTUMP'
 %
 %           Created by Giuseppe Cardillo
 %           giuseppe.cardillo-edta@poste.it
@@ -49,6 +49,7 @@ addRequired(p,'text',@(x) ischar(x));
 addRequired(p,'key',@(x) ischar(x));
 addRequired(p,'direction',@(x) validateattributes(x,{'numeric'},{'scalar','real','finite','nonnan','nonempty','integer','nonzero','>=',-1,'<=',1}));
 parse(p,text,key,direction);
+clear p
 
 % ASCII codes for Uppercase letters ranges between 65 and 90;
 ctext=double(upper(text)); ctext(ctext<65 | ctext>90)=[]; ctext=char(ctext);

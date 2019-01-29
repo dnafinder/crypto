@@ -38,29 +38,29 @@ function out=nihilist(x,key1,key2,ms)
 %
 % Examples:
 % 
-% out=nihilist('DYNAMITE AT THE WINTER PALACE','PLAYFAIR EXAMPLE','OCTOBER',5)
+% out=nihilist('Hide the gold into the tree stump','leprachaun','ghosts and goblins',5)
 % 
 % out = 
 % 
 %   struct with fields:
 % 
-%         plain: 'DYNAMITE AT THE WINTER PALACE'
+%         plain: 'HIDE THE GOLD INTO THE TREE STUMP'
 %            ms: 5
-%          key1: 'PLAYFAIR EXAMPLE'
-%          key2: 'OCTOBER'
-%     encrypted: [76 46 93 56 56 44 73 66 45 102 94 66 46 76 64 74 102 66 53 34 35 55 45 83 66]
+%          key1: 'leprachaun'
+%          key2: 'ghosts and goblins'
+%     encrypted: [55 56 73 56 90 66 27 57 73 44 73 59 35 79 66 89 55 34 87 58 57 56 59 69 54 74 55]
 % 
-% out=nihilist([76 46 93 56 56 44 73 66 45 102 94 66 46 76 64 74 102 66 53 34 35 55 45 83 66],'PLAYFAIR EXAMPLE','OCTOBER',5)
+% out=nihilist([55 56 73 56 90 66 27 57 73 44 73 59 35 79 66 89 55 34 87 58 57 56 59 69 54 74 55],'leprachaun','ghosts and goblins',5)
 % 
 % out = 
 % 
 %   struct with fields:
 % 
-%     encrypted: [76 46 93 56 56 44 73 66 45 102 94 66 46 76 64 74 102 66 53 34 35 55 45 83 66]
+%     encrypted: [55 56 73 56 90 66 27 57 73 44 73 59 35 79 66 89 55 34 87 58 57 56 59 69 54 74 55]
 %            ms: 5
-%          key1: 'PLAYFAIR EXAMPLE'
-%          key2: 'OCTOBER'
-%         plain: 'DYNAMITEATTHEWINTERPALACE'
+%          key1: 'leprachaun'
+%          key2: 'ghosts and goblins'
+%         plain: 'HIDETHEGOLDINTOTHETREESTUMP'
 %
 % See also adfgx, adfgvx, bifid, checkerboard1, checkerboard2, foursquares, nihilist2, playfair, polybius, trifid, twosquares, vigenere
 %

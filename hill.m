@@ -51,26 +51,34 @@ function out=hill(text,key,direction)
 %
 % Examples:
 %
-% out=hill('Hide the gold in the tree stump','leprachaun',1)
+% out=hill('Hide the gold into the tree stump','leprachaun',1)
 % 
 % out = 
 % 
 %   struct with fields:
 % 
-%         plain: 'Hide the gold in the tree stump'
+%         plain: 'Hide the gold into the tree stump'
 %           key: 'leprachaun'
-%     encrypted: 'WHGXVPO7V.B9J2V9VPO706LB 9 -0-QT'
+%     encrypted: 'WHGXVPO7V.B9J2V9AMIYKEXD,KSZ905N1,JA'
 %
+% out=hill('WHGXVPO7V.B9J2V9AMIYKEXD,KSZ905N1,JA','leprachaun',-1)
+% 
 % out = 
 % 
 %   struct with fields:
 % 
-%     encrypted: 'WHGXVPO7V.B9J2V9VPO706LB 9 -0-QT'
+%     encrypted: 'WHGXVPO7V.B9J2V9AMIYKEXD,KSZ905N1,JA'
 %           key: 'leprachaun'
-%         plain: 'HIDE THE GOLD IN THE TREE STUMP'
+%         plain: 'HIDE THE GOLD INTO THE TREE STUMP'
 %
 %           Created by Giuseppe Cardillo
 %           giuseppe.cardillo-edta@poste.it
+
+p = inputParser;
+addRequired(p,'text',@(x) ischar(x));
+addRequired(p,'key',@(x) ischar(x));
+addRequired(p,'direction',@(x) validateattributes(x,{'numeric'},{'scalar','real','finite','nonnan','nonempty','integer','nonzero','>=',-1,'<=',1}));
+clear p
 
 %mapping array
 map=[double(upper(' abcdefghijklmnopqrstuvwxyz0123456789.?,-'));0:1:40];

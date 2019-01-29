@@ -38,29 +38,29 @@ function out=chaocipher(text,direction,varargin)
 %
 % la='HXUCZVAMDSLKPEFJRIGTWOBNYQ';
 % ra='PTLNBQDEOYSFAVZKGJRIHWXUMC';
-% out=chaocipher('WELL DONE IS BETTER THAN WELL SAID',1,la,ra)
+% out=chaocipher('Hide the gold into the tree stump',1,la,ra)
 % 
 % out = 
 % 
 %   struct with fields:
 % 
-%         plain: 'WELLDONEISBETTERTHANWELLSAID'
+%         plain: 'HIDETHEGOLDINTOTHETREESTUMP'
 %            la: 'HXUCZVAMDSLKPEFJRIGTWOBNYQ'
 %            ra: 'PTLNBQDEOYSFAVZKGJRIHWXUMC'
-%     encrypted: 'OAHQHCNYNXTSZJRRHJBYHQKSOUJY'
+%     encrypted: 'WGZZNAXLHIBLVEIUIXYTLCTWSTT'
 %
 % la='HXUCZVAMDSLKPEFJRIGTWOBNYQ';
 % ra='PTLNBQDEOYSFAVZKGJRIHWXUMC';
-% out=chaocipher('OAHQHCNYNXTSZJRRHJBYHQKSOUJY',-1,la,ra)
+% out=chaocipher('WGZZNAXLHIBLVEIUIXYTLCTWSTT',-1,la,ra)
 %
 % out = 
 % 
 %   struct with fields:
 % 
-%     encrypted: 'OAHQHCNYNXTSZJRRHJBYHQKSOUJY'
+%     encrypted: 'WGZZNAXLHIBLVEIUIXYTLCTWSTT'
 %            la: 'HXUCZVAMDSLKPEFJRIGTWOBNYQ'
 %            ra: 'PTLNBQDEOYSFAVZKGJRIHWXUMC'
-%         plain: 'WELLDONEISBETTERTHANWELLSAID'
+%         plain: 'HIDETHEGOLDINTOTHETREESTUMP
 %
 %           Created by Giuseppe Cardillo
 %           giuseppe.cardillo-edta@poste.it
@@ -79,7 +79,7 @@ if isempty(la)
     assert(direction==1,'This algorithm cannot decode without a left alphabet')
     la=char(randperm(26)+64);
 else
-    la=double(upper(la)); la(la<65 | la>90)=[]; la=unique(la);
+    la=double(upper(la)); la(la<65 | la>90)=[]; la=unique(la,'stable');
     assert(sum(ismember(la,65:1:90))==26,'Left alphabet must be a permutation of a standard alphabet of 26 letter')
     la=char(la);
 end
@@ -87,8 +87,8 @@ if isempty(ra)
     assert(direction==1,'This algorithm cannot decode without a right alphabet')
     ra=char(randperm(26)+64);
 else
-    ra=double(upper(ra)); ra(ra<65 | ra>90)=[]; ra=unique(ra);
-    assert(sum(ismember(ra,65:1:90))==ra,'Right alphabet must be a permutation of a standard alphabet of 26 letter')
+    ra=double(upper(ra)); ra(ra<65 | ra>90)=[]; ra=unique(ra,'stable');
+    assert(sum(ismember(ra,65:1:90))==26,'Right alphabet must be a permutation of a standard alphabet of 26 letter')
     ra=char(ra);
 end
 

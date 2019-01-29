@@ -21,29 +21,29 @@ function out=checkerboard1(text,pskey,key1,key2,direction)
 %
 % Examples:
 % 
-% out=checkerboard1('Hide the gold in the tree stump','leprachaun','black','white',1)
-%
-% out = 
-% 
-%   struct with fields:
-% 
-%         plain: 'HIDETHEGOLDINTHETREESTUMP'
-%         pskey: 'LEPRACHAUN'
-%          key1: 'BLACK'
-%          key2: 'WHITE'
-%     encrypted: 'LHATAWBHCELHBHAICHBWAWATLTCELHBHCEBTBHBHCTCELICWBI'
-%
-% out=checkerboard1('LHATAWBHCELHBHAICHBWAWATLTCELHBHCEBTBHBHCTCELICWBI','leprachaun','black','white',-1)
+% out=checkerboard1('Hide the gold into the tree stump','leprachaun','ghost','ghoul',1)
 % 
 % out = 
 % 
 %   struct with fields:
 % 
-%     encrypted: 'LHATAWBHCELHBHAICHBWAWATLTCELHBHCEBTBHBHCTCELICWBI'
+%         plain: 'HIDETHEGOLDINTOTHETREESTUMP'
 %         pskey: 'LEPRACHAUN'
-%          key1: 'BLACK'
-%          key2: 'WHITE'
-%         plain: 'HIDETHEGOLDINTHETREESTUMP'
+%          key1: 'GHOST'
+%          key2: 'GHOUL'
+%     encrypted: 'HHOUOGGHSLHHGHOOSHGGOGOUHUSLSHSLHHGHSLGUGHGHSUSLHOSGGO'
+%
+% out=checkerboard1('HHOUOGGHSLHHGHOOSHGGOGOUHUSLSHSLHHGHSLGUGHGHSUSLHOSGGO','leprachaun','ghost','ghoul',-1)
+% 
+% out = 
+% 
+%   struct with fields:
+% 
+%     encrypted: 'HHOUOGGHSLHHGHOOSHGGOGOUHUSLSHSLHHGHSLGUGHGHSUSLHOSGGO'
+%         pskey: 'LEPRACHAUN'
+%          key1: 'GHOST'
+%          key2: 'GHOUL'
+%         plain: 'HIDETHEGOLDINTOTHETREESTUMP'
 %
 % See also adfgx, adfgvx, bifid, checkerboard2, foursquares, nihilist, playfair, polybius, threesquares, trifid, twosquares
 %

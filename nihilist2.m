@@ -26,25 +26,25 @@ function out=nihilist2(text,key,direction)
 %
 % Examples:
 %
-% out=nihilist2('dynamite at the winter palace',[3 4 6 1 5 2],1)
+% out=nihilist2('Hide the gold into the tree stump',[3 4 6 1 5 2],1)
 % 
 % out = 
 % 
 %   struct with fields:
 % 
-%         plain: 'dynamite at the winter palace'
+%         plain: 'HIDE THE GOLD INTO THE TREE STUMP'
 %           key: [3 4 6 1 5 2]
-%     encrypted: 'e itwherpn tnaidmyacael a tte'
+%     encrypted: 'INODT HET  TPUMDETH IE TRSE GLHOE'
 %
-% out=nihilist2('e itwherpn tnaidmyacael a tte',[3 4 6 1 5 2],-1)
+% out=nihilist2('INODT HET  TPUMDETH IE TRSE GLHOE',[3 4 6 1 5 2],-1)
 %
 % out = 
 % 
 %   struct with fields:
 % 
-%     encrypted: 'e itwherpn tnaidmyacael a tte'
+%     encrypted: 'INODT HET  TPUMDETH IE TRSE GLHOE'
 %           key: [3 4 6 1 5 2]
-%         plain: 'dynamite at the winter palace'
+%         plain: 'HIDE THE GOLD INTO THE TREE STUMP'
 %
 % See also nihilist
 %
@@ -56,7 +56,9 @@ addRequired(p,'text',@(x) ischar(x));
 addRequired(p,'key',@(x) validateattributes(x,{'numeric'},{'row','real','finite','nonnan','nonempty','integer','nonzero'}));
 addRequired(p,'direction',@(x) validateattributes(x,{'numeric'},{'scalar','real','finite','nonnan','nonempty','integer','nonzero','>=',-1,'<=',1}));
 parse(p,text,key,direction);
+clear p
 
+text=upper(text);
 M=max(key);
 assert(isequal(sort(key),1:1:M),'This key can not be used. Check it!')
 LT=length(text);

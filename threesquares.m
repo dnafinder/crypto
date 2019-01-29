@@ -32,17 +32,17 @@ function out=threesquares(text,key1,key2,key3,direction)
 %
 % Examples:
 %
-% out=threesquares('Hide the gold in the tree stump','leprachaun','goblin secret','rainbow',1)
+% out=threesquares('Hide the gold into the tree stump','leprachaun','ghosts','goblins',1)
 %
 % out = 
 % 
 %   struct with fields:
 % 
-%         plain: 'HIDETHEGOLDINTHETREESTUMP'
+%         plain: 'HIDETHEGOLDINTOTHETREESTUMP'
 %          key1: 'LEPRACHAUN'
-%          key2: 'GOBLINSECRET'
-%          key3: 'RAINBOW'
-%     encrypted: 'WEILHRTTTHRBWSILLIYODWCNKTROIRSMTXWUQIY'
+%          key2: 'GHOSTS'
+%          key3: 'GOBLINS'
+%     encrypted: 'HSFCMCBQTFGGWTMDFFNDOFUHODDBTNHIBIUOPDIXBV'
 %
 % if you re-run the function:
 %
@@ -50,37 +50,37 @@ function out=threesquares(text,key1,key2,key3,direction)
 % 
 %   struct with fields:
 % 
-%         plain: 'HIDETHEGOLDINTHETREESTUMP'
+%         plain: 'HIDETHEGOLDINTOTHETREESTUMP'
 %          key1: 'LEPRACHAUN'
-%          key2: 'GOBLINSECRET'
-%          key3: 'RAINBOW'
-%     encrypted: 'OEOMHNTTTHRGESIMLOYOTFCSTTCEIEIMFQWQUIY'
+%          key2: 'GHOSTS'
+%          key3: 'GOBLINS'
+%     encrypted: 'WSLDMCBQOWGOFTIDFLSDHHUTEDEZTREIBNUSPDLPBY'
 %
 % both are decrypted in the same message
 %
-% out=threesquares('WEILHRTTTHRBWSILLIYODWCNKTROIRSMTXWUQIY','leprachaun','goblin secret','rainbow',-1)
+% out=threesquares('HSFCMCBQTFGGWTMDFFNDOFUHODDBTNHIBIUOPDIXBV','leprachaun','ghosts','goblins',-1)
 % 
 % out = 
 % 
 %   struct with fields:
 % 
-%     encrypted: 'WEILHRTTTHRBWSILLIYODWCNKTROIRSMTXWUQIY'
+%     encrypted: 'HSFCMCBQTFGGWTMDFFNDOFUHODDBTNHIBIUOPDIXBV'
 %          key1: 'LEPRACHAUN'
-%          key2: 'GOBLINSECRET'
-%          key3: 'RAINBOW'
-%         plain: 'HIDETHEGOLDINTHETREESTUMP'
+%          key2: 'GHOSTS'
+%          key3: 'GOBLINS'
+%         plain: 'HIDETHEGOLDINTOTHETREESTUMP'
 %
-% out=threesquares('OEOMHNTTTHRGESIMLOYOTFCSTTCEIEIMFQWQUIY','leprachaun','goblin secret','rainbow',-1)
+% out=threesquares('WSLDMCBQOWGOFTIDFLSDHHUTEDEZTREIBNUSPDLPBY','leprachaun','ghosts','goblins',-1)
 % 
 % out = 
 % 
 %   struct with fields:
 % 
-%     encrypted: 'OEOMHNTTTHRGESIMLOYOTFCSTTCEIEIMFQWQUIY'
+%     encrypted: 'WSLDMCBQOWGOFTIDFLSDHHUTEDEZTREIBNUSPDLPBY'
 %          key1: 'LEPRACHAUN'
-%          key2: 'GOBLINSECRET'
-%          key3: 'RAINBOW'
-%         plain: 'HIDETHEGOLDINTHETREESTUMP'
+%          key2: 'GHOSTS'
+%          key3: 'GOBLINS'
+%         plain: 'HIDETHEGOLDINTOTHETREESTUMP'
 %
 % See also adfgx, adfgvx, bifid, checkerboard1, checkerboard2, foursquares, nihilist, playfair, polybius, threesquares, trifid, twosquares
 %
@@ -94,6 +94,7 @@ addRequired(p,'key2',@(x) ischar(x));
 addRequired(p,'key3',@(x) ischar(x));
 addRequired(p,'direction',@(x) validateattributes(x,{'numeric'},{'scalar','real','finite','nonnan','nonempty','integer','nonzero','>=',-1,'<=',1}));
 parse(p,text,key1,key2,key3,direction);
+clear p
 
 % ASCII codes for Uppercase letters ranges between 65 and 90;
 ctext=double(upper(text)); ctext(ctext<65 | ctext>90)=[]; 

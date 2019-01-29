@@ -31,25 +31,25 @@ function out=affine(text,key,direction)
 %
 % Examples:
 %
-% out=affine('Giuseppe Cardillo',[5 8],1)
+% out=affine('Hide the gold into the tree stump',[5 8],1)
 %
 % out = 
 % 
 %   struct with fields:
 % 
-%         plain: 'GIUSEPPE CARDILLO'
+%         plain: 'HIDE THE GOLD INTO THE TREE STUMP'
 %           key: [5 8]
-%     encrypted: 'MWEUCFFCSIPXWLLA'
+%     encrypted: 'RWXCZRCMALXWVZAZRCZPCCUZEQF'
 %
-% out=affine('MWEUCFFCSIPXWLLA',[5 8],-1)
-%
+% out=affine('RWXCZRCMALXWVZAZRCZPCCUZEQF',[5 8],-1)
+% 
 % out = 
 % 
 %   struct with fields:
 % 
-%     encrypted: 'MWEUCFFCSIPXWLLA'
+%     encrypted: 'RWXCZRCMALXWVZAZRCZPCCUZEQF'
 %           key: [5 8]
-%         plain: 'GIUSEPPECARDILLO'
+%         plain: 'HIDETHEGOLDINTOTHETREESTUMP'
 %
 % See also rot, rot13, atbash
 %
@@ -61,6 +61,7 @@ addRequired(p,'text',@(x) ischar(x));
 addRequired(p,'key',@(x) validateattributes(x,{'numeric'},{'row','ncols',2,'real','finite','nonnan','nonempty','integer','nonzero'}));
 addRequired(p,'direction',@(x) validateattributes(x,{'numeric'},{'scalar','real','finite','nonnan','nonempty','integer','nonzero','>=',-1,'<=',1}));
 parse(p,text,key,direction);
+clear p
 
 assert(ismember(key(1),[1 3 5 7 9 11 15 17 19 21 23 25]),'Key A must be coprime with 26')
 assert(key(2)>=-25 & key(2)<=25,'Key B must be between -25 and 25 (0 excluded)')

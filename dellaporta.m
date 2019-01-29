@@ -21,25 +21,25 @@ function out=dellaporta(text,key,direction)
 %
 % Examples:
 %
-% out=dellaporta('We are discovered flee at once','kingstonpower',1)
+% out=dellaporta('Hide the gold into the tree stump','leprachaun',1)
 %
 % out = 
 % 
 %   struct with fields:
 % 
-%        plain: 'WEAREDISCOVEREDFLEEATONCE'
-%          key: 'KINGSTONPOWER'
-%    encrypted: 'EVTBNZPMWHKTJWUYONNUAHGNT'
+%         plain: 'HIDETHEGOLDINTOTHETREESTUMP'
+%           key: 'LEPRACHAUN'
+%     encrypted: 'ZXXZGVUTERVXGLBFXRJLWTLLHNM'
 %
-% out=dellaporta('EVTBNZPMWHKTJWUYONNUAHGNT','KINGSTONPOWER',-1)
+% out=dellaporta('ZXXZGVUTERVXGLBFXRJLWTLLHNM','leprachaun',-1)
 %
 % out = 
 % 
 %   struct with fields:
 % 
-%     encrypted: 'EVTBNZPMWHKTJWUYONNUAHGNT'
-%           key: 'KINGSTONPOWER'
-%         plain: 'WEAREDISCOVEREDFLEEATONCE'
+%     encrypted: 'ZXXZGVUTERVXGLBFXRJLWTLLHNM'
+%           key: 'LEPRACHAUN'
+%         plain: 'HIDETHEGOLDINTOTHETREESTUMP'
 %
 % See also autokey, beaufort, gronsfeld, trithemius, vigenere
 %
@@ -51,6 +51,7 @@ addRequired(p,'text',@(x) ischar(x));
 addRequired(p,'key',@(x) ischar(x));
 addRequired(p,'direction',@(x) validateattributes(x,{'numeric'},{'scalar','real','finite','nonnan','nonempty','integer','nonzero','>=',-1,'<=',1}));
 parse(p,text,key,direction);
+clear p
 
 % The Dalla Porta Cipher uses the following tableau:
 % 

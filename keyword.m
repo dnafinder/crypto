@@ -36,25 +36,25 @@ function out=keyword(text,key,direction)
 %
 % Examples:
 %
-% out=keyword('Knowledge is power','kryptos',1)
-%
-% out = 
-% 
-%   struct with fields:
-% 
-%         plain: 'KNOWLEDGEISPOWER'
-%           key: 'KRYPTOS'
-%     encrypted: 'DGHVETPSTBMIHVTL'
-% 
-% out=keyword('DGHVETPSTBMIHVTL','kryptos',-1)
+% out=keyword('Hide the gold into the tree stump','leprachaun',1)
 % 
 % out = 
 % 
 %   struct with fields:
 % 
-%     encrypted: 'DGHVETPSTBMIHVTL'
-%           key: 'KRYPTOS'
-%         plain: 'KNOWLEDGEISPOWER'
+%         plain: 'HIDETHEGOLDINTOTHETREESTUMP'
+%           key: 'LEPRACHUN'
+%     encrypted: 'UNRASUAHJFRNISJSUASOAAQSTGK'
+% 
+% out=keyword('UNRASUAHJFRNISJSUASOAAQSTGK','leprachaun',-1)
+% 
+% out = 
+% 
+%   struct with fields:
+% 
+%     encrypted: 'UNRASUAHJFRNISJSUASOAAQSTGK'
+%           key: 'LEPRACHUN'
+%         plain: 'HIDETHEGOLDINTOTHETREESTUMP'
 %
 %           Created by Giuseppe Cardillo
 %           giuseppe.cardillo-edta@poste.it
@@ -63,6 +63,7 @@ p = inputParser;
 addRequired(p,'text',@(x) ischar(x));
 addRequired(p,'key',@(x) ischar(x));
 addRequired(p,'direction',@(x) validateattributes(x,{'numeric'},{'scalar','real','finite','nonnan','nonempty','integer','nonzero','>=',-1,'<=',1}));
+clear p
 
 % ASCII codes of standard English 26 letters alphabet
 plainal=65:1:90;

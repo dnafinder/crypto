@@ -22,35 +22,34 @@ function out=checkerboard2(text,pskey,key1,key2,direction)
 %
 % Examples:
 % 
-% out=checkerboard1('Hide the gold in the tree stump','leprachaun',['black';'horse'],['white';'grays'],1)
+% out=checkerboard2('Hide the gold into the tree stump','leprachaun',['black';'ghost'],['train';'ghoul'],1)
 % 
 % out = 
 % 
 %   struct with fields:
 % 
-%         plain: 'HIDETHEGOLDINTHETREESTUMP'
+%         plain: 'HIDETHEGOLDINTOTHETREESTUMP'
 %         pskey: 'LEPRACHAUN'
 %          key1: [2×5 char]
 %          key2: [2×5 char]
-%     encrypted: 'HGLRLWBGOIHGBGLHOGBWLWLRHROIHGBGOIBRBGBGOROIHHOWBH'
+%     encrypted: 'HHOIOTGHCLLHBHOASRGTATOIHUSNCRCLLRGRCNGIBRGHCUSLHOCTBO'
 %
-% out=checkerboard1('HGLRLWBGOIHGBGLHOGBWLWLRHROIHGBGOIBRBGBGOROIHHOWBH','leprachaun',['black';'horse'],['white';'grays'],-1)
+% out=checkerboard2('HHOIOTGHCLLHBHOASRGTATOIHUSNCRCLLRGRCNGIBRGHCUSLHOCTBO','leprachaun',['black';'ghost'],['train';'ghoul'],-1)
 % 
 % out = 
 % 
 %   struct with fields:
 % 
-%     encrypted: 'HGLRLWBGOIHGBGLHOGBWLWLRHROIHGBGOIBRBGBGOROIHHOWBH'
+%     encrypted: 'HHOIOTGHCLLHBHOASRGTATOIHUSNCRCLLRGRCNGIBRGHCUSLHOCTBO'
 %         pskey: 'LEPRACHAUN'
 %          key1: [2×5 char]
 %          key2: [2×5 char]
-%         plain: 'HIDETHEGOLDINTHETREESTUMP'
+%         plain: 'HIDETHEGOLDINTOTHETREESTUMP'
 %
 % See also adfgx, adfgvx, bifid, checkerboard1, foursquares, nihilist, playfair, polybius, threesquares, trifid, twosquares
 %
 %           Created by Giuseppe Cardillo
 %           giuseppe.cardillo-edta@poste.it
-
 p = inputParser;
 addRequired(p,'text',@(x) ischar(x));
 addRequired(p,'pskey',@(x) ischar(x));
@@ -59,6 +58,7 @@ addRequired(p,'key2',@(x) ischar(x));
 addRequired(p,'direction',@(x) validateattributes(x,{'numeric'},{'scalar','real','finite','nonnan','nonempty','integer','nonzero','>=',-1,'<=',1}));
 parse(p,text,pskey,key1,key2,direction);
 clear p
+
 assert(isequal(size(key1),[2 5]) && isequal(size(key2),[2 5]),'Key1 and Key2 must be 2x5 letters long')
 key1=upper(key1);
 key2=upper(key2);
@@ -69,7 +69,7 @@ assert(all(~ismember(key2(1,:),key2(2,:))),'key2 A and key2 B must not share let
 ctext=double(upper(text)); ctext(ctext<65 | ctext>90)=[]; 
 ckey=double(upper(pskey)); ckey(ckey>90 | ckey<65)=[]; 
 % Convert J (ASCII code 74) into I (ASCII code 73)
-ctext(ctext==74)=73;
+ctext(ctext==74)=73; 
 ckey(ckey==74)=73; 
 
 switch direction
@@ -79,8 +79,8 @@ switch direction
         out.encrypted=char(ctext);
 end
 out.pskey=char(ckey);
-out.key1=upper(key1);
-out.key2=upper(key2);
+out.key1=key1;
+out.key2=key2;
 
 % Polybius square generation from Key
 % Using the key "PLAYFAIR EXAMPLE"
@@ -110,12 +110,12 @@ switch direction
         clear locb
         L=length(I);
         s1=binornd(1,0.5,L,2)+1;
-        out.encrypted=reshape([key1(s1(:,1)',I);key2(s1(:,2)',J)],1,2*length(I));
+        out.encrypted=reshape([key1(sub2ind([2,5],s1(:,1)',I));key2(sub2ind([2,5],s1(:,2)',J))],1,2*length(I));
         clear I J L s1
     case -1
         ctext=char(reshape(ctext',2,length(ctext)/2));
-        [~,I]=ismember(ctext(1,:),key1);
-        [~,J]=ismember(ctext(2,:),key2);
+        [~,I]=ismember(ctext(1,:),key1); [~,I]=ind2sub([2,5],I);
+        [~,J]=ismember(ctext(2,:),key2); [~,J]=ind2sub([2,5],J);
         clear ctext
         Idx=sub2ind([5,5],I,J);
         clear I J

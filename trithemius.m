@@ -22,23 +22,23 @@ function out=trithemius(text,direction)
 %
 % Examples:
 %
-% out=trithemius('We are discovered flee at once',1)
+% out=trithemius('Hide the gold into the tree stump',1)
 %
 % out = 
 % 
 %   struct with fields:
 % 
-%         plain: 'WEAREDISCOVEREDFLEEATONCE'
-%     encrypted: 'WFCUIIOZKXFPDRRUBVWTNJJZC'
+%         plain: 'HIDETHEGOLDINTOTHETREESTUMP'
+%     encrypted: 'HJFHXMKNWUNTZGCIXVLKYZOQSLP'
 %
-% out=trithemius('WFCUIIOZKXFPDRRUBVWTNJJZC',-1)
+% out=trithemius('HJFHXMKNWUNTZGCIXVLKYZOQSLP',-1)
 %
 % out = 
 % 
 %   struct with fields:
 % 
-%     encrypted: 'WFCUIIOZKXFPDRRUBVWTNJJZC'
-%         plain: 'WEAREDISCOVEREDFLEEATONCE'
+%     encrypted: 'HJFHXMKNWUNTZGCIXVLKYZOQSLP'
+%         plain: 'HIDETHEGOLDINTOTHETREESTUMP'
 %
 % See also vigenere, autokey, beaufort, dellaporta, gronsfeld
 %

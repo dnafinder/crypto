@@ -16,23 +16,23 @@ function out=a1z26(x)
 %
 % Examples:
 %
-% out=a1z26('Giuseppe Cardillo')
-%
+% out=a1z26('Hide the gold into the tree stump')
+% 
 % out = 
 % 
 %   struct with fields:
 % 
-%         plain: 'GIUSEPPE CARDILLO'
-%     encrypted: [7 9 21 19 5 16 16 5 3 1 18 4 9 12 12 15]
+%         plain: 'Hide the gold into the tree stump'
+%     encrypted: [8 9 4 5 20 8 5 7 15 12 4 9 14 20 15 20 8 5 20 18 5 5 19 20 21 13 16]
 %
-% out=a1z26([7 9 21 19 5 16 16 5 3 1 18 4 9 12 12 15])
-%
+% out=a1z26([8 9 4 5 20 8 5 7 15 12 4 9 14 20 15 20 8 5 20 18 5 5 19 20 21 13 16])
+% 
 % out = 
 % 
 %   struct with fields:
 % 
-%     encrypted: [7 9 21 19 5 16 16 5 3 1 18 4 9 12 12 15]
-%         plain: 'GIUSEPPECARDILLO'
+%     encrypted: [8 9 4 5 20 8 5 7 15 12 4 9 14 20 15 20 8 5 20 18 5 5 19 20 21 13 16]
+%         plain: 'HIDETHEGOLDINTOTHETREESTUMP'
 %
 %           Created by Giuseppe Cardillo
 %           giuseppe.cardillo-edta@poste.it

@@ -37,27 +37,27 @@ function out=adfgvx(text,key,direction,varargin)
 %
 % Examples:
 %
-% out=adfgvx('Attack at 1200am','privacy',1,['NA1C3H';'8TB2OM';'E5WRPD';'4F6G7I';'9J0KLQ';'SUVXYZ'])
+% out=adfgvx('Hide the gold into the tree stump','leprachaun',1,['NA1C3H';'8TB2OM';'E5WRPD';'4F6G7I';'9J0KLQ';'SUVXYZ'])
 % 
 % out = 
 % 
 %   struct with fields:
 % 
 %        matrix: [6×6 char]
-%           key: 'privacy'
-%         plain: 'Attack at 1200am'
-%     encrypted: 'DGDDDAGDDGAFADDFDADVDVFAADVX'
+%           key: 'leprachaun'
+%         plain: 'Hide the gold into the tree stump'
+%     encrypted: 'FGAFXAVDDDXGAAAXXXDAXFDDDDAAFDFDDVVGDGFGAFFXAXXAVDVDFX'
 %
-% out=adfgvx('DGDDDAGDDGAFADDFDADVDVFAADVX','privacy',-1,['NA1C3H';'8TB2OM';'E5WRPD';'4F6G7I';'9J0KLQ';'SUVXYZ'])
+% out=adfgvx('FGAFXAVDDDXGAAAXXXDAXFDDDDAAFDFDDVVGDGFGAFFXAXXAVDVDFX','leprachaun',-1,['NA1C3H';'8TB2OM';'E5WRPD';'4F6G7I';'9J0KLQ';'SUVXYZ'])
 % 
 % out = 
 % 
 %   struct with fields:
 % 
 %        matrix: [6×6 char]
-%           key: 'privacy'
-%     encrypted: 'DGDDDAGDDGAFADDFDADVDVFAADVX'
-%         plain: 'ATTACKAT1200AM'
+%           key: 'leprachaun'
+%     encrypted: 'FGAFXAVDDDXGAAAXXXDAXFDDDDAAFDFDDVVGDGFGAFFXAXXAVDVDFX'
+%         plain: 'HIDETHEGOLDINTOTHETREESTUMP'
 %
 % See also adfgx, bidif, checkerboard1, checkerboard2, foursquares, nihilist, playfair, polybius, threesquares, trifid, twosquares
 %

@@ -33,27 +33,27 @@ function out=twosquares(text,key1,key2,direction)
 %
 % Examples:
 %
-% out=twosquares('Hide the gold in the tree stump','leprachaun','goblin secret',1)
+% out=twosquares('Hide the gold into the tree stump','leprachaun','ghosts and goblins',1)
 %
 % out = 
 % 
 %   struct with fields:
 % 
-%         plain: 'HIDETHEGOLDINTHETREESTUMP'
+%         plain: 'HIDETHEGOLDINTOTHETREESTUMP'
 %          key1: 'LEPRACHAUN'
-%          key2: 'GOBLINSECRET'
-%     encrypted: 'REDCUKGEQEHLNIEHUBBHKISQBX'
+%          key2: 'GHOSTSANDGOBLINS'
+%     encrypted: 'AFEDPAGEUHIDLRUEDFRTOFURAQOX'
 %
-% out=twosquares('REDCUKGEQEHLNIEHUBBHKISQBX','leprachaun','goblin secret',-1)
+% out=twosquares('AFEDPAGEUHIDLRUEDFRTOFURAQOX','leprachaun','ghosts and goblins',-1)
 % 
 % out = 
 % 
 %   struct with fields:
 % 
-%     encrypted: 'REDCUKGEQEHLNIEHUBBHKISQBX'
+%     encrypted: 'AFEDPAGEUHIDLRUEDFRTOFURAQOX'
 %          key1: 'LEPRACHAUN'
-%          key2: 'GOBLINSECRET'
-%         plain: 'HIDETHEGOLDINTHETREESTUMP'
+%          key2: 'GHOSTSANDGOBLINS'
+%         plain: 'HIDETHEGOLDINTOTHETREESTUMP'
 %
 % See also adfgx, adfgvx, bifid, checkerboard1, checkerboard2, foursquares, nihilist, playfair, polybius, threesquares, trifid
 %
@@ -66,6 +66,7 @@ addRequired(p,'key1',@(x) ischar(x));
 addRequired(p,'key2',@(x) ischar(x));
 addRequired(p,'direction',@(x) validateattributes(x,{'numeric'},{'scalar','real','finite','nonnan','nonempty','integer','nonzero','>=',-1,'<=',1}));
 parse(p,text,key1,key2,direction);
+clear p
 
 % ASCII codes for Uppercase letters ranges between 65 and 90;
 ctext=double(upper(text)); ctext(ctext<65 | ctext>90)=[]; 

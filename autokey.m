@@ -29,25 +29,25 @@ function out=autokey(text,key,direction)
 %
 % Examples:
 %
-% out=autokey('attack the east wall at dawn','queen',1)
+% out=autokey('Hide the gold into the tree stump','leprachaun',1)
 % 
 % out = 
 % 
 %   struct with fields:
 % 
-%         plain: 'ATTACKTHEEASTWALLATDAWN'
-%           key: 'QUEEN'
-%     encrypted: 'QNXEPKMAEGKLAAELDTPDLHN'
+%         plain: 'HIDETHEGOLDINTOTHETREESTUMP'
+%           key: 'LEPRACHAUN'
+%     encrypted: 'SMSVTJLGIYKQQXHALKHCHMFMIFW'
 %
-% out=autokey('QNXEPKMAEGKLAAELDTPDLHN','QUEEN',-1)
+% out=autokey('SMSVTJLGIYKQQXHALKHCHMFMIFW','leprachaun',-1)
 % 
 % out = 
 % 
 %   struct with fields:
 % 
-%     encrypted: 'QNXEPKMAEGKLAAELDTPDLHN'
-%           key: 'QUEEN'
-%         plain: 'ATTACKTHEEASTWALLATDAWN'
+%     encrypted: 'SMSVTJLGIYKQQXHALKHCHMFMIFW'
+%           key: 'LEPRACHAUN'
+%         plain: 'HIDETHEGOLDINTOTHETREESTUMP'
 %
 % See also beaufort, dellaporta, gronsfeld, trithemius, vigenere
 %
@@ -59,6 +59,7 @@ addRequired(p,'text',@(x) ischar(x));
 addRequired(p,'key',@(x) ischar(x));
 addRequired(p,'direction',@(x) validateattributes(x,{'numeric'},{'scalar','real','finite','nonnan','nonempty','integer','nonzero','>=',-1,'<=',1}));
 parse(p,text,key,direction);
+clear p
 
 % Set all letters in uppercase and convert into ASCII Code.
 ctext=double(upper(text)); 

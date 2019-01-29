@@ -32,25 +32,25 @@ function out=railfence(text,key,direction)
 %
 % Examples:
 %
-% out=railfence('WE ARE DISCOVERED FLEE AT ONCE',3,1)
+% out=railfence('Hide the gold into the tree stump',3,1)
 %
 % out = 
 % 
 %   struct with fields:
 % 
-%         plain: 'WE ARE DISCOVERED FLEE AT ONCE'
+%         plain: 'HIDE THE GOLD INTO THE TREE STUMP'
 %           key: 3
-%     encrypted: 'WRIVDETCEAEDSOEE LEA NE  CRF O'
+%     encrypted: 'H  DTHRSPIETEGL NOTETE TMDHOI  EU'
 %
-% out=railfence('WRIVDETCEAEDSOEE LEA NE  CRF O',3,-1)
+% out=railfence('H  DTHRSPIETEGL NOTETE TMDHOI  EU',3,-1)
 %
 % out = 
 % 
 %   struct with fields:
 % 
-%     encrypted: 'WRIVDETCEAEDSOEE LEA NE  CRF O'
+%     encrypted: 'H  DTHRSPIETEGL NOTETE TMDHOI  EU'
 %           key: 3
-%         plain: 'WE ARE DISCOVERED FLEE AT ONCE
+%         plain: 'HIDE THE GOLD INTO THE TREE STUMP'
 %
 %           Created by Giuseppe Cardillo
 %           giuseppe.cardillo-edta@poste.it
@@ -60,6 +60,9 @@ addRequired(p,'text',@(x) ischar(x));
 addRequired(p,'key',@(x) validateattributes(x,{'numeric'},{'scalar','real','finite','nonnan','nonempty','integer'}));
 addRequired(p,'direction',@(x) validateattributes(x,{'numeric'},{'scalar','real','finite','nonnan','nonempty','integer','nonzero','>=',-1,'<=',1}));
 parse(p,text,key,direction);
+clear p
+
+text=upper(text);
 
 % For example, we use again the messagge 'WE ARE DISCOVERED FLEE AT ONCE'
 % (without spaces) and 3 rails. The rails will be the rows of a sparse

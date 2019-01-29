@@ -21,25 +21,25 @@ function out=gronsfeld(text,key,direction)
 %
 % Examples:
 %
-% out=gronsfeld('We are discovered flee at once','1264587895663',1)
+% out=gronsfeld('Hide the gold into the tree stump','1264587895663',1)
 %
 % out = 
 % 
 %   struct with fields:
 % 
-%         plain: 'WEAREDISCOVEREDFLEEATONCE'
+%         plain: 'HIDETHEGOLDINTOTHETREESTUMP'
 %           key: '1264587895663'
-%     encrypted: 'XGGVJLPALTBKUFFLPJMHBXSIK'
+%     encrypted: 'IKJIYPLOXQJOQUQZLJBYMNXZAPQ'
 %
-% out=gronsfeld('XGGVJLPALTBKUFFLPJMHBXSIK','1264587895663',-1)
+% out=gronsfeld('IKJIYPLOXQJOQUQZLJBYMNXZAPQ','1264587895663',-1)
 %
 % out = 
 % 
 %   struct with fields:
 % 
-%     encrypted: 'XGGVJLPALTBKUFFLPJMHBXSIK'
+%     encrypted: 'IKJIYPLOXQJOQUQZLJBYMNXZAPQ'
 %           key: '1264587895663'
-%         plain: 'WEAREDISCOVEREDFLEEATONCE'
+%         plain: 'HIDETHEGOLDINTOTHETREESTUMP'
 %
 % See also autokey, beaufort, dellaporta, trithemius, vigenere
 %
@@ -51,6 +51,7 @@ addRequired(p,'text',@(x) ischar(x));
 addRequired(p,'key',@(x) ischar(x));
 addRequired(p,'direction',@(x) validateattributes(x,{'numeric'},{'scalar','real','finite','nonnan','nonempty','integer','nonzero','>=',-1,'<=',1}));
 parse(p,text,key,direction);
+clear p
 
 out=vigenere(text,char(double(key)+17),direction);
 out.key=key;

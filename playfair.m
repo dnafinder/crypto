@@ -25,25 +25,25 @@ function out=playfair(text,key,direction)
 %
 % Examples:
 %
-% out=playfair('Hide the gold in the tree stump','playfair example',1)
+% out=playfair('Hide the gold into the tree stump','leprachaun',1)
 %
 % out = 
 % 
 %   struct with fields:
 % 
-%         plain: 'HIDETHEGOLDINTHETREESTUMP'
-%           key: 'PLAYFAIREXAMPLE'
-%     encrypted: 'BMODZBXDNABEKUDMUIXMMOUVIF'
+%         plain: 'HIDETHEGOLDINTOTHETREESTUMP'
+%           key: 'LEPRACHAUN'
+%     encrypted: 'NFFLOBPFMEFKBSQMFHSAPWROQBQL'
 %
-% out=playfair('BMODZBXDNABEKUDMUIXMMOUVIF','playfair example',-1)
+% out=playfair('NFFLOBPFMEFKBSQMFHSAPWROQBQL','leprachaun',-1)
 %
 % out = 
 % 
 %   struct with fields:
 % 
-%     encrypted: 'BMODZBXDNABEKUDMUIXMMOUVIF'
-%           key: 'PLAYFAIREXAMPLE'
-%         plain: 'HIDETHEGOLDINTHETREESTUMP'
+%     encrypted: 'NFFLOBPFMEFKBSQMFHSAPWROQBQL'
+%           key: 'LEPRACHAUN'
+%         plain: 'HIDETHEGOLDINTOTHETREESTUMP'
 %
 % See also adfgx, adfgvx, bifid, checkerboard1, checkerboard2, foursquares, nihilist, polybius, threesquares, trifid, twosquares
 %
@@ -55,6 +55,7 @@ addRequired(p,'text',@(x) ischar(x));
 addRequired(p,'key',@(x) ischar(x));
 addRequired(p,'direction',@(x) validateattributes(x,{'numeric'},{'scalar','real','finite','nonnan','nonempty','integer','nonzero','>=',-1,'<=',1}));
 parse(p,text,key,direction);
+clear p
 
 % ASCII codes for Uppercase letters ranges between 65 and 90;
 ctext=double(upper(text)); ctext(ctext<65 | ctext>90)=[]; 

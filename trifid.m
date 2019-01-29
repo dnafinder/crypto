@@ -29,27 +29,27 @@ function out=trifid(text,key,period,direction)
 %
 % Examples:
 %
-% out=trifid('Hide the gold in the tree stump','leprachaun',7,1)
+% out=trifid('Hide the gold into the tree stump','leprachaun',7,1)
 % 
 % out = 
 % 
 %   struct with fields:
 % 
-%         plain: 'HIDETHEGOLDINTHETREESTUMP'
+%         plain: 'HIDETHEGOLDINTOTHETREESTUMP'
 %           key: 'LEPRACHAUN'
 %        period: 7
-%     encrypted: 'AHULQISGGXEQSOPLYRLKISPTJ'
+%     encrypted: 'AHULQISGGXEQSOKHHQFSSNRLYJJ'
 %
-% out=trifid('AHULQISGGXEQSOPLYRLKISPTJ','leprachaun',7,-1)
+% out=trifid('AHULQISGGXEQSOKHHQFSSNRLYJJ','leprachaun',7,-1)
 %
 % out = 
 % 
 %   struct with fields:
 % 
-%     encrypted: 'AHULQISGGXEQSOPLYRLKISPTJ'
+%     encrypted: 'AHULQISGGXEQSOKHHQFSSNRLYJJ'
 %           key: 'LEPRACHAUN'
 %        period: 7
-%         plain: 'HIDETHEGOLDINTHETREESTUMP'
+%         plain: 'HIDETHEGOLDINTOTHETREESTUMP'
 %
 % See also adfgx, adfgvx, bifid, checkerboard1, checkerboard2, foursquares, nihilist, playfair, polybius, threesquares, twosquares
 %
@@ -62,6 +62,7 @@ addRequired(p,'key',@(x) ischar(x));
 addRequired(p,'period',@(x) validateattributes(x,{'numeric'},{'scalar','real','finite','nonnan','nonempty','integer','nonzero'}));
 addRequired(p,'direction',@(x) validateattributes(x,{'numeric'},{'scalar','real','finite','nonnan','nonempty','integer','nonzero','>=',-1,'<=',1}));
 parse(p,text,key,period,direction);
+clear p
 
 % ASCII codes for Uppercase letters ranges between 65 and 90;
 ctext=double(upper(text)); ctext(ctext<65 | ctext>90)=[]; 

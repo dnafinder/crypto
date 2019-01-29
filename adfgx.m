@@ -31,25 +31,27 @@ function out=adfgx(text,key,direction,varargin)
 %
 % Examples:
 %
-% out=adfgx('Attack at once','cargo',1,['BTALP';'DHOZK';'QFVSN';'GICUX';'MREWY'])
+% out=adfgx('Hide the gold into the tree stump','leprachaun',1,['BTALP';'DHOZK';'QFVSN';'GICUX';'MREWY'])
 %
 % out = 
 % 
 %   struct with fields:
 % 
 %        matrix: [5×5 char]
-%           key: 'cargo'
-%         plain: 'Attack at once'
-%     encrypted: 'FAXDFADDDGDGFFFAFAXAFAFX'
+%           key: 'leprachaun'
+%         plain: 'Hide the gold into the tree stump'
+%     encrypted: 'DGFXFFFDDDAAXFGDDADFAXDAAADDDAXXDGFDGGXGDXADFDDFXAADXG'
 %
+% out=adfgx('DGFXFFFDDDAAXFGDDADFAXDAAADDDAXXDGFDGGXGDXADFDDFXAADXG','leprachaun',-1,['BTALP';'DHOZK';'QFVSN';'GICUX';'MREWY'])
+% 
 % out = 
 % 
 %   struct with fields:
 % 
 %        matrix: [5×5 char]
-%           key: 'cargo'
-%     encrypted: 'FAXDFADDDGDGFFFAFAXAFAFX'
-%         plain: 'ATTACKATONCE'
+%           key: 'leprachaun'
+%     encrypted: 'DGFXFFFDDDAAXFGDDADFAXDAAADDDAXXDGFDGGXGDXADFDDFXAADXG'
+%         plain: 'HIDETHEGOLDINTOTHETREESTUMP'
 %
 % See also adfgvx, bifid, checkerboard1, checkerboard2, foursquares, nihilist, playfair, polybius, threesquares, trifid, twosquares
 %

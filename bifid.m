@@ -28,27 +28,27 @@ function out=bifid(text,key,period,direction)
 %
 % Examples:
 %
-% out=bifid('Hide the gold in the tree stump','leprachaun',7,1)
+% out=bifid('Hide the gold into the tree stump','leprachaun',7,1)
 % 
 % out = 
 % 
 %   struct with fields:
 % 
-%         plain: 'HIDETHEGOLDINTHETREESTUMP'
+%         plain: 'HIDETHEGOLDINTOTHETREESTUMP'
 %           key: 'LEPRACHAUN'
 %        period: 7
-%     encrypted: 'TGZAPSFFAUKMKBKKLCSXSTMUP'
+%     encrypted: 'TGZAPSFFAUKMKBQKKEUSXETMSUP'
 %
-% out=bifid('TGZAPSFFAUKMKBKKLCSXSTMUP','leprachaun',7,-1)
+% out=bifid('TGZAPSFFAUKMKBQKKEUSXETMSUP','leprachaun',7,-1)
 %
 % out = 
 % 
 %   struct with fields:
 % 
-%     encrypted: 'TGZAPSFFAUKMKBKKLCSXSTMUP'
+%     encrypted: 'TGZAPSFFAUKMKBQKKEUSXETMSUP'
 %           key: 'LEPRACHAUN'
 %        period: 7
-%         plain: 'HIDETHEGOLDINTHETREESTUMP'
+%         plain: 'HIDETHEGOLDINTOTHETREESTUMP'
 %
 % See also adfgx, adfgvx, checkerboard1, checkerboard2, foursquares, nihilist, playfair, polybius, threesquares, trifid, twosquares
 %
@@ -61,6 +61,8 @@ addRequired(p,'key',@(x) ischar(x));
 addRequired(p,'period',@(x) validateattributes(x,{'numeric'},{'scalar','real','finite','nonnan','nonempty','integer','nonzero'}));
 addRequired(p,'direction',@(x) validateattributes(x,{'numeric'},{'scalar','real','finite','nonnan','nonempty','integer','nonzero','>=',-1,'<=',1}));
 parse(p,text,key,period,direction);
+clear p
+
 % ASCII codes for Uppercase letters ranges between 65 and 90;
 ctext=double(upper(text)); ctext(ctext<65 | ctext>90)=[]; 
 assert(period<=length(ctext),strcat('Period must be <=',num2str(length(ctext))))

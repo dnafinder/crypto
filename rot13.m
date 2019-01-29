@@ -22,29 +22,30 @@ function out=rot13(text)
 %
 % Examples:
 %
-% out=rot13('Green cat')
+% out=rot13('Hide the gold into the tree stump')
 % 
 % out = 
 % 
 %   struct with fields:
 % 
-%      input: 'Green cat'
-%     output: 'TERRAPNG'
+%      input: 'HIDE THE GOLD INTO THE TREE STUMP'
+%     output: 'UVQRGURTBYQVAGBGURGERRFGHZC'
 %
-% out=rot13('terrapng')
+% out=rot13('UVQRGURTBYQVAGBGURGERRFGHZC')
 %
 % out = 
 % 
 %   struct with fields:
 % 
-%      input: 'terrapng'
-%     output: 'GREENCAT'
+%      input: 'UVQRGURTBYQVAGBGURGERRFGHZC'
+%     output: 'HIDETHEGOLDINTOTHETREESTUMP'
 %
 % See also rot, affine, atbash
 %
 %           Created by Giuseppe Cardillo
 %           giuseppe.cardillo-edta@poste.it
 
+text=upper(text);
 tmp=rot(text,13,1);
 out.input=text;
 out.output=tmp.encrypted;

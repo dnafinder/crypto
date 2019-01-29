@@ -23,25 +23,25 @@ function out=vigenere(text,key,direction)
 %
 % Examples:
 %
-% out=vigenere('We are discovered flee at once','kingstonpower',1)
+% out=vigenere('Hide the gold into the tree stump','leprachaun',1)
 %
 % out = 
 % 
 %   struct with fields:
 % 
-%        plain: 'WEAREDISCOVEREDFLEEATONCE'
-%          key: 'KINGSTONPOWER'
-%    encrypted: 'GMNXWWWFRCRIIOLSRWXOGDBYI'
+%         plain: 'HIDETHEGOLDINTOTHETREESTUMP'
+%           key: 'LEPRACHAUN'
+%     encrypted: 'SMSVTJLGIYOMCKOVOENEPIHKUOW'
 %
-% out=vigenere('GMNXWWWFRCRIIOLSRWXOGDBYI','KINGSTONPOWER',-1)
+% out=vigenere('SMSVTJLGIYOMCKOVOENEPIHKUOW','leprachaun',-1)
 %
 % out = 
 % 
 %   struct with fields:
 % 
-%     encrypted: 'GMNXWWWFRCRIIOLSRWXOGDBYI'
-%           key: 'KINGSTONPOWER'
-%         plain: 'WEAREDISCOVEREDFLEEATONCE'
+%     encrypted: 'SMSVTJLGIYOMCKOVOENEPIHKUOW'
+%           key: 'LEPRACHAUN'
+%         plain: 'HIDETHEGOLDINTOTHETREESTUMP'
 %
 % See also autokey, beaufort, dellaporta, gronsfeld, nihilist, trithemius 
 %
@@ -53,6 +53,7 @@ addRequired(p,'text',@(x) ischar(x));
 addRequired(p,'key',@(x) ischar(x));
 addRequired(p,'direction',@(x) validateattributes(x,{'numeric'},{'scalar','real','finite','nonnan','nonempty','integer','nonzero','>=',-1,'<=',1}));
 parse(p,text,key,direction);
+clear p
 
 % Set all letters in uppercase and convert into ASCII Code.
 text=double(upper(text));

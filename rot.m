@@ -34,25 +34,25 @@ function out=rot(text,key,direction)
 %
 % Examples:
 %
-% out=rot('Giuseppe Cardillo',7,1)
+% out=rot('Hide the gold into the tree stump',7,1)
 %
 % out = 
 % 
 %   struct with fields:
 % 
-%         plain: 'GIUSEPPE CARDILLO'
+%         plain: 'HIDE THE GOLD INTO THE TREE STUMP'
 %           key: 7
-%     encrypted: 'NPBZLWWLJHYKPSSV'
+%     encrypted: 'OPKLAOLNVSKPUAVAOLAYLLZABTW'
 %
-% out=rot('NPBZLWWLJHYKPSSV',7,-1)
+% out=rot('OPKLAOLNVSKPUAVAOLAYLLZABTW',7,-1)
 %
 % out = 
 % 
 %   struct with fields:
 % 
-%     encrypted: 'NPBZLWWLJHYKPSSV'
+%     encrypted: 'OPKLAOLNVSKPUAVAOLAYLLZABTW'
 %           key: 7
-%         plain: 'GIUSEPPECARDILLO'
+%         plain: 'HIDETHEGOLDINTOTHETREESTUMP'
 %
 % See also rot13, affine, atbash, ragbaby
 %
@@ -64,6 +64,7 @@ addRequired(p,'text',@(x) ischar(x));
 addRequired(p,'key',@(x) validateattributes(x,{'numeric'},{'scalar','real','finite','nonnan','nonempty','integer','nonzero','>=',-25,'<=',25}));
 addRequired(p,'direction',@(x) validateattributes(x,{'numeric'},{'scalar','real','finite','nonnan','nonempty','integer','nonzero','>=',-1,'<=',1}));
 parse(p,text,key,direction);
+clear p
 
 % Set all letters in uppercase and convert into ASCII Code.
 text=upper(text); ctext=double(text); 

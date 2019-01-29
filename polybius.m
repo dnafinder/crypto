@@ -46,25 +46,25 @@ function out=polybius(x,ms)
 %
 % Examples:
 % 
-% out=polybius('Giuseppe Cardillo',5)
+% out=polybius('Hide the gold into the tree stump',5)
 % 
 % out = 
 % 
 %   struct with fields:
 % 
-%         plain: 'GIUSEPPE CARDILLO'
+%         plain: 'HIDE THE GOLD INTO THE TREE STUMP'
 %            ms: 5
-%     encrypted: [22 24 45 43 15 35 35 15 13 11 42 14 24 31 31 34]
+%     encrypted: [23 24 14 15 44 23 15 22 34 31 14 24 33 44 34 44 23 15 44 42 15 15 43 44 45 32 35]
 %
-% out=polybius([22 24 45 43 15 35 35 15 13 11 42 14 24 31 31 34],5)
+% out=polybius([23 24 14 15 44 23 15 22 34 31 14 24 33 44 34 44 23 15 44 42 15 15 43 44 45 32 35],5)
 %
 % out = 
 % 
 %   struct with fields:
 % 
-%     encrypted: [22 24 45 43 15 35 35 15 13 11 42 14 24 31 31 34]
+%     encrypted: [23 24 14 15 44 23 15 22 34 31 14 24 33 44 34 44 23 15 44 42 15 15 43 44 45 32 35]
 %            ms: 5
-%         plain: 'GIUSEPPECARDILLO'
+%         plain: 'HIDETHEGOLDINTOTHETREESTUMP'
 %
 % Many other algorithms are based onto Polybius Square.
 % See also adfgx, adfgvx, bazeries, bifid, checkerboard1, checkerboard2, foursquares, nihilist, playfair, threesquares, trifid, twosquares
@@ -110,9 +110,9 @@ if ischar(x) %encrypt
 else
     switch ms
         case 5
-            assert(all(ismember(x,[11:1:15 21:1:25 31:1:35 41:1:45 51:1:55],'This array can''t be decoded using a 5x5 Polybius matrix')))
+            assert(all(ismember(x,[11:1:15 21:1:25 31:1:35 41:1:45 51:1:55])),'This array can''t be decoded using a 5x5 Polybius matrix')
         case 6
-            assert(all(ismember(x,[11:1:16 21:1:26 31:1:36 41:1:46 51:1:56 61:1:66],'This array can''t be decoded using a 6x6 Polybius matrix')))
+            assert(all(ismember(x,[11:1:16 21:1:26 31:1:36 41:1:46 51:1:56 61:1:66])),'This array can''t be decoded using a 6x6 Polybius matrix')
     end
     out.encrypted=x;
     out.ms=ms;

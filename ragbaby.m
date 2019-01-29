@@ -20,25 +20,25 @@ function out=ragbaby(text,key,direction)
 %
 % Examples:
 %
-% out=ragbaby('Hide the gold in the tree stump','leprachaun and goblins',1)
+% out=ragbaby('Hide the gold into the tree stump','leprachaun',1)
+% 
+% out = 
+% 
+%   struct with fields:
+% 
+%         plain: 'HIDE THE GOLD INTO THE TREE STUMP'
+%           key: 'LEPRACHAUN'
+%     encrypted: 'UKIC WBC KVCM OILY ZGN LDBD LPMLI'
+%
+% out=ragbaby('UKIC WBC KVCM OILY ZGN LDBD LPMLI','leprachaun',-1)
 %
 % out = 
 % 
 %   struct with fields:
 % 
-%         plain: 'HIDE THE GOLD IN THE TREE STUMP'
-%           key: 'LEPRACHAUNANDGOBLINS'
-%     encrypted: 'UFBC WDC IFCF KI ZBN LGDG VPJPI'
-%
-% out=ragbaby('UFBC WDC IFCF KI ZBN LGDG VPJPI','leprachaun and goblins',-1)
-%
-% out = 
-% 
-%   struct with fields:
-% 
-%     encrypted: 'UFBC WDC IFCF KI ZBN LGDG VPJPI'
-%           key: 'LEPRACHAUNANDGOBLINS'
-%         plain: 'HIDE THE GOLD IN THE TREE STUMP'
+%     encrypted: 'UKIC WBC KVCM OILY ZGN LDBD LPMLI'
+%           key: 'LEPRACHAUN'
+%         plain: 'HIDE THE GOLD INTO THE TREE STUMP'
 %
 % See also rot
 %
@@ -50,6 +50,7 @@ addRequired(p,'text',@(x) ischar(x));
 addRequired(p,'key',@(x) ischar(x));
 addRequired(p,'direction',@(x) validateattributes(x,{'numeric'},{'scalar','real','finite','nonnan','nonempty','integer','nonzero','>=',-1,'<=',1}));
 parse(p,text,key,direction);
+clear p
 
 % ASCII codes for Uppercase letters ranges between 65 and 90;
 ctext=double(upper(text)); 

@@ -28,25 +28,25 @@ function out=bazeries(text,key,direction)
 %
 % Examples:
 %
-% out=bazeries('Whoever has made a voyage up the Hudson must remember the Kaatskill mountains','81257',1)
+% out=bazeries('Hide the gold into the tree stump','81257',1)
 % 
 % out = 
 % 
 %   struct with fields:
 % 
-%         plain: 'Whoever has made a voyage up the Hudson must remember the Kaatskill mountains'
+%         plain: 'Hide the gold into the tree stump'
 %           key: '81257'
-%     encrypted: 'DUMTMCDSENRTEMVEQXMOELCCRVXDMDKWXNNMUKRDKUMYNMBPRKEEPMGNGEKWXCRWB'
-%
-% out=bazeries('DUMTMCDSENRTEMVEQXMOELCCRVXDMDKWXNNMUKRDKUMYNMBPRKEEPMGNGEKWXCRWB','81257',-1)
+%     encrypted: 'OMDKMVBDCVGKCKWBRMMUKMDQNXK'
+% 
+% out=bazeries('OMDKMVBDCVGKCKWBRMMUKMDQNXK','81257',-1)
 % 
 % out = 
 % 
 %   struct with fields:
 % 
-%     encrypted: 'DUMTMCDSENRTEMVEQXMOELCCRVXDMDKWXNNMUKRDKUMYNMBPRKEEPMGNGEKWXCRWB'
+%     encrypted: 'OMDKMVBDCVGKCKWBRMMUKMDQNXK'
 %           key: '81257'
-%         plain: 'WHOEVERHASMADEAVOYAGEUPTHEHUDSONMUSTREMEMBERTHEKAATSKILLMOUNTAINS'
+%         plain: 'HIDETHEGOLDINTOTHETREESTUMP'
 %
 % See also polybius
 %
@@ -58,6 +58,8 @@ addRequired(p,'text',@(x) ischar(x));
 addRequired(p,'key',@(x) ischar(x));
 addRequired(p,'direction',@(x) validateattributes(x,{'numeric'},{'scalar','real','finite','nonnan','nonempty','integer','nonzero','>=',-1,'<=',1}));
 parse(p,text,key,direction);
+clear p
+
 nk=str2double(key);
 assert(nk<1e6,'Key must be less than 1 million')
 
