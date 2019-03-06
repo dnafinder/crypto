@@ -41,7 +41,7 @@ function out=gronsfeld(text,key,direction)
 %           key: '1264587895663'
 %         plain: 'HIDETHEGOLDINTOTHETREESTUMP'
 %
-% See also autokey, beaufort, dellaporta, trithemius, vigenere
+% See also autokey, beaufort, gromark, dellaporta, trithemius, vigenere
 %
 %           Created by Giuseppe Cardillo
 %           giuseppe.cardillo-edta@poste.it
