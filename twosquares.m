@@ -131,13 +131,13 @@ for I=1:L
         tmp=ctext(I,1); ctext(I,1)=ctext(I,2); ctext(I,2)=tmp; 
     end
 end
-clear I R1 C1 R2 C2 PS1 PS2 tmp
+clear I R1 C1 R2 C2 PS1 PS2 tmp L
 
 switch direction
     case 1 %encrypt
-        out.encrypted=char(reshape(ctext',1,L*2));
+        out.encrypted=char(reshape(ctext',1,[]));
     case -1 %decrypt
-        out.plain=char(reshape(ctext',1,L*2));
+        out.plain=char(reshape(ctext',1,[]));
         if out.plain(end)=='X' && ~ismember(out.plain(end-1),'AEIOUY')
             %if last letter is 'X' and the second last is not a vowel then
             %erase the 'X': it was added to pad text.

@@ -71,15 +71,14 @@ switch direction
             RL=ceil(LT/M2);
             pad=repmat('§',1,RL*M2-LT);
             ctext=reshape([text pad],M,M)';
-            clear RL LT pad
+            clear RL LT pad M2
         else
             ctext=reshape(text,M,M)';
         end
         clear M
         ctext=ctext(:,key);
         ctext=ctext(key,:);
-        ctext=regexprep(reshape(ctext',1,M2),'§','');
-        clear M2
+        ctext=regexprep(reshape(ctext',1,[]),'§','');
         out.plain=text;
         out.key=key;
         out.encrypted=ctext;
@@ -87,11 +86,11 @@ switch direction
         if LT<M2
             RL=ceil(LT/M2);
             pad=repmat('§',1,RL*M2-LT);
-            clear RL
+            clear RL M2
         else
             pad=[];
         end
-        clear LT
+        clear LT 
         [~,Idx]=sort(key);
         ctext=repmat('^',M,M);
         I=M;
@@ -120,8 +119,7 @@ switch direction
         ctext=ctext(Idx,:);
         ctext=ctext(:,Idx);
         clear Idx
-        ctext=regexprep(reshape(ctext',1,M2),'§','');
-        clear M2
+        ctext=regexprep(reshape(ctext',1,[]),'§','');
         out.encrypted=text;
         out.key=key;
         out.plain=ctext;

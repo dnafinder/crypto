@@ -71,27 +71,27 @@ LT=length(ctext);
 RL=ceil(LT/M);
 if mod(LT,M)~=0
     pad=repmat('X',1,RL*M-LT);
-    ctext=reshape([ctext pad],M,RL)';
-    clear pad;
+    ctext=reshape([ctext pad],M,[])';
+    clear pad
 else
     switch direction
         case 1 %encrypt
-            ctext=reshape(ctext,M,RL)';
+            ctext=reshape(ctext,M,[])';
         case -1 %decrypt
-            ctext=reshape(ctext,RL,M);
+            ctext=reshape(ctext,[],M);
     end
 end
-clear LT
+clear LT M RL
 
 switch direction
     case 1 %encrypt
         out.plain=text;
         out.key=key;
-        out.encrypted=reshape(ctext(:,Idx),1,RL*M);
+        out.encrypted=reshape(ctext(:,Idx),1,[]);
     case -1 %decrypt
         out.encrypted=text;
         out.key=key;
-        ctext=reshape(ctext(:,key)',1,RL*M);
+        ctext=reshape(ctext(:,key)',1,[]);
         X=find(ctext=='X');
         if ~isempty(X)
             X(X==1)=[]; %If "X" is the first letter, surely it wasn't added;
@@ -102,4 +102,4 @@ switch direction
         clear X
         out.plain=ctext;
 end
-clear M RL Idx ctext 
+clear Idx ctext 

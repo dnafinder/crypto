@@ -110,7 +110,7 @@ switch direction
         clear locb
         L=length(I);
         s1=binornd(1,0.5,L,2)+1;
-        out.encrypted=reshape([key1(sub2ind([2,5],s1(:,1)',I));key2(sub2ind([2,5],s1(:,2)',J))],1,2*length(I));
+        out.encrypted=reshape([key1(sub2ind([2,5],s1(:,1)',I));key2(sub2ind([2,5],s1(:,2)',J))],1,[]);
         clear I J L s1
     case -1
         ctext=char(reshape(ctext',2,length(ctext)/2));

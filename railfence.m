@@ -106,7 +106,7 @@ switch direction
         matrix(Ind(1:L))=double(text);
         clear Ind L rows cols
         %Reshape the matrix and then reads off to get the ciphertext
-        matrix=reshape(matrix',1,N*key);
+        matrix=reshape(matrix',1,[]);
         %squeeze out NaNs
         matrix(isnan(matrix))=[];
         %transform back the ASCII codes

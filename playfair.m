@@ -126,11 +126,11 @@ switch direction
             end
         end
         L=length(tmp)/2; %lenght of digrams vector
-        ctext=reshape(tmp,2,L)'; %reshape tmp vector into Lx2 matrix
+        ctext=reshape(tmp,2,[])'; %reshape tmp vector into Lx2 matrix
         clear a b tmp
     case -1 %decrypt
         L=length(text)/2; %lenght of digrams vector
-        ctext=double(reshape(text,2,L)'); %reshape text vector into Lx2 matrix
+        ctext=double(reshape(text,2,[])'); %reshape text vector into Lx2 matrix
 end
 
 tmp=zeros(L,2); %vector preallocation
@@ -175,13 +175,14 @@ clear PS R1 R2 C1 C2 I ctext A
 
 switch direction
     case 1 %encrypt
+        clear L
         %simply reshape the tmp array
-        out.encrypted=char(reshape(tmp',1,L*2));
+        out.encrypted=char(reshape(tmp',1,[]));
         clear tmp
     case -1 %decrypt
         %reshape the tmp array
         L=L*2;
-        tmp=reshape(tmp',1,L);
+        tmp=reshape(tmp',1,[]);
         %Find all the "Q"
         Q=find(tmp==81); 
         q=[];

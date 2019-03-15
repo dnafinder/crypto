@@ -105,7 +105,7 @@ switch direction
         % transform index into subscripts
         [I,J]=ind2sub([5,5],locb);
         clear locb
-        out.encrypted=reshape([key1(I);key2(J)],1,2*length(I));
+        out.encrypted=reshape([key1(I);key2(J)],1,[]);
         clear I J
     case -1
         ctext=char(reshape(ctext',2,length(ctext)/2));

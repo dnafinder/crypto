@@ -69,6 +69,7 @@ ckey(ckey==87)=86;
 % key Length
 LK=length(ckey);
 C=LT/25;
+clear LT
 %Check if LK is the ratio of LT and 25
 assert(C==LK,'The key must be %i letters long',C)
 
@@ -94,7 +95,7 @@ for I=1:C
 end
 clear C I S ckey*
 %reshape into a vector horizontally
-ctext=reshape(ctext',1,LT);
+ctext=reshape(ctext',1,[]);
 
 out.key=key;
 switch direction
@@ -105,4 +106,4 @@ switch direction
         out.encrypted=text;
         out.plain=ctext;
 end
-clear ctext LT
+clear ctext

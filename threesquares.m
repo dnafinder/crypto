@@ -170,8 +170,8 @@ switch direction
             [R3,C3]=find(PSC==ctext(I,2)); %find row and column of the 2nd trigram letter into the Polybius Square C
             ctext2(I,:)=[PSA(R3,C1) PSB(R2,C3)];
         end
-        clear PS* R* C* I ctext
-        out.plain=char(reshape(ctext2',1,L*2));
+        clear PS* R* C* I ctext L
+        out.plain=char(reshape(ctext2',1,[]));
         clear ctext2
         if out.plain(end)=='X' && ~ismember(out.plain(end-1),'AEIOUY')
             %if last letter is 'X' and the second last is not a vowel then

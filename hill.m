@@ -127,27 +127,27 @@ switch direction
         clear D r
         %reshape text: text matrix rows must be equal to encryptyng matrix columns
         T=reshape(ctext,N,LT/N)';
-        clear ctext N
+        clear ctext N LT
         E=mod(T*K,41)'; %encrypt
         clear K T
         %back mapping
-        [~,idx]=ismember(reshape(E,LT,1)',map(2,:));
-        clear E LT
+        [~,idx]=ismember(reshape(E,[],1)',map(2,:));
+        clear E
         out.plain=text;
         out.key=key;
         out.encrypted=deblank(char(map(1,idx)));
     case -1 %decrypt
         %reshape text: text matrix rows must be equal to encryptyng matrix columns
         T=reshape(ctext',N,LT/N)';
-        clear ctext N
+        clear ctext N LT
         %MODULAR inverse matrix of the cipher matrix
         IK=mod(round(inv(K)*D*r),41); %#ok<MINV>
         clear K D r
         P=mod(T*IK,41)'; %decrypt
         clear IK T
         %back mapping
-        [~,idx]=ismember(reshape(P,LT,1)',map(2,:));
-        clear P LT
+        [~,idx]=ismember(reshape(P,[],1)',map(2,:));
+        clear P 
         out.encrypted=text;
         out.key=key;
         out.plain=deblank(char(map(1,idx)));
