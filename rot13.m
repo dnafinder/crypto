@@ -43,7 +43,7 @@ function out=rot13(text)
 % See also rot, affine, atbash
 %
 %           Created by Giuseppe Cardillo
-%           giuseppe.cardillo-edta@poste.it
+%           giuseppe.cardillo.75@gmail.com
 
 text=upper(text);
 tmp=rot(text,13,1);

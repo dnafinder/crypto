@@ -46,7 +46,7 @@ function out=vigenere(text,key,direction)
 % See also autokey, beaufort, dellaporta, gronsfeld, nihilist, trithemius 
 %
 %           Created by Giuseppe Cardillo
-%           giuseppe.cardillo-edta@poste.it
+%           giuseppe.cardillo.75@gmail.com
 
 p = inputParser;
 addRequired(p,'text',@(x) ischar(x));

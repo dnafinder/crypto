@@ -43,7 +43,7 @@ function out=trithemius(text,direction)
 % See also vigenere, autokey, beaufort, dellaporta, gronsfeld
 %
 %           Created by Giuseppe Cardillo
-%           giuseppe.cardillo-edta@poste.it
+%           giuseppe.cardillo.75@gmail.com
 
 out=vigenere(text,'ABCDEFGHIJKLMNOPQRSTUVWXYZ',direction);
 out=rmfield(out,'key');

@@ -63,7 +63,7 @@ function out=chaocipher(text,direction,varargin)
 %         plain: 'HIDETHEGOLDINTOTHETREESTUMP
 %
 %           Created by Giuseppe Cardillo
-%           giuseppe.cardillo-edta@poste.it
+%           giuseppe.cardillo.75@gmail.com
 
 p = inputParser;
 addRequired(p,'text',@(x) ischar(x));

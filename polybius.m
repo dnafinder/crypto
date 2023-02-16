@@ -70,7 +70,7 @@ function out=polybius(x,ms)
 % See also adfgx, adfgvx, bazeries, bifid, checkerboard1, checkerboard2, foursquares, nihilist, playfair, threesquares, trifid, twosquares
 %
 %           Created by Giuseppe Cardillo
-%           giuseppe.cardillo-edta@poste.it
+%           giuseppe.cardillo.75@gmail.com
 
 assert(ms==5 || ms==6,'Polybius matrix can be 5x5 or 6x6')
 % rearrange ASCII codes into a square matrix

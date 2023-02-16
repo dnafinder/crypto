@@ -35,7 +35,7 @@ function out=a1z26(x)
 %         plain: 'HIDETHEGOLDINTOTHETREESTUMP'
 %
 %           Created by Giuseppe Cardillo
-%           giuseppe.cardillo-edta@poste.it
+%           giuseppe.cardillo.75@gmail.com
 %
 
 if all(isnumeric(x)) % decrypt

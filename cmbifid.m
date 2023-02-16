@@ -51,7 +51,7 @@ function out=cmbifid(text,key1,key2,period,direction)
 % See also bifid
 %
 %           Created by Giuseppe Cardillo
-%           giuseppe.cardillo-edta@poste.it
+%           giuseppe.cardillo.75@gmail.com
 
 p = inputParser;
 addRequired(p,'text',@(x) ischar(x));

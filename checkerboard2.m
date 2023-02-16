@@ -49,7 +49,8 @@ function out=checkerboard2(text,pskey,key1,key2,direction)
 % See also adfgx, adfgvx, bifid, checkerboard1, foursquares, nihilist, playfair, polybius, threesquares, trifid, twosquares
 %
 %           Created by Giuseppe Cardillo
-%           giuseppe.cardillo-edta@poste.it
+%           giuseppe.cardillo.75@gmail.com
+
 p = inputParser;
 addRequired(p,'text',@(x) ischar(x));
 addRequired(p,'pskey',@(x) ischar(x));

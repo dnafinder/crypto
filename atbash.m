@@ -46,7 +46,7 @@ function out=atbash(text)
 % See also rot, rot13, affine
 %
 %           Created by Giuseppe Cardillo
-%           giuseppe.cardillo-edta@poste.it
+%           giuseppe.cardillo.75@gmail.com
 
 tmp=affine(text,[25 25],1);
 out.input=text;

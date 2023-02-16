@@ -62,7 +62,7 @@ function out=adfgvx(text,key,direction,varargin)
 % See also adfgx, bidif, checkerboard1, checkerboard2, foursquares, nihilist, playfair, polybius, threesquares, trifid, twosquares
 %
 %           Created by Giuseppe Cardillo
-%           giuseppe.cardillo-edta@poste.it
+%           giuseppe.cardillo.75@gmail.com
 
 p = inputParser;
 addRequired(p,'text',@(x) ischar(x));

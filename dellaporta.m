@@ -44,7 +44,7 @@ function out=dellaporta(text,key,direction)
 % See also autokey, beaufort, gronsfeld, trithemius, vigenere
 %
 %           Created by Giuseppe Cardillo
-%           giuseppe.cardillo-edta@poste.it
+%           giuseppe.cardillo.75@gmail.com
 
 p = inputParser;
 addRequired(p,'text',@(x) ischar(x));

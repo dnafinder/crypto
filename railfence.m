@@ -53,7 +53,7 @@ function out=railfence(text,key,direction)
 %         plain: 'HIDE THE GOLD INTO THE TREE STUMP'
 %
 %           Created by Giuseppe Cardillo
-%           giuseppe.cardillo-edta@poste.it
+%           giuseppe.cardillo.75@gmail.com
 
 p = inputParser;
 addRequired(p,'text',@(x) ischar(x));

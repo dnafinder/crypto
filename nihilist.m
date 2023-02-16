@@ -65,7 +65,7 @@ function out=nihilist(x,key1,key2,ms)
 % See also adfgx, adfgvx, bifid, checkerboard1, checkerboard2, foursquares, nihilist2, playfair, polybius, trifid, twosquares, vigenere
 %
 %           Created by Giuseppe Cardillo
-%           giuseppe.cardillo-edta@poste.it
+%           giuseppe.cardillo.75@gmail.com
 
 %Input Checking        
 assert(ischar(x) || all(isnumeric(x)))
