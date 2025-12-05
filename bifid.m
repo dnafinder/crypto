@@ -104,7 +104,6 @@ switch direction
 
         for s = 1:period:K
             idx = s:min(s+period-1,K);
-            r = numel(idx);
 
             rows = I(idx);
             cols = J(idx);
