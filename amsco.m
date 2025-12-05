@@ -1,246 +1,264 @@
 function out=amsco(text,key,direction)
 % AMSCO Cipher encoder/decoder
 % This algorithm arranges the plain text into a matrix, alternating digraphs
-% and single letter. The number of columns is given by the max number of
-% the key. Then, the columns are rearrangend using the key and the text is
+% and single letters. The number of columns is given by the key length.
+% Then, the columns are rearranged using the key order and the text is
 % read vertically.
+% English, 26 letters, alphabet is used and all non-alphabet symbols are
+% not transformed.
 %
 % Syntax: 	out=amsco(text,key,direction)
 %
 %     Input:
-%           text - It is a characters array to encode or decode
-%           key - It is a characters array of the digits used as key.
+%           text - It is a character array or a string scalar to encode or decode
+%           key - It is a character array or a string scalar of digits used as key.
+%                 It must represent a valid permutation of 1..N (e.g. '3142').
 %           direction - this parameter can assume only two values:
 %                   1 to encrypt
 %                  -1 to decrypt.
 %     Output:
 %           out - It is a structure
-%           out.plain = the plain text
+%           out.plain = the plain text (processed)
 %           out.key = the used key
-%           out.encrypted = the coded text
+%           out.encrypted = the coded text (processed)
 %
 % Examples:
 %
 % out=amsco('Hide the gold into the tree stump','3142',1)
 %
-% out = 
-% 
-%   struct with fields:
-% 
-%         plain: 'Hide the gold into the tree stump'
-%           key: '3142'
-%     encrypted: 'DOOEPHIETHIEGNTTRUMETLDTHES'
-%
 % out=amsco('DOOEPHIETHIEGNTTRUMETLDTHES','3142',-1)
-%
-% out = 
-% 
-%   struct with fields:
-% 
-%     encrypted: 'DOOEPHIETHIEGNTTRUMETLDTHES'
-%           key: '3142'
-%         plain: 'HIDETHEGOLDINTOTHETREESTUMP'
 %
 %           Created by Giuseppe Cardillo
 %           giuseppe.cardillo.75@gmail.com
+%           GitHub (Crypto): https://github.com/dnafinder/crypto
 
 p = inputParser;
-addRequired(p,'text',@(x) ischar(x));
-addRequired(p,'key',@(x) ischar(x));
-addRequired(p,'direction',@(x) validateattributes(x,{'numeric'},{'scalar','real','finite','nonnan','nonempty','integer','nonzero','>=',-1,'<=',1}));
+addRequired(p,'text',@(x) ischar(x) || (isstring(x) && isscalar(x)));
+addRequired(p,'key',@(x) ischar(x) || (isstring(x) && isscalar(x)));
+addRequired(p,'direction',@(x) validateattributes(x,{'numeric'}, ...
+    {'scalar','real','finite','nonnan','nonempty','integer','nonzero','>=',-1,'<=',1}));
 parse(p,text,key,direction);
 clear p
 
-% ASCII codes for Uppercase letters ranges between 65 and 90;
-ctext=double(upper(text)); ctext(ctext<65 | ctext>90)=[]; ctext=char(ctext);
-% Convert key into a vector
-K=double(key)-48;
-LK=length(K); %how many columns?
-[~,Idx]=sort(K); %take the index of the ordered columns
+if isstring(text)
+    text = char(text);
+end
+if isstring(key)
+    key = char(key);
+end
+
+assert(ismember(direction,[-1 1]),'Direction must be 1 (encrypt) or -1 (decrypt).')
+
+% Validate key: digits only
+assert(~isempty(key) && all(key>='0' & key<='9'), ...
+    'Key must be a non-empty char vector of digits (e.g. ''3142'').')
+
+% Convert key into a numeric vector
+K = double(key) - 48;
+LK = numel(K);
+
+% Key must be a permutation of 1..LK
+sK = sort(K);
+assert(isequal(sK,1:LK), ...
+    'This key cannot be used. Digits must form a permutation of 1..%d.',LK)
+clear sK
+
+% Index of ordered columns
+[~,Idx] = sort(K);
 clear K
 
+% ASCII codes of standard English 26 letters alphabet
+ctext = double(upper(text));
+ctext(ctext < 65 | ctext > 90) = [];
+ctext = char(ctext);
+
 switch direction
-    case 1 %encrypt
-        out.plain=text;
-        out.key=key;
-        % example:
-        % text='Incomplete columnar with alternating single letters and digraphs';
-        % key='41325';
-        % ctext='INCOMPLETECOLUMNARWITHALTERNATINGSINGLELETTERSANDDIGRAPHS'
-        
-        % check if lenght of text is multiple of 3; if not, pad the text with '*'
-        M=mod(length(ctext),3);
-        if M~=0
-            ctext=[ctext repmat('*',1,3-M)];
+    case 1 % encrypt
+        out.plain = ctext;
+        out.key = key;
+
+        % check if length of text is multiple of 3; if not, pad with '*'
+        M = mod(numel(ctext),3);
+        if M ~= 0
+            ctext = [ctext repmat('*',1,3-M)];
         end
         clear M
-        LT2=length(ctext); LT1=LT2/3; LT2=LT2*4/3; clear LT
-        % Reshape ctext into a Nx3 matrix; add a fourth column of '*' and back
-        % reshape into a single line
-        % A=INC*OMP*LET*ECO*LUM*NAR*WIT*HAL*TER*NAT*ING*SIN*GLE*LET*TER*SAN*DDI*GRA*PHS*
-        A=reshape([reshape(ctext,3,LT1)' repmat('*',LT1,1)]',1,LT2);
-        clear LT1 ctext
-        
-        % check if lenght of A is multiple of key length; if not, pad the text with '*'
-        LK=LK*2;
-        M=mod(LT2,LK);
-        Z=LK-M;
-        if M~=0
-            LT2=LT2+Z;
-            A=[A repmat('*',1,Z)];
+
+        LT_txt = numel(ctext);
+        LT1 = LT_txt/3;
+        LTA = LT_txt*4/3;
+
+        % Reshape ctext into a Nx3 matrix; add a fourth column of '*'
+        A = reshape([reshape(ctext,3,LT1)' repmat('*',LT1,1)]',1,LTA);
+        clear LT1 ctext LT_txt
+
+        % Now we work with doubled columns (single/digraph slots)
+        LK2 = LK*2;
+
+        % check if length of A is multiple of LK2; if not, pad with '*'
+        M = mod(LTA,LK2);
+        if M ~= 0
+            Z = LK2 - M;
+            A = [A repmat('*',1,Z)];
+            LTA = LTA + Z;
             clear Z
         end
         clear M
-        % reshape A into NxLK*2 columns
-        % B =
-        % IN|C*|OM|P*|LE
-        % T*|EC|O*|LU|M*
-        % NA|R*|WI|T*|HA
-        % L*|TE|R*|NA|T*
-        % IN|G*|SI|N*|GL
-        % E*|LE|T*|TE|R*
-        % SA|N*|DD|I*|GR
-        % A*|PH|S*|**|**
-        %  4| 1| 3| 2| 5
-        B=reshape(A,LK,LT2/LK)';
+
+        % reshape A into NxLK2 columns
+        B = reshape(A,LK2,LTA/LK2)';
         clear A
-        
+
         % Reorder columns using the key
-        % C=
-        % C*|P*|OM|IN|LE
-        % EC|LU|O*|T*|M*
-        % R*|T*|WI|NA|HA
-        % TE|NA|R*|L*|T*
-        % G*|N*|SI|IN|GL
-        % LE|TE|T*|E*|R*
-        % N*|I*|DD|SA|GR
-        % PH|**|S*|A*|**
-        % 1 | 2| 3| 4| 5
-        I=1:2:LK;
-        I=I(Idx);
-        clear Idx
-        C=B(:,reshape([I;I+1],1,LK));
-        clear B Idx I
-        
-        % Reshape C into a 2xZ matrix
-        % D =
-        % CERTGLNPPLTNNTI*OOWRSTDSITNLIESALMHTGRG*
-        % *C*E*E*H*U*A*E**M*I*I*D*N*A*N*A*E*A*L*R*
-        I=LT2/LK; Z=LT2/2;
-        fine=I:I:Z;
-        inizio=fine-I+1;
-        D=repmat('*',2,Z); %matrix preallocation
-        clear I Z
-        I=1;
-        C=C';
-        for Z=1:2:LK
-            D(:,inizio(I):fine(I))=C(Z:Z+1,:);
-            I=I+1;
+        I = 1:2:LK2;
+        I = I(Idx);
+        C = B(:,reshape([I;I+1],1,LK2));
+        clear B I
+
+        % Reshape C into a 2xZ matrix by blocks
+        nBlocks = LTA/LK2;
+        Z = LTA/2;
+        fine = nBlocks:nBlocks:Z;
+        inizio = fine - nBlocks + 1;
+
+        D = repmat('*',2,Z); % preallocation
+        C = C';
+
+        b = 1;
+        for colPair = 1:2:LK2
+            D(:,inizio(b):fine(b)) = C(colPair:colPair+1,:);
+            b = b + 1;
         end
-        clear I Z LK C inizio fine
-        
+        clear b colPair C inizio fine nBlocks
+
         % Back reshape D into a single line
-        % E=C*ECR*TEG*LEN*PHP*LUT*NAN*TEI***OMO*WIR*SIT*DDS*INT*NAL*INE*SAA*LEM*HAT*GLR*GR**
-        E=reshape(D,1,LT2);
-        clear LT2 D
+        E = reshape(D,1,LTA);
+        clear D LTA
+
         % Erase '*'
-        E(E=='*')=[];
-        out.encrypted=E;
-        clear E
-    case -1 %decrypt
-        out.encrypted=text;
-        out.key=key;
-        LK2=LK*2;
-        LT=length(ctext);
-        asterisks=floor(LT/3); %number of * for single letters 
-        LT=LT+asterisks;
-        clear asterisks;
-        R=ceil(LT/LK2); %rows
-        M=floor((R*LK2-LT)/2); %is the matrix padded?
-        %the extrapad is an * that is inserted instead of a digraph
-        extrapad=R*LK2-LT-M*2;
-        if M~=0
-            padded=LK:-1:LK-M+1; %padded columns
-            clear Z
+        E(E=='*') = [];
+
+        out.encrypted = E;
+        clear E LK2
+
+    case -1 % decrypt
+        out.encrypted = ctext;
+        out.key = key;
+
+        LK2 = LK*2;
+
+        LT = numel(ctext);
+        asterisks = floor(LT/3); % number of * for single letters
+        LT = LT + asterisks;
+        clear asterisks
+
+        R = ceil(LT/LK2); % rows
+
+        % Is the matrix padded?
+        M = floor((R*LK2 - LT)/2);
+
+        % The extrapad is an * inserted instead of a digraph
+        extrapad = R*LK2 - LT - M*2;
+
+        if M ~= 0
+            padded = LK:-1:LK-M+1; % padded columns (in key-space, 1..LK)
         else
-            padded=[];
+            padded = [];
         end
         clear M LT
-        B=repmat('*',R,LK2); %Matrix preallocation
+
+        % Safe guard for later comparisons
+        if isempty(padded)
+            minPadded = 0;
+        else
+            minPadded = min(padded);
+        end
+
+        B = repmat('*',R,LK2); % Matrix preallocation
+
         % Reorder columns using the key
-        I=1:2:LK2;
-        I=I(Idx);
-        S=1; F=mod(LK,2);
-        for J=1:LK
-            H=ismember(Idx(J),padded);
+        I = 1:2:LK2;
+        I = I(Idx);
+
+        S = 1;
+        F = mod(LK,2);
+
+        for J = 1:LK
+            H = ismember(Idx(J),padded);
+
             switch mod(Idx(J),2)
-                case 0 %we must fill a column that start with single letter
-                    B(1,I(J))=ctext(S);
-                    S=S+1;
-                    lr=R-H;
-                    for X=2:lr
+                case 0 % column starting with single letter
+                    B(1,I(J)) = ctext(S);
+                    S = S + 1;
+
+                    lr = R - H;
+
+                    for X = 2:lr
                         switch F
-                            case 0 %If columns are even continue with single
-                                B(X,I(J))=ctext(S);
-                                S=S+1;
-                            case 1 %If columns are even alternate single and digraph
+                            case 0 % even number of columns: continue with single
+                                B(X,I(J)) = ctext(S);
+                                S = S + 1;
+
+                            case 1 % odd number of columns: alternate single/digraph
                                 switch mod(X,2)
                                     case 0
-                                        %check if you need to introduce the extrapad
-                                        if X==lr && extrapad~=0 && I(J)==min(padded)*2-3
-                                            B(X,I(J))=ctext(S);
-                                            S=S+1;
+                                        if X==lr && extrapad~=0 && I(J)==minPadded*2-3
+                                            B(X,I(J)) = ctext(S);
+                                            S = S + 1;
                                         else
-                                            B(X,I(J):I(J)+1)=ctext(S:S+1);
-                                            S=S+2;
+                                            B(X,I(J):I(J)+1) = ctext(S:S+1);
+                                            S = S + 2;
                                         end
                                     case 1
-                                        B(X,I(J))=ctext(S);
-                                        S=S+1;
+                                        B(X,I(J)) = ctext(S);
+                                        S = S + 1;
                                 end
                         end
                     end
-                case 1 %we must fill a column that start with digraph
-                    B(1,I(J):I(J)+1)=ctext(S:S+1);
-                    S=S+2;
-                    lr=R-H;
-                    for X=2:lr
+
+                case 1 % column starting with digraph
+                    B(1,I(J):I(J)+1) = ctext(S:S+1);
+                    S = S + 2;
+
+                    lr = R - H;
+
+                    for X = 2:lr
                         switch F
-                            case 0 %If columns are even continue with digraph
-                                %check if you need to introduce the extrapad
-                                if X==lr && extrapad~=0 && I(J)==min(padded)*2-3
-                                    B(X,I(J))=ctext(S);
-                                    S=S+1;
+                            case 0 % even number of columns: continue with digraph
+                                if X==lr && extrapad~=0 && I(J)==minPadded*2-3
+                                    B(X,I(J)) = ctext(S);
+                                    S = S + 1;
                                 else
-                                    B(X,I(J):I(J)+1)=ctext(S:S+1);
-                                    S=S+2;
+                                    B(X,I(J):I(J)+1) = ctext(S:S+1);
+                                    S = S + 2;
                                 end
-                            case 1 %If columns are even alternate single and digraph
+
+                            case 1 % odd number of columns: alternate single/digraph
                                 switch mod(X,2)
                                     case 0
-                                        B(X,I(J))=ctext(S);
-                                        S=S+1;
+                                        B(X,I(J)) = ctext(S);
+                                        S = S + 1;
                                     case 1
-                                        %check if you need to introduce the extrapad
-                                        if X==lr && extrapad~=0 && I(J)==min(padded)*2-3
-                                            B(X,I(J))=ctext(S);
-                                            S=S+1;
+                                        if X==lr && extrapad~=0 && I(J)==minPadded*2-3
+                                            B(X,I(J)) = ctext(S);
+                                            S = S + 1;
                                         else
-                                            B(X,I(J):I(J)+1)=ctext(S:S+1);
-                                            S=S+2;
+                                            B(X,I(J):I(J)+1) = ctext(S:S+1);
+                                            S = S + 2;
                                         end
                                 end
                         end
                     end
             end
         end
-        clear S X H I J Idx padded ctext extrapad F LK lr
-        %back reshape into a vector
-        B=reshape(B',1,R*LK2);
-        % Erase '*'
-        B(B=='*')=[];
-        out.plain=B;
+
+        clear S X H I J padded extrapad F LK lr minPadded
+
+        % Back reshape into a vector
+        B = reshape(B',1,[]);
+        B(B=='*') = [];
+
+        out.plain = B;
+
         clear B R LK2
 end
-
-
