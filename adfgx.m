@@ -5,209 +5,197 @@ function out=adfgx(text,key,direction,varargin)
 % Nebel (1891–1977) and introduced in March 1918, the cipher was a
 % fractionating transposition cipher which combined a modified Polybius
 % square with a single columnar transposition. The cipher is named after
-% the six possible letters used in the ciphertext: A, D, F, G and X. The
-% letters were chosen deliberately because they are very different from one
-% another in the Morse code. That reduced the possibility of operator
-% error. Nebel designed the cipher to provide an army on the move with
-% encryption that was more convenient than trench codes but was still
-% secure. In fact, the Germans believed the ADFGX cipher was unbreakable.
+% the five possible letters used in the ciphertext: A, D, F, G and X.
+% The letters were chosen deliberately because they are very different from
+% one another in the Morse code, reducing the possibility of operator error.
+%
+% English, 26 letters, alphabet is used.
+% Only letters A-Z are processed; other characters are ignored.
+% J is merged into I.
 %
 % Syntax: 	out=adfgx(text,key,direction,matrix)
 %
 %     Input:
-%           text - It is a characters array to encode or decode
-%           key - It is the keyword
-%           direction - this parameter can assume only two values: 
+%           text - It is a character array or a string scalar to encode or decode
+%           key - It is the transposition keyword (character array or string scalar)
+%           direction - this parameter can assume only two values:
 %                   1 to encrypt
 %                  -1 to decrypt.
-%           matrix - a scrambled 5x5 Polybius matrix. If it is empty and
-%           direction is 1, the software will generate it. 
+%           matrix - a scrambled 5x5 Polybius matrix (char 5x5) using the
+%                    standard English alphabet without J. If it is empty and
+%                    direction is 1, the software will generate it.
 %     Output:
 %           out - It is a structure
-%           out.plain = the plain text
-%           out.key = the used key
+%           out.plain = the plain text (processed)
+%           out.key = the used key (processed)
 %           out.matrix = the used matrix
 %           out.encrypted = the coded text
 %
 % Examples:
 %
-% out=adfgx('Hide the gold into the tree stump','leprachaun',1,['BTALP';'DHOZK';'QFVSN';'GICUX';'MREWY'])
+% out=adfgx('Hide the gold into the tree stump','leprachaun',1, ...
+%           ['BTALP';'DHOZK';'QFVSN';'GICUX';'MREWY'])
 %
-% out = 
-% 
-%   struct with fields:
-% 
-%        matrix: [5×5 char]
-%           key: 'leprachaun'
-%         plain: 'Hide the gold into the tree stump'
-%     encrypted: 'DGFXFFFDDDAAXFGDDADFAXDAAADDDAXXDGFDGGXGDXADFDDFXAADXG'
+% out=adfgx('DGFXFFFDDDAAXFGDDADFAXDAAADDDAXXDGFDGGXGDXADFDDFXAADXG', ...
+%           'leprachaun',-1, ...
+%           ['BTALP';'DHOZK';'QFVSN';'GICUX';'MREWY'])
 %
-% out=adfgx('DGFXFFFDDDAAXFGDDADFAXDAAADDDAXXDGFDGGXGDXADFDDFXAADXG','leprachaun',-1,['BTALP';'DHOZK';'QFVSN';'GICUX';'MREWY'])
-% 
-% out = 
-% 
-%   struct with fields:
-% 
-%        matrix: [5×5 char]
-%           key: 'leprachaun'
-%     encrypted: 'DGFXFFFDDDAAXFGDDADFAXDAAADDDAXXDGFDGGXGDXADFDDFXAADXG'
-%         plain: 'HIDETHEGOLDINTOTHETREESTUMP'
-%
-% See also adfgvx, bifid, checkerboard1, checkerboard2, foursquares, nihilist, playfair, polybius, threesquares, trifid, twosquares
+% See also adfgvx, bifid, checkerboard1, checkerboard2, foursquares,
+% nihilist, playfair, polybius, threesquares, trifid, twosquares
 %
 %           Created by Giuseppe Cardillo
 %           giuseppe.cardillo.75@gmail.com
+%           GitHub (Crypto): https://github.com/dnafinder/crypto
 
 p = inputParser;
-addRequired(p,'text',@(x) ischar(x));
-addRequired(p,'key',@(x) ischar(x));
-addRequired(p,'direction',@(x) validateattributes(x,{'numeric'},{'scalar','real','finite','nonnan','nonempty','integer','nonzero','>=',-1,'<=',1}));
-addOptional(p,'matrix',[],@(x) isempty(x) | (isequal(size(x),[5,5]) && ischar(x)));
+addRequired(p,'text',@(x) ischar(x) || (isstring(x) && isscalar(x)));
+addRequired(p,'key',@(x) ischar(x) || (isstring(x) && isscalar(x)));
+addRequired(p,'direction',@(x) validateattributes(x,{'numeric'}, ...
+    {'scalar','real','finite','nonnan','nonempty','integer','nonzero','>=',-1,'<=',1}));
+addOptional(p,'matrix',[],@(x) isempty(x) || (ischar(x) && isequal(size(x),[5,5])));
 parse(p,text,key,direction,varargin{:});
-matrix=p.Results.matrix; clear p
+matrix = p.Results.matrix;
+clear p
 
-A=65:1:90; A(A==74)=[];
-if isempty(matrix) %if there is not a coding matrix
-    %if you must decrypt... exit
+if isstring(text); text = char(text); end
+if isstring(key);  key  = char(key);  end
+
+assert(ismember(direction,[-1 1]),'Direction must be 1 (encrypt) or -1 (decrypt)')
+
+% Alphabet without J:
+A = 65:1:90;
+A(A==74) = [];
+
+% --- Matrix handling ---
+if isempty(matrix)
     assert(direction==1,'This algorithm cannot decode without a matrix')
-    %otherwise scramble the A vector and reshape into a 5x5 matrix
-    cmatrix=reshape(A(randperm(25)),[5,5]);
-    out.matrix=char(cmatrix);
+    cmatrix = reshape(A(randperm(25)),[5,5]);
+    out.matrix = char(cmatrix);
 else
-    cmatrix=double(upper(matrix));
-    %check if the matrix contains all letters except J
-    assert(all(ismember(cmatrix(:),A)),'Matrix must use standard English alphabet without J letter. J=I')
-    out.matrix=upper(matrix);
+    cmatrix = double(upper(matrix));
+    assert(all(ismember(cmatrix(:),A)), ...
+        'Matrix must use standard English alphabet without J letter. J=I')
+    assert(numel(unique(cmatrix(:)))==25, ...
+        'Matrix must contain 25 unique letters (A-Z without J).')
+    out.matrix = upper(matrix);
 end
-clear A 
-out.key=key;
+clear A
 
-%ASCII CODES FOR [ABCDEFGHIKLMNOPQRSTUVWXYZ]; 
-%change J into I; remove the others
-ctext=double(upper(text)); ctext(ctext==74)=73; ctext(ctext<65 | ctext>90)=[];
-ckey=double(upper(key)); ckey(ckey==74)=73; ckey(ckey<65 | ckey>90)=[];
-%Sort letters in the key
-[~,Idx]=sort(ckey);
+% --- Filter and normalize text and key ---
+ctext = double(upper(text));
+ctext(ctext==74) = 73; % J -> I
+ctext(ctext<65 | ctext>90) = [];
 
-% as in the example, the secret mixed alphabet is first filled into a 5×5 Polybius square: 
-%    A   D   F   G   X
-% A  B   T   A   L   P
-% D  D   H   O   Z   K
-% F  Q   F   V   S   N
-% G  G   I   C   U   X
-% X  M   R   E   W   Y
-switch direction %encrypt
-    case 1
-    %By using the square, the message is converted to fractionated form: 
-    %    a  t  t  a  c  k  a  t  o  n  c  e
-    %   AF AD AD AF GF DX AF AD DF FX GF XF
-        out.plain=text;
-        P={'A' 'D' 'F' 'G' 'X'};
-        % Find the index of each characters into Polybius square
-        [~,locb]=ismember(ctext,cmatrix);
-        % transform index into subscripts
-        [I,J]=ind2sub([5,5],locb);
-        % transform into ADFGX coding
-        tmp=(char(strcat(P(I'),P(J'))))';
-        %tmp = AAAAGDAADFGX
-        %      FDDFFXFDFXFF
-        clear P
-        %reshape tmp
-        out1=tmp(:)';
-        %out1=AFADADAFGFDXAFADDFFXGFXF
-        clear locb I J tmp
-        %Next, the fractionated message is subject to a columnar
-        %transposition. The message is written in rows under a
-        %transposition key (here "CARGO"):
-        %C A R G O
-        %_________
-        %A F A D A
-        %D A F G F
-        %D X A F A
-        %D D F F X
-        %G F X F 
-        %
-        %To do this, the length of the message must be a multiple of key
-        %length
-        L=length(out1); %length of the message
-        C=length(ckey); %length of the key (columns)
-        R=ceil(L/C); %how many rows we need?
-        if L~=C
-            tmp=strcat(out1,repmat('Z',1,C*R-L)); %padding
+ckey_raw = double(upper(key));
+ckey_raw(ckey_raw==74) = 73; % J -> I
+ckey_raw(ckey_raw<65 | ckey_raw>90) = [];
+
+assert(~isempty(ckey_raw),'Key must contain at least one valid letter A-Z.')
+
+out.key = char(ckey_raw);
+
+% Sort letters in the key for columnar transposition
+[~,Idx] = sort(ckey_raw);
+
+% ADFGX coordinate symbols
+P = 'ADFGX';
+
+switch direction
+    case 1 % encrypt
+        % Store processed plaintext
+        out.plain = char(ctext);
+
+        % Fractionation using the Polybius square
+        [~,locb] = ismember(ctext,cmatrix);
+        assert(all(locb>0),'Plaintext contains characters not encodable with the given matrix.')
+
+        [I,J] = ind2sub([5,5],locb);
+
+        % Build ADFGX digraph stream
+        out1 = reshape([P(I); P(J)],1,[]);
+        clear locb I J
+
+        % Columnar transposition
+        L = numel(out1);
+        C = numel(ckey_raw);
+        R = ceil(L/C);
+
+        % Pad to full rectangle (use 'Z' that never appears in ADFGX stream)
+        padLen = C*R - L;
+        if padLen > 0
+            tmp = [out1 repmat('Z',1,padLen)];
+        else
+            tmp = out1;
         end
-        tmp=reshape(tmp,C,R)';
-        %Next, the letters are sorted alphabetically in the transposition
-        %key (changing CARGO to ACGOR) by rearranging the columns beneath
-        %the letters along with the letters themselves:   
-        % A C G O R
-        % _________
-        % F A D A A
-        % A D G F F
-        % X D F A A
-        % D D F X F
-        % F G F   X
-        tmp=tmp(:,Idx);
-        clear L C R Idx
-        %Then, it is read off in columns, in keyword order, which yields
-        %the ciphertext.
-        tmp=tmp(:)'; 
-        %tmp=FAXDFADDDGDGFFFAFAXZAFAFX
-        tmp(tmp=='Z')=[]; %eventually remove padding 'Z'
-        out.encrypted=tmp; 
-        clear tmp
-    case -1 %decrypt
-        out.encrypted=text;
-        %ASCII code for ADFGX
-        P=double('ADFGX');
-        %check that all letters into encoded text are ADFGX
-        assert(all(ismember(ctext,P)))
-        L=length(ctext); %length of the message
-        C=length(ckey); %length of the key (columns)
-        R=ceil(L/C); %how many rows we need?
-        N=C*R; %number of the elements of the matrix
-        tmp=zeros(R,C); %vector preallocation
-        if L<N %we need padding
-            padding=C-N+L+1; %starting column to pad
-            tmp(R,padding:C)=90; %pad
-            %tmp = 0 0 0 0 0
-            %      0 0 0 0 0
-            %      0 0 0 0 0
-            %      0 0 0 0 0
-            %      0 0 0 0 90
-            for I=1:C %fill the columns into the Idx order
-                if Idx(I)<padding %if the column number to fill is not a padded column
-                    tmp(:,Idx(I))=ctext(1:R); %fill it
-                    ctext(1:R)=[]; %erase the letters that were added
+
+        tmp = reshape(tmp,C,R)';     % R x C
+        tmp = tmp(:,Idx);           % reorder columns by sorted key
+
+        tmp = tmp(:)';              % read off by columns
+        tmp(tmp=='Z') = [];         % remove padding
+
+        out.encrypted = tmp;
+
+        clear tmp out1 L C R padLen
+
+    case -1 % decrypt
+        % Store filtered encrypted input
+        out.encrypted = char(ctext);
+
+        % Validate ADFGX alphabet
+        Pc = double(P);
+        assert(all(ismember(ctext,Pc)), ...
+            'Ciphertext must contain only letters A, D, F, G, X.')
+
+        L = numel(ctext);
+        C = numel(ckey_raw);
+        R = ceil(L/C);
+        N = C*R;
+
+        tmp = zeros(R,C);
+
+        if L < N
+            % Determine which columns are shorter due to padding
+            paddingStart = C - N + L + 1;
+            tmp(R,paddingStart:C) = 90; % mark padded cells with 'Z'/90
+
+            cwork = ctext;
+
+            for iCol = 1:C
+                colPos = Idx(iCol);
+                if colPos < paddingStart
+                    tmp(:,colPos) = cwork(1:R);
+                    cwork(1:R) = [];
                 else
-                    tmp(1:R-1,Idx(I))=ctext(1:R-1); %add R-1 letters
-                    ctext(1:R-1)=[]; %erase the letters that were added
+                    tmp(1:R-1,colPos) = cwork(1:R-1);
+                    cwork(1:R-1) = [];
                 end
             end
-            clear padding
-            %tmp = A F A D A
-            %      D A F G F
-            %      D X A F A
-            %      D D F F X
-            %      G F X F Z
-        else %we don't need padding
-            tmp2=reshape(ctext,R,C); %reshape array into a matrix
-            tmp(:,Idx)=tmp2(:,1:C); %back revert the order of the columns
+            clear cwork paddingStart iCol colPos
+        else
+            tmp2 = reshape(ctext,R,C);
+            tmp(:,Idx) = tmp2(:,1:C);
             clear tmp2
         end
-        %transform the matrix into a vector
-        tmp=tmp'; 
-        out1=tmp(:)'; 
-        %erase the eventually present pads
-        out1(out1==90)=[];
-        %out1=AFADADAFGFDXAFADDFFXGFXF
-        clear tmp C ctext ckey I Idx L N R
-        R=out1(1:2:end); %rows are odds positions of out1
-        C=out1(2:2:end); %cols are even positions of out1
-        for I=1:5 %convert A=1 D=2 F=3 G=4 X=5
-            R(R==P(I))=I;
-            C(C==P(I))=I;
+
+        % Recover fractionated stream
+        tmp = tmp';
+        out1 = tmp(:)';
+        out1(out1==90) = []; % remove padding markers
+
+        % Convert ADFGX pairs back to matrix indices
+        Rv = out1(1:2:end);
+        Cv = out1(2:2:end);
+
+        for k = 1:5
+            Rv(Rv==Pc(k)) = k;
+            Cv(Cv==Pc(k)) = k;
         end
-        ind=sub2ind([5,5],R,C); %convert subs to index
-        out.plain=matrix(ind); %find letters into the matrix
-        clear ind R C I
+
+        ind = sub2ind([5,5],Rv,Cv);
+        out.plain = char(cmatrix(ind));
+
+        clear tmp out1 Rv Cv ind k L C R N Pc
+end
+
 end
