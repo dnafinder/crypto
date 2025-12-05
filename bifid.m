@@ -2,162 +2,153 @@ function out=bifid(text,key,period,direction)
 % BIFID Cipher encoder/decoder
 % Bifid is a cipher which combines the Polybius square with transposition,
 % and uses fractionation to achieve diffusion. It was invented by Felix
-% Delastelle. Delastelle was a Frenchman who invented several ciphers
-% including the bifid, trifid, and four-square ciphers. The first
-% presentation of the bifid appeared in the French Revue du Génie civil in
-% 1895 under the name of cryptographie nouvelle. It has never been used by
-% a military or government organisation, only ever by amateur
-% cryptographers. 
-% 
+% Delastelle.
+%
+% English, 26 letters, alphabet is used with I/J combined.
+% Only letters A-Z are processed; other characters are ignored.
+% J is merged into I.
+%
 % Syntax: 	out=bifid(text,key,period,direction)
 %
 %     Input:
-%           text - It is a characters array to encode or decode
+%           text - It is a character array or a string scalar to encode or decode
 %           key - It is the keyword used to generate Polybius Square
-%           period - an integer number used to fractionate the message. It
-%           must be less than or equal to message length
-%           direction - this parameter can assume only two values: 
+%                 (character array or string scalar)
+%           period - an integer number used to fractionate the message.
+%                    It must be less than or equal to message length
+%           direction - this parameter can assume only two values:
 %                   1 to encrypt
 %                  -1 to decrypt.
 %     Output:
 %           out - It is a structure
-%           out.plain = the plain text
-%           out.key = the used key
+%           out.plain = the plain text (processed)
+%           out.key = the used key (processed)
 %           out.period = the used period
-%           out.encrypted = the coded text
+%           out.encrypted = the coded text (processed)
 %
 % Examples:
 %
 % out=bifid('Hide the gold into the tree stump','leprachaun',7,1)
-% 
-% out = 
-% 
-%   struct with fields:
-% 
-%         plain: 'HIDETHEGOLDINTOTHETREESTUMP'
-%           key: 'LEPRACHAUN'
-%        period: 7
-%     encrypted: 'TGZAPSFFAUKMKBQKKEUSXETMSUP'
 %
 % out=bifid('TGZAPSFFAUKMKBQKKEUSXETMSUP','leprachaun',7,-1)
 %
-% out = 
-% 
-%   struct with fields:
-% 
-%     encrypted: 'TGZAPSFFAUKMKBQKKEUSXETMSUP'
-%           key: 'LEPRACHAUN'
-%        period: 7
-%         plain: 'HIDETHEGOLDINTOTHETREESTUMP'
-%
-% See also adfgx, adfgvx, checkerboard1, checkerboard2, cmbifid, foursquares, nihilist, playfair, polybius, threesquares, trifid, twosquares
+% See also adfgx, adfgvx, checkerboard1, checkerboard2, cmbifid,
+% foursquares, nihilist, playfair, polybius, threesquares, trifid,
+% twosquares
 %
 %           Created by Giuseppe Cardillo
 %           giuseppe.cardillo.75@gmail.com
+%           GitHub (Crypto): https://github.com/dnafinder/crypto
 
 p = inputParser;
-addRequired(p,'text',@(x) ischar(x));
-addRequired(p,'key',@(x) ischar(x));
-addRequired(p,'period',@(x) validateattributes(x,{'numeric'},{'scalar','real','finite','nonnan','nonempty','integer','nonzero'}));
-addRequired(p,'direction',@(x) validateattributes(x,{'numeric'},{'scalar','real','finite','nonnan','nonempty','integer','nonzero','>=',-1,'<=',1}));
+addRequired(p,'text',@(x) ischar(x) || (isstring(x) && isscalar(x)));
+addRequired(p,'key',@(x) ischar(x) || (isstring(x) && isscalar(x)));
+addRequired(p,'period',@(x) validateattributes(x,{'numeric'}, ...
+    {'scalar','real','finite','nonnan','nonempty','integer','positive'}));
+addRequired(p,'direction',@(x) validateattributes(x,{'numeric'}, ...
+    {'scalar','real','finite','nonnan','nonempty','integer','nonzero','>=',-1,'<=',1}));
 parse(p,text,key,period,direction);
 clear p
 
-% ASCII codes for Uppercase letters ranges between 65 and 90;
-ctext=double(upper(text)); ctext(ctext<65 | ctext>90)=[]; 
-assert(period<=length(ctext),strcat('Period must be <=',num2str(length(ctext))))
-ckey=double(upper(key)); ckey(ckey>90 | ckey<65)=[]; 
-% Convert J (ASCII code 74) into I (ASCII code 73)
-ctext(ctext==74)=73;
-ckey(ckey==74)=73; 
+if isstring(text); text = char(text); end
+if isstring(key);  key  = char(key);  end
 
+assert(ismember(direction,[-1 1]),'Direction must be 1 (encrypt) or -1 (decrypt)')
+
+% --- Filter and normalize text and key (A-Z only, J->I) ---
+ctext = double(upper(text));
+ctext(ctext<65 | ctext>90) = [];
+ctext(ctext==74) = 73;
+
+ckey_raw = double(upper(key));
+ckey_raw(ckey_raw>90 | ckey_raw<65) = [];
+ckey_raw(ckey_raw==74) = 73;
+
+assert(~isempty(ctext),'Text must contain at least one valid letter A-Z.')
+assert(~isempty(ckey_raw),'Key must contain at least one valid letter A-Z.')
+assert(period <= numel(ctext), ...
+    'Period must be <= message length after filtering (%d).', numel(ctext))
+
+% Outputs (processed)
 switch direction
-    case 1 %encrypt
-        out.plain=char(ctext);
-    case -1 %decript
-        out.encrypted=char(ctext);
+    case 1
+        out.plain = char(ctext);
+    case -1
+        out.encrypted = char(ctext);
 end
-out.key=char(ckey);
-out.period=period;
+out.key = char(ckey_raw);
+out.period = period;
 
-% Polybius square generation from Key
-% For example, the key word is EXTRAORDINARY
-% Chars of the key must be choosen only once
-ckey=unique(ckey,'stable'); %EXTRAODINY
-% Add the other letters alphabetically: EXTRAODINYBCFGHKLMPQSUVWZ
-A=[65:1:73 75:1:90];
-B=[ckey A(~ismember(A,ckey))];
-% Rearrange into the square in a clockwise spiral. 
-%    1   2   3   4   5
-% 1  E   X   T   R   A
-% 2  K   L   M   P   O
-% 3  H   W   Z   Q   D
-% 4  G   V   U   S   I
-% 5  F   C   B   Y   N
-PS=B(fliplr(abs(spiral(5)-26)));
+% --- Polybius square generation from key (spiral layout) ---
+ckey = unique(ckey_raw,'stable');
+A = [65:1:73 75:1:90]; % alphabet without J
+B = [ckey A(~ismember(A,ckey))];
+
+% Rearrange into the square in a clockwise spiral.
+PS = B(fliplr(abs(spiral(5)-26)));
+
 clear A B ckey
 
-% Find the index of each characters into Polybius square
-[~,locb]=ismember(ctext,PS);
-clear ctext
-% transform index into subscripts
-[I,J]=ind2sub([5,5],locb);
-clear locb
-% If it is needed, pad I and J with 0 to ensure that their lengths
-% are multiple of period
-K=length(I);
-L=ceil(K/period);
-pad=zeros(1,L*period-K);
-clear K
-if ~isempty(pad)
-    I=[I pad]; J=[J pad];
-end
+% --- Convert text to Polybius coordinates ---
+[~,locb] = ismember(ctext,PS);
+assert(all(locb>0),'Text contains characters not encodable with the generated Polybius square.')
+
+[I,J] = ind2sub([5,5],locb);
+K = numel(I);
 
 switch direction
-    case 1 %encrypt
-        % reshape and join them according to period
-        I=reshape(I,period,L)'; J=reshape(J,period,L)';
-        A=[I J]'; A=A(:);
-        % erase 0 if it is needed
-        if ~isempty(pad)
-            A(A==0)=[];
+    case 1 % encrypt
+        % Build ciphertext coordinates block by block (no padding)
+        Ic = zeros(1,K);
+        Jc = zeros(1,K);
+
+        for s = 1:period:K
+            idx = s:min(s+period-1,K);
+            r = numel(idx);
+
+            rows = I(idx);
+            cols = J(idx);
+
+            seq = [rows cols];          % 1 x (2r), rows then cols
+            Rc = seq(1:2:end);
+            Cc = seq(2:2:end);
+
+            Ic(idx) = Rc;
+            Jc(idx) = Cc;
         end
-        clear pad
-        % return onto Polybius Square
-        L=length(A);
-        I=A(1:2:L-1); J=A(2:2:L);
-        Ind=sub2ind([5,5],I,J); 
-        clear A I J L
-        out.encrypted=char(PS(Ind'));
-        clear PS Ind
-    case -1 %decrypt
-        % reshape and join them according to period
-        I=reshape(I,period,L); J=reshape(J,period,L); clear L
-        A=[I(:) J(:)];
-        b=length(A)/period; %blocks
-        I=zeros(b*period,1); J=I;
-        for K=1:b-1
-            z=period*K;
-            B=A(z-period+1:z,1:2)'; B=B(:);
-            I(z-period+1:z)=B(1:period);
-            J(z-period+1:z)=B(period+1:end);
+
+        Ind = sub2ind([5,5],Ic,Jc);
+        out.encrypted = char(PS(Ind));
+
+        clear Ic Jc rows cols seq Rc Cc idx r s Ind
+
+    case -1 % decrypt
+        % Ciphertext coordinates are I,J (from out.encrypted filtered)
+        Ic = I;
+        Jc = J;
+
+        Ip = zeros(1,K);
+        Jp = zeros(1,K);
+
+        for s = 1:period:K
+            idx = s:min(s+period-1,K);
+            r = numel(idx);
+
+            Rc = Ic(idx);
+            Cc = Jc(idx);
+
+            seq = zeros(1,2*r);
+            seq(1:2:end) = Rc;
+            seq(2:2:end) = Cc;
+
+            Ip(idx) = seq(1:r);
+            Jp(idx) = seq(r+1:end);
         end
-        clear K b B
-        A(1:z,:)=[]; A=A'; A=A(:);
-        if ~isempty(pad)
-            lp=period-length(pad);
-        else
-            lp=period;
-        end
-        I(z+1:z+lp)=A(1:lp); A(1:lp)=[];
-        J(z+1:z+lp)=A(1:lp);
-        clear A z lp
-        if ~isempty(pad)
-            I(I==0)=[];
-            J(J==0)=[];
-        end
-        clear pad
-        Ind=sub2ind([5,5],I,J); 
-        clear I J
-        out.plain=char(PS(Ind'));
+
+        Ind = sub2ind([5,5],Ip,Jp);
+        out.plain = char(PS(Ind));
+
+        clear Ic Jc Ip Jp Rc Cc seq idx r s Ind
+end
+
 end
