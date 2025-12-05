@@ -6,26 +6,27 @@ function out=keyword(text,key,direction)
 % removed, then the cipher alphabet is generated with the keyword matching
 % to A,B,C etc. until the keyword is used up, whereupon the rest of the
 % ciphertext letters are used in alphabetical order, excluding those
-% already used in the key.      
+% already used in the key.
 %
 % Plaintext:   A B C D E F G H I J K L M N O P Q R S T U V W X Y Z
 % Encrypted:   K R Y P T O S A B C D E F G H I J L M N Q U V W X Z
 %
 % With KRYPTOS as the keyword, all As become Ks, all Bs become Rs and so on.
-% Encrypting the message "knowledge is power" using the keyword "kryptos": 
-% 
+% Encrypting the message "knowledge is power" using the keyword "kryptos":
+%
 % Plaintext:   K N O W L E D G E  I S  P O W E R
 % Encoded:     D G H V E T P S T  B M  I H V T L
 % Only one alphabet is used here, so the cipher is monoalphabetic.
-% English, 26 letters, alphabet is used and all non-alphabet symbols are
-% not transformed.   
+% English, 26 letters, alphabet is used.
+% Only letters A-Z are processed; other characters are ignored in the
+% transformation.
 %
 % Syntax: 	out=keyword(text,key,direction)
 %
 %     Input:
-%           text - It is a characters array to encode or decode
-%           key - It is the keyword
-%           direction - this parameter can assume only two values: 
+%           text - It is a character array or a string scalar to encode or decode
+%           key - It is the keyword (character array or string scalar)
+%           direction - this parameter can assume only two values:
 %                   1 to encrypt
 %                  -1 to decrypt.
 %     Output:
@@ -37,43 +38,63 @@ function out=keyword(text,key,direction)
 % Examples:
 %
 % out=keyword('Hide the gold into the tree stump','leprachaun',1)
-% 
-% out = 
-% 
+%
+% out =
+%
 %   struct with fields:
-% 
+%
 %         plain: 'HIDETHEGOLDINTOTHETREESTUMP'
 %           key: 'LEPRACHUN'
 %     encrypted: 'UNRASUAHJFRNISJSUASOAAQSTGK'
-% 
+%
 % out=keyword('UNRASUAHJFRNISJSUASOAAQSTGK','leprachaun',-1)
-% 
-% out = 
-% 
+%
+% out =
+%
 %   struct with fields:
-% 
-%     encrypted: 'UNRASUAHJFRNISJSUASOAAQSTGK'
-%           key: 'LEPRACHUN'
+%
 %         plain: 'HIDETHEGOLDINTOTHETREESTUMP'
+%           key: 'LEPRACHUN'
+%     encrypted: 'UNRASUAHJFRNISJSUASOAAQSTGK'
 %
 %           Created by Giuseppe Cardillo
 %           giuseppe.cardillo.75@gmail.com
+%           GitHub (Crypto): https://github.com/dnafinder/crypto
 
 p = inputParser;
-addRequired(p,'text',@(x) ischar(x));
-addRequired(p,'key',@(x) ischar(x));
-addRequired(p,'direction',@(x) validateattributes(x,{'numeric'},{'scalar','real','finite','nonnan','nonempty','integer','nonzero','>=',-1,'<=',1}));
+addRequired(p,'text',@(x) ischar(x) || (isstring(x) && isscalar(x)));
+addRequired(p,'key',@(x) ischar(x) || (isstring(x) && isscalar(x)));
+addRequired(p,'direction',@(x) validateattributes(x,{'numeric'},...
+    {'scalar','real','finite','nonnan','nonempty','integer','nonzero','>=',-1,'<=',1}));
+parse(p,text,key,direction);
 clear p
+
+if isstring(text)
+    text = char(text);
+end
+if isstring(key)
+    key = char(key);
+end
+
+assert(ismember(direction,[-1 1]),'Direction must be 1 (encrypt) or -1 (decrypt)')
 
 % ASCII codes of standard English 26 letters alphabet
 plainal=65:1:90;
+
 % Set all letters in uppercase and convert into ASCII Code.
-ctext=double(upper(text)); ctext(ctext<65 | ctext>90)=[]; 
-ckey=double(upper(key)); ckey(ckey<65 | ckey>90)=[]; 
+ctext=double(upper(text)); 
+ctext(ctext<65 | ctext>90)=[];
+
+ckey=double(upper(key)); 
+ckey(ckey<65 | ckey>90)=[];
+
 % Take not repeated letters into keyword
 ckey=unique(ckey,'stable');
-% Construct the matrix: into the first row the plain alphabet and into the second row the crypting alphabet
-M=[plainal;ckey plainal(~ismember(plainal,ckey))]; clear plainal
+
+% Construct the matrix: into the first row the plain alphabet and
+% into the second row the crypting alphabet
+M=[plainal; ckey plainal(~ismember(plainal,ckey))]; 
+clear plainal
 
 switch direction
     case 1
@@ -81,11 +102,14 @@ switch direction
     case -1
         S=2; E=1;
 end
+
 % Preallocate vector
-tmp=zeros(1,length(ctext)); 
+tmp=zeros(1,numel(ctext));
+
 % unique letters into text (max length 26)
 L=unique(ctext);
-for I=1:length(L)
+
+for I=1:numel(L)
     % Find the position into the text
     Idx=ismember(ctext,L(I));
     % Substitute using crypting or plain alphabet
@@ -98,7 +122,8 @@ switch direction
         out.key=char(ckey);
         out.encrypted=char(tmp);
     case -1
-        out.encrypted=text;
-        out.key=char(ckey);
         out.plain=char(tmp);
+        out.key=char(ckey);
+        out.encrypted=text;
+end
 end
