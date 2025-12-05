@@ -6,15 +6,18 @@ function out=playfair(text,key,direction)
 % Baron Playfair of St. Andrews, who promoted its use. Playfair is no
 % longer used by military forces because of the advent of digital
 % encryption devices. This cipher is now regarded as insecure for any
-% purpose, because modern computers could easily break it within seconds.   
-% Playfair Cipher is based onto Polybius Square.
+% purpose, because modern computers could easily break it within seconds.
+% Playfair Cipher is based on a 5x5 Polybius Square with I/J combined.
+% English, 26 letters, alphabet is used.
+% Only letters A-Z are processed; other characters are ignored in the
+% transformation. J is merged into I.
 %
-% Syntax: 	out=playfair(text,key,direction)
+% Syntax:         out=playfair(text,key,direction)
 %
 %     Input:
-%           text - It is a characters array to encode or decode
-%           key - It is the keyword
-%           direction - this parameter can assume only two values: 
+%           text - It is a character array or a string scalar to encode or decode
+%           key - It is the keyword (character array or string scalar)
+%           direction - this parameter can assume only two values:
 %                   1 to encrypt
 %                  -1 to decrypt.
 %     Output:
@@ -27,42 +30,67 @@ function out=playfair(text,key,direction)
 %
 % out=playfair('Hide the gold into the tree stump','leprachaun',1)
 %
-% out = 
-% 
+% out =
+%
 %   struct with fields:
-% 
+%
 %         plain: 'HIDETHEGOLDINTOTHETREESTUMP'
 %           key: 'LEPRACHAUN'
 %     encrypted: 'NFFLOBPFMEFKBSQMFHSAPWROQBQL'
 %
 % out=playfair('NFFLOBPFMEFKBSQMFHSAPWROQBQL','leprachaun',-1)
 %
-% out = 
-% 
+% out =
+%
 %   struct with fields:
-% 
-%     encrypted: 'NFFLOBPFMEFKBSQMFHSAPWROQBQL'
-%           key: 'LEPRACHAUN'
+%
 %         plain: 'HIDETHEGOLDINTOTHETREESTUMP'
+%           key: 'LEPRACHAUN'
+%     encrypted: 'NFFLOBPFMEFKBSQMFHSAPWROQBQL'
 %
 % See also adfgx, adfgvx, bifid, checkerboard1, checkerboard2, foursquares, nihilist, polybius, threesquares, trifid, twosquares
 %
 %           Created by Giuseppe Cardillo
 %           giuseppe.cardillo.75@gmail.com
+%           GitHub (Crypto): https://github.com/dnafinder/crypto
 
 p = inputParser;
-addRequired(p,'text',@(x) ischar(x));
-addRequired(p,'key',@(x) ischar(x));
-addRequired(p,'direction',@(x) validateattributes(x,{'numeric'},{'scalar','real','finite','nonnan','nonempty','integer','nonzero','>=',-1,'<=',1}));
+addRequired(p,'text',@(x) ischar(x) || (isstring(x) && isscalar(x)));
+addRequired(p,'key',@(x) ischar(x) || (isstring(x) && isscalar(x)));
+addRequired(p,'direction',@(x) validateattributes(x,{'numeric'},...
+    {'scalar','real','finite','nonnan','nonempty','integer','nonzero','>=',-1,'<=',1}));
 parse(p,text,key,direction);
 clear p
 
-% ASCII codes for Uppercase letters ranges between 65 and 90;
-ctext=double(upper(text)); ctext(ctext<65 | ctext>90)=[]; 
-ckey=double(upper(key)); ckey(ckey>90 | ckey<65)=[]; 
+if isstring(text)
+    text = char(text);
+end
+if isstring(key)
+    key = char(key);
+end
+
+assert(ismember(direction,[-1 1]),'Direction must be 1 (encrypt) or -1 (decrypt)')
+
+% ASCII codes for uppercase letters range between 65 and 90
+ctext=double(upper(text)); 
+ctext(ctext<65 | ctext>90)=[];
+
+ckey=double(upper(key)); 
+ckey(ckey>90 | ckey<65)=[];
+
 % Convert J (ASCII code 74) into I (ASCII code 73)
 ctext(ctext==74)=73;
-ckey(ckey==74)=73; 
+ckey(ckey==74)=73;
+
+% Chars of the key must be chosen only once
+ckey=unique(ckey,'stable');
+
+out.key=char(ckey);
+
+% Polybius square generation from Key
+A=[65:1:73 75:1:90];
+PS=reshape([ckey A(~ismember(A,ckey))],[5,5])';
+clear ckey A
 
 switch direction
     case 1
@@ -70,42 +98,18 @@ switch direction
     case -1
         out.encrypted=char(ctext);
 end
-out.key=char(ckey);
-
-% Polybius square generation from Key
-% Using the key "PLAYFAIR EXAMPLE"
-% Chars of the key must be choosen only once
-% PLAYFIREXM
-ckey=unique(ckey,'stable');
-% then all the others into alphabetic order
-
-%    1   2   3   4   5
-% 1  P   L   A   Y   F
-% 2  I   R   E   X   M
-% 3  B   C   D   G   H
-% 4  K   N   O   Q   S
-% 5  T   U   V   W   Z
-
-A=[65:1:73 75:1:90];
-PS=reshape([ckey A(~ismember(A,ckey))],[5,5])';
-clear ckey A
 
 switch direction
-    case 1 %Encrypt
-        % To encrypt a message, one would break the message into digrams
-        % (groups of 2 letters) such that, for example, "HelloWorld"
-        % becomes "HE LL OW OR LD". 
+    case 1 % Encrypt
+        % Break the message into digrams, inserting X (or Q if needed)
         tmp=[];
-        while length(ctext)>1
-            a=ctext(1); b=ctext(2);
-            if a~=b %if digrams are by two different letters, i.e. HE, add both to tmp and erase from ctext;
+        while numel(ctext)>1
+            a=ctext(1); 
+            b=ctext(2);
+            if a~=b
                 tmp=[tmp a b]; %#ok<*AGROW>
                 ctext([1 2])=[];
-            else %if digrams are by two equal letters, i.e. LL,
-                %add the first to tmp and erase it from ctext; then append
-                %an uncommon letter, such as "X" (ASCII=88), to complete
-                %the final digram. If the letter is an "X", append a "Q"
-                %(ASCII=81).  
+            else
                 if a~=88
                     tmp=[tmp a 88];
                 else
@@ -114,126 +118,98 @@ switch direction
                 ctext(1)=[];
             end
         end
-        % Since encryption requires pairs of letters, messages with an odd
-        % number of characters usually append an uncommon letter, such as
-        % "X" (ASCII=88), to complete the final digram. If the last letter
-        % is an "X", append a "Q" (ASCII=81).
-        if length(ctext)==1
+
+        if isscalar(ctext)
             if ctext==88
                 tmp=[tmp ctext 81];
             else
                 tmp=[tmp ctext 88];
             end
         end
-        L=length(tmp)/2; %lenght of digrams vector
-        ctext=reshape(tmp,2,[])'; %reshape tmp vector into Lx2 matrix
+
+        L=numel(tmp)/2;
+        ctext=reshape(tmp,2,[])';
         clear a b tmp
-    case -1 %decrypt
-        L=length(text)/2; %lenght of digrams vector
-        ctext=double(reshape(text,2,[])'); %reshape text vector into Lx2 matrix
+
+    case -1 % Decrypt
+        assert(mod(numel(ctext),2)==0,'Ciphertext length must be even after filtering.')
+        L=numel(ctext)/2;
+        ctext=reshape(ctext,2,[])';
 end
 
-tmp=zeros(L,2); %vector preallocation
+tmp=zeros(L,2);
 
 switch direction
-    case 1 %encrypt
+    case 1
         A=[2 3 4 5 1];
-    case -1 %decrypt
+    case -1
         A=[5 1 2 3 4];
 end
 
 for I=1:L
-    [R1,C1]=find(PS==ctext(I,1)); %find row and column of the 1st digram letter into the Polybius Square
-    [R2,C2]=find(PS==ctext(I,2)); %find row and column of the 2nd digram letter into the Polybius Square
+    [R1,C1]=find(PS==ctext(I,1));
+    [R2,C2]=find(PS==ctext(I,2));
+
     if R1~=R2
         if C1~=C2
-            %If the letters are not on the same row or column, replace them
-            %with the letters on the same row respectively but at the other
-            %pair of corners of the rectangle defined by the original pair.
-            %The order is important – the first letter of the encrypted
-            %pair is the one that lies on the same row as the first letter
-            %of the plaintext pair. Pratically... switch columns!
             tmp(I,:)=[PS(R1,C2) PS(R2,C1)];
         else
-            %If the letters appear on the same column of your table,
-            %replace them with the letters immediately below respectively
-            %(wrapping around to the top side of the column if a letter in
-            %the original pair was on the bottom side of the column). THIS
-            %IS THE MEANING OF THE "A" VECTOR (wrapping).
             tmp(I,:)=[PS(A(R1),C1) PS(A(R2),C1)];
         end
     else
-        %If the letters appear on the same row of your table, replace them
-        %with the letters to their immediate right respectively (wrapping
-        %around to the left side of the row if a letter in the original
-        %pair was on the right side of the row). THIS IS THE MEANING OF THE
-        %"A" VECTOR (wrapping).   
         tmp(I,:)=[PS(R1,A(C1)) PS(R1,A(C2))];
     end
 end
+
 clear PS R1 R2 C1 C2 I ctext A
 
 switch direction
-    case 1 %encrypt
-        clear L
-        %simply reshape the tmp array
+    case 1 % Encrypt
         out.encrypted=char(reshape(tmp',1,[]));
-        clear tmp
-    case -1 %decrypt
-        %reshape the tmp array
+        clear tmp L
+
+    case -1 % Decrypt
         L=L*2;
         tmp=reshape(tmp',1,[]);
-        %Find all the "Q"
-        Q=find(tmp==81); 
+
+        % Find all the "Q"
+        Q=find(tmp==81);
         q=[];
-        if ~isempty(Q) %If there are some Q...
-            for I=1:length(Q)
+        if ~isempty(Q)
+            for I=1:numel(Q)
                 if Q(I)==L && tmp(Q(I)-1)==88
-                    %if "Q" is the last letter and "X" is the second last
-                    %"Q" was added to pad. So, add them into erasing "q"
-                    %array
                     q=[q Q(I)];
-                elseif Q(I)>1 && tmp(Q(I)-1)==88 && tmp(Q(I)+1)==88
-                    %if "Q" is not the first letter and the preceding and
-                    %the following letters are "X", "Q" was added to
-                    %divide digram. So, add this position into erasing "q" array.
+                elseif Q(I)>1 && Q(I)<L && tmp(Q(I)-1)==88 && tmp(Q(I)+1)==88
                     q=[q Q(I)];
                 end
             end
             clear I
             if ~isempty(q)
-                %if there are "Q" that must be erased, erase them and
-                %update tmp length.
-                tmp(q)=[]; 
-                L=length(tmp);
+                tmp(q)=[];
+                L=numel(tmp);
             end
         end
         clear Q q
-        
-        %Find all the "X"
-        X=find(tmp==88); 
+
+        % Find all the "X"
+        X=find(tmp==88);
         x=[];
-        if ~isempty(X) %If there are some X...
-            for I=1:length(X)
+        if ~isempty(X)
+            for I=1:numel(X)
                 if X(I)>1 && X(I)<L
-                    %If "X" is the first letter, surely it wasn't added;
-                    %If "X" is the last letter, it is impossible to
-                    %automatically establish if it was added to pad of it
-                    %is a real "X". So, we will scan between 2 and end-1
                     if tmp(X(I)-1)==tmp(X(I)+1)
-                        %if the preceding and the following letters are 
-                        %equal, "X" was added to divide digram. 
-                        %So, add this position into erasing "q" array.
                         x=[x X(I)];
                     end
                 end
             end
             clear I
-            if ~isempty(x) %if there are "X" that must be erased, erase them
+            if ~isempty(x)
                 tmp(x)=[];
             end
         end
         clear X x
+
         out.plain=char(tmp);
-        clear tmp
+        clear tmp L
+end
 end
