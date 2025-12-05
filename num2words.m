@@ -4,10 +4,10 @@ function str = num2words(num)
 % (c) 2017 Stephen Cobeldick
 %
 % The function NUM2WORDS has many useful formatting options but some users
-% may prefer a faster conversion: NUM2WORDS_FAST runs around twice as fast.
+% may prefer a faster conversion: this implementation runs around twice as fast.
 %
 %%% Syntax:
-%  str = num2words_fast(num)
+%  str = num2words(num)
 %
 % The number format is based on: http://www.blackwasp.co.uk/NumberToWords.aspx
 % Floating-point values are rounded, and to provide the least-unexpected
@@ -18,22 +18,22 @@ function str = num2words(num)
 %
 %% Examples %%
 %
-% num2words_fast(0)
+% num2words(0)
 %  ans = 'Zero'
 %
-% num2words_fast(1024)
+% num2words(1024)
 %  ans = 'One Thousand and Twenty-Four'
-% num2words_fast(-1024)
+% num2words(-1024)
 %  ans = 'Negative One Thousand and Twenty-Four'
 %
-% num2words_fast(1e23)
+% num2words(1e23)
 %  ans = 'One Hundred Sextillion'
-% num2words_fast(1.23e308)
+% num2words(1.23e308)
 %  ans = 'One Hundred and Twenty-Three Uncentillion'
 %
-% num2words_fast(Inf)
+% num2words(Inf)
 %  ans = 'Infinity'
-% num2words_fast(NaN)
+% num2words(NaN)
 %  ans = 'Not-a-Number'
 %
 %% Input and Output Arguments %%
@@ -44,7 +44,9 @@ function str = num2words(num)
 %%% Output:
 %  str = Char Vector, with the number name of the value of <num>, written in short scale.
 %
-% str = num2words_fast(num)
+%           GitHub (Crypto): https://github.com/dnafinder/crypto
+%
+% str = num2words(num)
 assert(isnumeric(num)&&isscalar(num),'First input <num> must be a numeric scalar')
 assert(isreal(num),'First input <num> cannot be a complex value: %g%+gi',num,imag(num))
 %
@@ -75,7 +77,7 @@ if strncmp(raw,'-',1)
 end
 %
 end
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%num2words_fast
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%num2words
 function str = n2wfParse(vec,pwr)
 %
 if ~any(vec)
