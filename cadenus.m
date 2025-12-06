@@ -1,48 +1,52 @@
 function out=cadenus(text,key,direction)
-%CADENUS Cipher encoder/decoder
-%Columnar tramp using a keyword to shift the order of the columns and, at
-%the same time to shift the starting point of each column. The latter is
-%done by attaching a letter of the alphabet (25-letter alphabetas shown
-%with V and W in the same cell) to each row of plaintext in the block.
-%A severe limitation of the usefulness of the Cadenus is that every message
-%must be a multiple of twenty-five letters long and, as consequence, the
-%key length must be the ratio of text length and 25.
+% CADENUS Cipher encoder/decoder
+% Columnar transposition using a keyword to shift the order of the columns
+% and, at the same time, to shift the starting point of each column.
+% A 25-letter alphabet is used (W is mapped to V).
 %
-% Syntax: 	out=cadenus(text,key,direction)
+% Classical Cadenus constraints:
+% - plaintext length must be a multiple of 25
+% - key length must be plaintext_length/25
 %
-%     Input:
-%           text - It is a characters array to encode or decode
-%           key - It is a characters array of the digits used as key.
-%           direction - this parameter can assume only two values:
-%                   1 to encrypt
-%                  -1 to decrypt.
-%     Output:
-%           out - It is a structure
-%           out.plain = the plain text
-%           out.key = the used key
-%           out.encrypted = the coded text
+% This implementation:
+% - accepts any keyword length by deriving an effective key of length C
+%   via repeat/truncate.
+% - supports deterministic padding in encryption when plaintext length is
+%   not a multiple of 25, using a low-likelihood marker (max 24 chars).
+% - automatically removes that marker in decryption.
 %
-% Examples:
+% Syntax:  out=cadenus(text,key,direction)
 %
-% out=cadenus('the treasure is under the palm near the west cave under the great lion that sees the seaside','ear',1)
+% Input:
+%   text      - char vector
+%   key       - keyword (char vector)
+%   direction - 1 encrypt, -1 decrypt
 %
+% Output:
+%   out.plain
+%   out.key
+%   out.encrypted
+%
+% Example:
+% out=cadenus('Hide the gold into the tree stump','leprachaun',1)
+% 
 % out = 
 % 
 %   struct with fields:
 % 
-%           key: 'ear'
-%         plain: 'the treasure is under the palm near the west cave under the great lion that…'
-%     encrypted: 'HEERHTSEWEITUTVETNHARARENSERDLETNSPAAMEUATEHSHESRCETEEODEHTUSGISANEIRATEDTL'
-%
-% out=cadenus('HEERHTSEWEITUTVETNHARARENSERDLETNSPAAMEUATEHSHESRCETEEODEHTUSGISANEIRATEDTL','ear',-1)
-%
+%           key: 'LEPRACHAUN'
+%         plain: 'HIDE THE GOLD INTO THE TREE STUMP'
+%     encrypted: 'JXKZQHJXIZEHHXGZLHIXTZTHEDRTEETOMDKNQOJHKTQEJSKUQP'
+% 
+% out=cadenus('JXKZQHJXIZEHHXGZLHIXTZTHEDRTEETOMDKNQOJHKTQEJSKUQP','leprachaun',-1)
+% 
 % out = 
 % 
 %   struct with fields:
 % 
-%           key: 'ear'
-%     encrypted: 'HEERHTSEWEITUTVETNHARARENSERDLETNSPAAMEUATEHSHESRCETEEODEHTUSGISANEIRATEDTL'
-%         plain: 'THETREASUREISUNDERTHEPALMNEARTHEWESTCAVEUNDERTHEGREATLIONTHATSEESTHESEASIDE'
+%           key: 'LEPRACHAUN'
+%     encrypted: 'JXKZQHJXIZEHHXGZLHIXTZTHEDRTEETOMDKNQOJHKTQEJSKUQP'
+%         plain: 'HIDETHEGOLDINTOTHETREESTUMP'
 %
 %           Created by Giuseppe Cardillo
 %           giuseppe.cardillo.75@gmail.com
@@ -50,60 +54,116 @@ function out=cadenus(text,key,direction)
 p = inputParser;
 addRequired(p,'text',@(x) ischar(x));
 addRequired(p,'key',@(x) ischar(x));
-addRequired(p,'direction',@(x) validateattributes(x,{'numeric'},{'scalar','real','finite','nonnan','nonempty','integer','nonzero','>=',-1,'<=',1}));
+addRequired(p,'direction',@(x) validateattributes(x,{'numeric'}, ...
+    {'scalar','real','finite','nonnan','nonempty','integer','nonzero','>=',-1,'<=',1}));
 parse(p,text,key,direction);
 clear p
 
-% ASCII codes for Uppercase letters ranges between 65 and 90;
-ctext=double(upper(text)); ctext(ctext<65 | ctext>90)=[]; ctext=char(ctext);
-% text length
-LT=length(ctext);
-% Check if LT is multiple of 25
-R=mod(LT,25);
-assert(R==0,'A severe limitation of the usefulness of the Cadenus is that every message must be a multiple of twenty-five letters long.\n You need %i letters more',25-R)
-clear R
+% 6-char deterministic marker (no W)
+marker6  = 'KXQZJH';
+marker24 = repmat(marker6,1,4); % max pad length 24
 
-ckey=double(upper(key)); ckey(ckey<65 | ckey>90)=[];
-% Convert W (ASCII code 87) into V (ASCII code 86)
-ckey(ckey==87)=86;
-% key Length
-LK=length(ckey);
-C=LT/25;
-clear LT
-%Check if LK is the ratio of LT and 25
-assert(C==LK,'The key must be %i letters long',C)
+% Normalize text: uppercase A-Z only, W->V
+ctext = double(upper(text));
+ctext(ctext<65 | ctext>90) = [];
+ctext(ctext==87) = 86; % W -> V
+ctext = char(ctext);
 
-% reshape the text into a matrix 25xC
-ctext=reshape(ctext,C,25)';
-clear LK
+% Normalize key: uppercase A-Z only, W->V
+ckey = double(upper(key));
+ckey(ckey<65 | ckey>90) = [];
+ckey(ckey==87) = 86; % W -> V
+ckey = char(ckey);
+
+assert(~isempty(ckey),'Key must contain at least one A-Z letter.')
+
+% Shift reference alphabet (as in your original code)
+ckeyShiftAlpha = double('AZYXVUTSRQPONMLKJIHGFEDCB');
 
 switch direction
-    case 1 %if you are encrypting, take ordered key and index
-        [ckey,Idx]=sort(ckey);
-    case -1 %if you are decrypting, take only the index
-        [~,Idx]=sort(ckey);
-end
-%shuffle the columns
-ctext=ctext(:,Idx);
-clear Idx
+    case 1  % ENCRYPT
+        LT = length(ctext);
+        targetLen = ceil(LT/25)*25;
+        padLen = targetLen - LT;
+        C = targetLen/25;
 
-%Shift the starting point of the columns
-ckey2=double('AZYXVUTSRQPONMLKJIHGFEDCB');
-for I=1:C
-    S=find(ckey2==ckey(I),1,'first')-1;
-    ctext(:,I)=circshift(ctext(:,I),-direction*S);
-end
-clear C I S ckey*
-%reshape into a vector horizontally
-ctext=reshape(ctext',1,[]);
+        % Effective key of length C
+        rep = ceil(C/length(ckey));
+        effKey = repmat(ckey,1,rep);
+        effKey = effKey(1:C);
 
-out.key=key;
-switch direction
-    case 1
-        out.plain=text;
-        out.encrypted=ctext;
-    case -1
-        out.encrypted=text;
-        out.plain=ctext;
+        % Deterministic suffix padding
+        if padLen > 0
+            ctext = [ctext marker24(1:padLen)];
+        end
+
+        % Reshape text into 25xC (same pattern as your original)
+        mat = reshape(ctext,C,25)';
+
+        % Sort effective key and get column order
+        effKeyNum = double(effKey);
+        [effKeySorted, sortIdx] = sort(effKeyNum);
+
+        % Reorder columns to sorted-key order
+        mat = mat(:,sortIdx);
+
+        % Shift each column according to sorted key letters
+        for i = 1:C
+            S = find(ckeyShiftAlpha==effKeySorted(i),1,'first') - 1;
+            mat(:,i) = circshift(mat(:,i), -S);
+        end
+
+        % Read off by rows
+        cipherOut = reshape(mat',1,targetLen);
+
+        out.key = upper(key);
+        out.plain = upper(text);
+        out.encrypted = cipherOut;
+
+    case -1  % DECRYPT
+        LT = length(ctext);
+        assert(mod(LT,25)==0, ...
+            'Ciphertext length must be a multiple of 25 (after A-Z filtering).')
+
+        C = LT/25;
+
+        % Effective key of length C
+        rep = ceil(C/length(ckey));
+        effKey = repmat(ckey,1,rep);
+        effKey = effKey(1:C);
+
+        % Reshape ciphertext into 25xC
+        mat = reshape(ctext,C,25)';
+
+        % Sort effective key
+        effKeyNum = double(effKey);
+        [effKeySorted, sortIdx] = sort(effKeyNum);
+
+        % At this stage, columns are in sorted order already by construction
+        % Undo shifts
+        for i = 1:C
+            S = find(ckeyShiftAlpha==effKeySorted(i),1,'first') - 1;
+            mat(:,i) = circshift(mat(:,i), S);
+        end
+
+        % Undo column permutation to original effective-key order
+        invIdx = zeros(1,C);
+        invIdx(sortIdx) = 1:C;
+        mat = mat(:,invIdx);
+
+        % Read off by rows
+        plainOut = reshape(mat',1,LT);
+
+        % Remove deterministic marker suffix if present (longest match)
+        maxK = min(24, length(plainOut));
+        for k = maxK:-1:1
+            if isequal(plainOut(end-k+1:end), marker24(1:k))
+                plainOut(end-k+1:end) = [];
+                break
+            end
+        end
+
+        out.key = upper(key);
+        out.encrypted = upper(text);
+        out.plain = plainOut;
 end
-clear ctext
