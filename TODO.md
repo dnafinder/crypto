@@ -85,5 +85,3 @@ AFFINE, HILL, ROT, ROT13, KEYWORD, POLYBIUS, etc.)
 - HEADLINES  
 - NULL  
 - TRIDIGITAL  
-*non-ACA* algorithms tha
-
