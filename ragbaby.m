@@ -1,15 +1,26 @@
 function out=ragbaby(text,key,direction)
 % RAGBABY Cipher encoder/decoder
-% The ragbaby cipher is a substitution cipher that encodes/decodes a text
-% using a keyed alphabet and their position in the plaintext word they are
-% a part of.  It can be considered as a multiple ROT encoding/decoding.
+% The Ragbaby cipher is a substitution cipher that encodes/decodes text
+% using a keyed alphabet and a progressive shift tied to the position of
+% each letter within its plaintext word and to the word order.
+%
+% The procedure can be described as a variable ROT over a keyed alphabet:
+% 1) Build a keyed alphabet from KEY (duplicates removed, stable order),
+%    then append the remaining letters A-Z.
+% 2) Preserve spaces; remove non A-Z characters.
+% 3) Number plaintext words in sequence: the first word starts at shift 1,
+%    the second at shift 2, etc. Within each word, the shift increases by
+%    1 for each subsequent letter.
+% 4) For encryption, shift each plaintext letter to the right by its
+%    assigned value in the keyed alphabet. For decryption, shift to the
+%    left by the same value.
 %
 % Syntax: 	out=ragbaby(text,key,direction)
 %
 %     Input:
 %           text - It is a characters array to encode or decode
 %           key - It is the keyword
-%           direction - this parameter can assume only two values: 
+%           direction - this parameter can assume only two values:
 %                   1 to encrypt
 %                  -1 to decrypt.
 %     Output:
@@ -21,21 +32,21 @@ function out=ragbaby(text,key,direction)
 % Examples:
 %
 % out=ragbaby('Hide the gold into the tree stump','leprachaun',1)
-% 
-% out = 
-% 
+%
+% out =
+%
 %   struct with fields:
-% 
+%
 %         plain: 'HIDE THE GOLD INTO THE TREE STUMP'
 %           key: 'LEPRACHAUN'
 %     encrypted: 'UKIC WBC KVCM OILY ZGN LDBD LPMLI'
 %
 % out=ragbaby('UKIC WBC KVCM OILY ZGN LDBD LPMLI','leprachaun',-1)
 %
-% out = 
-% 
+% out =
+%
 %   struct with fields:
-% 
+%
 %     encrypted: 'UKIC WBC KVCM OILY ZGN LDBD LPMLI'
 %           key: 'LEPRACHAUN'
 %         plain: 'HIDE THE GOLD INTO THE TREE STUMP'
@@ -48,53 +59,70 @@ function out=ragbaby(text,key,direction)
 p = inputParser;
 addRequired(p,'text',@(x) ischar(x));
 addRequired(p,'key',@(x) ischar(x));
-addRequired(p,'direction',@(x) validateattributes(x,{'numeric'},{'scalar','real','finite','nonnan','nonempty','integer','nonzero','>=',-1,'<=',1}));
+addRequired(p,'direction',@(x) validateattributes(x,{'numeric'}, ...
+    {'scalar','real','finite','nonnan','nonempty','integer','nonzero','>=',-1,'<=',1}));
 parse(p,text,key,direction);
 clear p
 
-% ASCII codes for Uppercase letters ranges between 65 and 90;
-ctext=double(upper(text)); 
-ctext(ctext==32)=0; ctext((ctext<65 & ctext~=0)| ctext>90)=[]; %preserve spaces
-ckey=double(upper(key)); ckey(ckey>90 | ckey<65)=[]; 
+% Preprocess text: uppercase, preserve spaces, remove other non A-Z chars.
+ctext = double(upper(text));
+ctext(ctext == 32) = 0; % temporary marker for spaces
+ctext((ctext < 65 & ctext ~= 0) | ctext > 90) = []; % keep only A-Z and spaces
+
+% Preprocess key: uppercase A-Z only
+ckey = double(upper(key));
+ckey(ckey > 90 | ckey < 65) = [];
+assert(~isempty(ckey),'Key must contain at least one letter A-Z.')
+
+% Build a display-safe version of the preprocessed text (convert markers to spaces)
+disptext = ctext;
+disptext(disptext == 0) = 32;
 
 switch direction
     case 1
-        out.plain=char(ctext);
+        out.plain = char(disptext);
     case -1
-        out.encrypted=char(ctext);
+        out.encrypted = char(disptext);
 end
-out.key=char(ckey);
+out.key = char(ckey);
 
-% Chars of the key must be choosen only once
-ckey=unique(ckey,'stable'); 
-A=65:1:90;
-%if key is 'LEPRACHAUN' then PS=LEPRACHUNBDFGIJKMOQSTVWXYZ
-PS=[ckey A(~ismember(A,ckey))];
+% Build keyed alphabet
+ckey = unique(ckey,'stable');
+A = 65:1:90;
+PS = [ckey A(~ismember(A,ckey))];
 
-[~,Idx]=ismember(ctext(ctext~=0),PS); %Index of inputed chars into PS
-clear ckey A
-%Number the letters of each plaintext word in sequence beginning with 1 for
-%the first letter of the first word, 2 for the first letter of the second
-%word, etc. Each plaintext letter is enciphered by moving to the right the
-%designated number of spaces, using the letter found there as its substitute
-S=1; J=1; L=length(ctext); tmp=zeros(1,L); tmp2=repmat(32,1,L);
-for I=1:L
-    if ctext(I)==0
-        S=S+1; 
-        J=S; 
+% Indices of letters (exclude spaces)
+letterMask = (ctext ~= 0);
+[~,IdxLetters] = ismember(ctext(letterMask), PS);
+
+% Compute shifts per character position
+wordIndex = 1;
+shiftVal = 1;
+L = length(ctext);
+shifts = zeros(1,L);
+
+for i = 1:L
+    if ctext(i) == 0
+        wordIndex = wordIndex + 1;
+        shiftVal = wordIndex;
     else
-        tmp(I)=J; 
-        J=J+1;
+        shifts(i) = shiftVal;
+        shiftVal = shiftVal + 1;
     end
 end
-clear J S L I ctext
-%Use "rot" modular algebra
-tmp2((tmp~=0))=PS(mod((Idx-1)+direction.*tmp(tmp~=0),26)+1);
-clear PS tmp where
+clear i L wordIndex shiftVal
+
+% Apply variable ROT over keyed alphabet, preserving spaces
+tmpOut = repmat(32,1,length(ctext)); % initialize with spaces
+letterShifts = shifts(letterMask);
+
+tmpOut(letterMask) = PS(mod((IdxLetters-1) + direction .* letterShifts, 26) + 1);
+
 switch direction
     case 1
-        out.encrypted=char(tmp2);
+        out.encrypted = char(tmpOut);
     case -1
-        out.plain=char(tmp2);
+        out.plain = char(tmpOut);
 end
-clear tmp2
+
+clear A PS ckey ctext disptext IdxLetters letterMask letterShifts shifts tmpOut
