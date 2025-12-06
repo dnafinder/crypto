@@ -1,86 +1,117 @@
-function out=baconian(text,direction)
-% BACONIAN Cipher encoder/decoder
-%Bacon's encryption uses a substitution alphabet based on 2 letters
-%(sometimes called biliteral or baconian), often A and B, replacing the
-%letters of the alphabet. The ciphered message is a binary code (with 2
-%distinct characters), and maybe spaces every 5 characters. Francis Bacon
-%first described the Bacon alphabet around 1605. If you encrypt the same
-%messagge twice, you will obtain two different coded text.
+function out = baconian(text, direction)
+%BACONIAN Cipher encoder/decoder
+% Bacon's cipher uses a biliteral substitution alphabet based on two groups
+% of letters. Each plaintext letter is represented by a 5-bit pattern.
+% This implementation encodes each bit using letters from two halves of the
+% alphabet:
+%   0-bit -> random letter in A..M
+%   1-bit -> random letter in N..Z
 %
-% Syntax: 	out=baconian(text,direction)
+% The ciphertext is therefore a sequence of uppercase letters. Encrypting
+% the same message twice will generally produce different ciphertext due to
+% the random choice of letters for each bit.
 %
-%     Input:
-%           text - It is a characters array to encode or decode
-%           direction - this parameter can assume only two values:
-%                   1 to encrypt
-%                  -1 to decrypt.
-%     Output:
-%           out - It is a structure
-%           out.plain = the plain text
-%           out.encrypted = the coded text
+% Syntax:
+%   out = baconian(text, direction)
+%
+% Input:
+%   text      - Character array or string scalar to encode or decode.
+%              Only letters A-Z are used; all other characters are removed.
+%   direction -  1 to encrypt
+%               -1 to decrypt
+%
+% Output:
+%   out - A structure with fields:
+%       out.plain
+%       out.encrypted
 %
 % Examples:
+%   out = baconian('Hide the gold into the tree stump', 1)
+%   out = baconian(out.encrypted, -1)
 %
-% out=baconian('Hide the gold into the tree stump',1)
-% 
-% out = 
-% 
-%   struct with fields:
-% 
-%         plain: 'Hide the gold into the tree stump'
-%     encrypted: 'CBNVQGUDKIAGFUXAHWMKWMAUVDCUYVHGTBLKCYOAEUWQCDYGWQBHCTZDTIKBHRXJNVMAUOBYOQAOGEZNIDWSQHKTFBXKDTYSLGMRHLODGCFSIETDKWENCBTYXERBLLZSIAEWUSZ'
-% 
-% out=baconian('CBNVQGUDKIAGFUXAHWMKWMAUVDCUYVHGTBLKCYOAEUWQCDYGWQBHCTZDTIKBHRXJNVMAUOBYOQAOGEZNIDWSQHKTFBXKDTYSLGMRHLODGCFSIETDKWENCBTYXERBLLZSIAEWUSZ',-1)
-% 
-% out = 
-% 
-%   struct with fields:
-% 
-%     encrypted: 'CBNVQGUDKIAGFUXAHWMKWMAUVDCUYVHGTBLKCYOAEUWQCDYGWQBHCTZDTIKBHRXJNVMAUOBYOQAOGEZNIDWSQHKTFBXKDTYSLGMRHLODGCFSIETDKWENCBTYXERBLLZSIAEWUSZ'
-%         plain: 'HIDETHEGOLDINTOTHETREESTUMP'
-%
-%           Created by Giuseppe Cardillo
-%           giuseppe.cardillo.75@gmail.com
+% Created by Giuseppe Cardillo
+% giuseppe.cardillo.75@gmail.com
+
+% ---- Input normalization and validation ----
+if isstring(text)
+    text = char(text);
+end
 
 p = inputParser;
-addRequired(p,'text',@(x) ischar(x));
-addRequired(p,'direction',@(x) validateattributes(x,{'numeric'},{'scalar','real','finite','nonnan','nonempty','integer','nonzero','>=',-1,'<=',1}));
-parse(p,text,direction);
-clear p
+p.FunctionName = mfilename;
+addRequired(p, 'text', @(x) ischar(x));
+addRequired(p, 'direction', @(x) validateattributes(x, {'numeric'}, ...
+    {'scalar','real','finite','nonnan','nonempty','integer','nonzero','>=',-1,'<=',1}));
+parse(p, text, direction);
 
-% ASCII codes for Uppercase letters ranges between 65 and 90;
-ctext=double(upper(text));
-ctext(ctext<65 | ctext>90)=[];
-%scale each number between 0 and 25
-ctext=ctext-65;
-%split the alphabeth in two halves
-array0=0:1:12;
-array1=13:1:25; 
+% ---- Preprocess text: keep only A-Z ----
+% ASCII codes for uppercase letters range between 65 and 90
+ctext = double(upper(text));
+ctext(ctext < 65 | ctext > 90) = [];
+
+% Scale each number between 0 and 25
+ctext = ctext - 65;
+
+% Split the alphabet in two halves
+array0 = 0:12;   % A..M
+array1 = 13:25;  % N..Z
 
 switch direction
-    case 1 %if you are encrypting...
-        out.plain=text; out.encrypted='';
-        %convert into 5 bits binary
-        bintext=dec2bin(ctext,5);
-        clear ctext
-        for I=1:length(bintext)
-            z=zeros(1,5); %preallocation
-            x=bintext(I,:); %take the i-esim byte
-            K=strfind(x,'0'); %index of 0 bits
-            z(K)=randsample(array0,length(K)); %choose random letters from the first array  
-            K=strfind(x,'1');%index of 1 bits
-            z(K)=randsample(array1,length(K)); %choose random letters from the second array
-            out.encrypted=strcat(out.encrypted,char(z+65)); %convert into ascii code
+    case 1 % encrypt
+        out.plain = text;
+
+        L = numel(ctext);
+        if L == 0
+            out.encrypted = '';
+            return;
         end
-    case -1 %if you are decrypting...
-        out.encrypted=text; out.plain='';
-        x=reshape(ctext,5,length(text)/5)'; %reshape into Nx5 matrix
-        z=zeros(size(x)); %preallocation
-        z(x>12)=1; %index of 1 bits;
-        clear x
-        for I=1:length(z)
-            %convert each byte into ascii code
-            out.plain=strcat(out.plain,char(bin2dec(num2str(z(I,:)))+65));
+
+        % Convert into 5-bit binary (one row per letter)
+        bintext = dec2bin(ctext, 5);
+
+        % Preallocate ciphertext numeric codes (0..25)
+        zAll = zeros(L, 5);
+
+        for I = 1:L
+            bits = bintext(I, :);
+
+            idx0 = strfind(bits, '0');
+            if ~isempty(idx0)
+                % Random letters from the first array (without replacement)
+                zAll(I, idx0) = array0(randperm(numel(array0), numel(idx0)));
+            end
+
+            idx1 = strfind(bits, '1');
+            if ~isempty(idx1)
+                % Random letters from the second array (without replacement)
+                zAll(I, idx1) = array1(randperm(numel(array1), numel(idx1)));
+            end
         end
+
+        % Convert into ASCII letters
+        out.encrypted = reshape(char(zAll + 65).', 1, []);
+
+    case -1 % decrypt
+        out.encrypted = text;
+
+        L = numel(ctext);
+        if L == 0
+            out.plain = '';
+            return;
+        end
+
+        assert(mod(L, 5) == 0, ...
+            'The encrypted text length (letters only) must be a multiple of 5.');
+
+        % Reshape into N-by-5 matrix of 0..25 codes
+        x = reshape(ctext, 5, []).';
+
+        % Rebuild bits: values > 12 correspond to 1-bits (N..Z)
+        z = x > 12;
+
+        % Convert each 5-bit row to a letter
+        binStr = char(z + '0');      % N-by-5 char array
+        decVal = bin2dec(binStr);    % 0..25
+        out.plain = reshape(char(decVal + 65).', 1, []);
 end
 end
