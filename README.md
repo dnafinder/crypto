@@ -3,108 +3,43 @@
 # Crypto (Classical Ciphers in MATLAB)
 
 A compact MATLAB collection of classical, hand-cipher-era algorithms implemented for study, teaching, and experimentation.  
-This repository focuses on clear, practical implementations with consistent I/O patterns and examples you can run immediately.
+The repository prioritizes clarity, consistent I/O structures, and faithful algorithmic behavior over modern security.
 
 ## 📘 Overview
-Crypto gathers a curated set of historical ciphers—substitution, transposition, and fractionating hybrids—implemented as MATLAB functions.  
-Most functions return a structured output (e.g., out.plain, out.encrypted, and key-related fields) to keep usage consistent across the collection.
+**Crypto** collects historical ciphers spanning substitution, transposition, and fractionating hybrids, implemented as MATLAB functions with a broadly consistent interface (typically returning structured outputs such as plaintext, ciphertext, and key-related fields).
 
-The main goal is educational: to explore how classical ciphers work, how keys shape the transformation, and how related families of methods differ in practice.
+Where applicable, the implementations are aligned with the conventions and descriptions found in **ACA references** (American Cryptogram Association) as a practical and widely used standard for hobbyist and educational cryptography.  
+This is not intended as a strict scholarly critical edition of each cipher variant; instead, the goal is a coherent, usable MATLAB interpretation that matches common ACA-style formulations and terminology.
+
+Primary reference hub:
+- https://www.cryptogram.org/resource-area/cipher-types/
 
 ## ✨ Features
-- Broad coverage of classical cipher families:
-  - Polybius-based substitutions and hybrids
-  - Fractionating ciphers (e.g., Bifid/Trifid families)
-  - Columnar and route-style transpositions
-  - Polyalphabetic systems (Vigenère family and variants)
-- Consistent functional style across files
-- Input sanitation and uppercase normalization
-- Reproducible examples in each function help section
-- Designed for both quick interactive exploration and scripted workflows
-
-## 🧩 Included Ciphers (non-exhaustive)
-This repo currently includes functions such as:
-- Substitution / Polybius family
-  - polybius (if present in repo)
-  - playfair (if present)
-  - foursquares
-  - checkerboard1
-  - checkerboard2
-  - nihilist (substitution)
-  - bazeries
-  - chaocipher
-- Fractionation + Transposition
-  - bifid
-  - cmbifid
-  - trifid
-  - adfgx
-  - adfgvx
-- Transposition
-  - cct
-  - railfence
-  - nihilist2 (double transposition)
-  - amsco
-  - cadenus
-  - swagman
-- Polyalphabetic
-  - vigenere
-  - beaufort
-  - autokey
-  - gronsfeld
-  - trithemius
-  - dellaporta
-  - gromark
-  - condi
-  - ragbaby
-
-Names may evolve as the collection is refined.
-
-## 📥 Installation
-1. Download or clone the repository:
-   https://github.com/dnafinder/crypto
-
-2. Add the folder to your MATLAB path:
-   addpath('path_to_crypto')
-
-3. Verify availability:
-   which vigenere
-   which adfgx
+- Coverage of major classical cipher families:
+  - **Polyalphabetic** systems
+  - **Monoalphabetic and keyed substitutions**
+  - **Polybius-square-based** methods and hybrids
+  - **Fractionating** ciphers
+  - **Columnar and route-style transpositions**
+  - **Mixed substitution-transposition** constructions
+- Input sanitization and uppercase normalization
+- Key handling designed to be explicit and reproducible
+- Emphasis on reversible designs when padding is required
+- Self-contained functions intended for both quick exploration and scripted use
 
 ## ⚙️ Requirements
 - MATLAB (recent versions recommended)
 
 ### Optional toolboxes
-Some functions may rely on specialized functions.
-For example, the Statistics and Machine Learning Toolbox may be required if a cipher uses functions like binornd.
-
-If you prefer zero-toolbox dependencies, you can replace such calls with deterministic or basic-random alternatives.
-
-## 🚀 Usage
-
-### General pattern
-Most functions follow:
-- direction = 1 for encryption
-- direction = -1 for decryption
-
-Example (Vigenère):
-   out = vigenere('Hide the gold into the tree stump','leprachaun',1);
-   out = vigenere(out.encrypted,'leprachaun',-1);
-
-Example (ADFGX with explicit matrix):
-   M = ['BTALP';'DHOZK';'QFVSN';'GICUX';'MREWY'];
-   out = adfgx('Hide the gold into the tree stump','leprachaun',1,M);
-   out = adfgx(out.encrypted,'leprachaun',-1,M);
-
-Example (Bifid with period):
-   out = bifid('Hide the gold into the tree stump','leprachaun',7,1);
-   out = bifid(out.encrypted,'leprachaun',7,-1);
+Some functions may rely on specialized MATLAB functions that belong to optional toolboxes.  
+If you prefer zero-toolbox dependencies, those calls can be replaced with deterministic or base-MATLAB alternatives.
 
 ## 🧠 Notes
-- These are historical ciphers and are not secure for modern cryptographic use.
-- The implementations aim for clarity and faithful behavior over modern security.
-- Many algorithms assume a 25-letter alphabet (I/J merged).  
-  Inputs are typically sanitized accordingly.
-- When padding is used, logic is designed to remain reversible under decryption whenever feasible.
+- These algorithms are **not** secure for modern cryptographic purposes.
+- Many historical systems assume reduced alphabets (e.g., 25-letter conventions with I/J merged).  
+  Functions typically normalize inputs accordingly.
+- When padding is used, the implementation aims to preserve clean **decryptability** and to document the convention in the help section of the relevant function.
+- The codebase is being progressively refined to improve robustness, consistency of edge-case handling, and documentation quality.
 
 ## 🧾 Citation
 If you use this repository in teaching, research, or publications, please cite:
