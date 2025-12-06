@@ -2,7 +2,7 @@ function out=bazeries(text,key,direction)
 % BAZERIES Cipher encoder/decoder
 % A simple substitution with trasposition. The Bazeries Cipher is a
 % ciphering system created by Etienne Bazeries combining two grids
-% (Polybius), and one key creating super-encryption.  
+% (Polybius), and one key creating super-encryption.
 % One of the squares features the alphabet written vertically in order. For
 % the other square, choose a number less than a million, spell it out, and
 % use it as the keyword for the other Polybius square, written
@@ -10,13 +10,14 @@ function out=bazeries(text,key,direction)
 % each group being the length of each digit in the key number. Reverse
 % the text in each group. The normal alphabet Polybius square represents
 % the plaintext letter, and the keyed horizontal Polybius square represents
-% the ciphertext letter to replace it with.  
+% the ciphertext letter to replace it with.
 %
 % Syntax: 	out=bazeries(text,key,direction)
 %
 %     Input:
 %           text - It is a characters array to encode or decode
 %           key - It is a characters array of the digits used as key.
+%                 Digits must be 1-9 only; key value must be < 1 million.
 %           direction - this parameter can assume only two values:
 %                   1 to encrypt
 %                  -1 to decrypt.
@@ -29,123 +30,151 @@ function out=bazeries(text,key,direction)
 % Examples:
 %
 % out=bazeries('Hide the gold into the tree stump','81257',1)
-% 
-% out = 
-% 
+%
+% out =
+%
 %   struct with fields:
-% 
-%         plain: 'Hide the gold into the tree stump'
+%
+%         plain: 'HIDETHEGOLDINTOTHETREESTUMP'
 %           key: '81257'
 %     encrypted: 'OMDKMVBDCVGKCKWBRMMUKMDQNXK'
-% 
+%
 % out=bazeries('OMDKMVBDCVGKCKWBRMMUKMDQNXK','81257',-1)
-% 
-% out = 
-% 
+%
+% out =
+%
 %   struct with fields:
-% 
+%
 %     encrypted: 'OMDKMVBDCVGKCKWBRMMUKMDQNXK'
 %           key: '81257'
 %         plain: 'HIDETHEGOLDINTOTHETREESTUMP'
 %
-% See also polybius
+% See also polybius, num2words
 %
 %           Created by Giuseppe Cardillo
 %           giuseppe.cardillo.75@gmail.com
 
 p = inputParser;
-addRequired(p,'text',@(x) ischar(x));
-addRequired(p,'key',@(x) ischar(x));
+addRequired(p,'text',@(x) ischar(x) || (isstring(x) && isscalar(x)));
+addRequired(p,'key',@(x) ischar(x) || (isstring(x) && isscalar(x)));
 addRequired(p,'direction',@(x) validateattributes(x,{'numeric'},{'scalar','real','finite','nonnan','nonempty','integer','nonzero','>=',-1,'<=',1}));
 parse(p,text,key,direction);
 clear p
 
-nk=str2double(key);
-assert(nk<1e6,'Key must be less than 1 million')
+% Ensure char row vectors
+text = char(text);
+key  = char(key);
+key  = key(:)';
 
-% ASCII codes for Uppercase letters ranges between 65 and 90;
-ctext=double(upper(text)); ctext(ctext<65 | ctext>90)=[]; 
-% Convert J (ASCII code 74) into I (ASCII code 73)
-ctext(ctext==74)=73; ctext=char(ctext);
-LT=length(ctext);
-% Convert key into a vector
-K=double(key)-48;
-LK=length(K); %how many columns?
+% Validate key: digits only, no zeros
+assert(~isempty(key),'Key must be a non-empty char vector of digits.')
+assert(~isempty(regexp(key,'^[1-9]+$','once')),'Key must contain digits 1-9 only (no zeros).')
 
-%Polybius square generation from Key
-%First a number less than a million is chosen (say 3752). It is spelled out
-%and used as the key in a 5x5 ciphertext Polybius square entered in
-%left-to-right horizontal rows. 
-%A  5x5 plaintext Polybius square is used with the alphabet in normal order
-%vertically. In the ciphertext and plaintext squares, I and J (I/J) are
-%combined in one cell.  
-A=[65:1:73 75:1:90];
-% PS1 =
-% AFLQV
-% BGMRW
-% CHNSX
-% DIOTY
-% EKPUZ
+nk = str2double(key);
+assert(~isnan(nk) && isfinite(nk),'Key must be numeric.')
+assert(nk < 1e6,'Key must be less than 1 million.')
+
+% Preprocess text: uppercase letters only, J -> I
+ctext = double(upper(text));
+ctext(ctext < 65 | ctext > 90) = [];
+ctext(ctext == 74) = 73;
+ctext = char(ctext);
+
+LT = length(ctext);
+
+out.key = upper(key);
+
+% Handle empty text after preprocessing
+if LT == 0
+    switch direction
+        case 1
+            out.plain = '';
+            out.encrypted = '';
+        case -1
+            out.encrypted = '';
+            out.plain = '';
+    end
+    return
+end
+
+% Convert key into digit vector
+K  = double(key) - 48;
+LK = length(K);
+
+% Base alphabet without J
+A = [65:1:73 75:1:90];
+
+% Build squares depending on direction
 switch direction
     case 1
-        out.plain=text;
-        PS1=char(reshape(A,5,5));
-        % key=Three Thousand Seven Hundred Fifty Two
-        ckey=unique(regexprep(upper(num2words(nk)),' ',''),'stable');
-        % ckey=THREOUSANDVFIYW
-        PS2=reshape([ckey A(~ismember(A,ckey))],[5,5])';
-        % PS2 =
-        % THREO
-        % USAND
-        % VFIYW
-        % BCGKL
-        % MPQXZ
+        out.plain = ctext;
+
+        % Plaintext square: alphabet written vertically in order
+        PS1 = char(reshape(A,5,5));
+
+        % Keyed square from spelled-out number
+        w = upper(num2words(nk));
+        w = regexprep(w,'[^A-Z]','');
+        ckey = unique(w,'stable');
+        ckey = double(ckey);
+        ckey(ckey == 74) = 73; % J -> I if present
+        ckey = unique(ckey,'stable');
+
+        PS2 = reshape([ckey A(~ismember(A,ckey))],[5,5])';
+        PS2 = char(PS2);
+
     case -1
-        out.encrypted=text;
-        PS2=char(reshape(A,5,5));
-        % key=Three Thousand Seven Hundred Fifty Two
-        ckey=unique(regexprep(upper(num2words(nk)),' ',''),'stable');
-        % ckey=THREOUSANDVFIYW
-        PS1=reshape([ckey A(~ismember(A,ckey))],[5,5])';
-        % PS2 =
-        % THREO
-        % USAND
-        % VFIYW
-        % BCGKL
-        % MPQXZ
-end
-out.key=key;
-clear ckey A nk
+        out.encrypted = ctext;
 
-% The plaintext is divided into groups governed by the key numbers, in this
-% example:3, 7, 5, and 2. Letters within each group are reversed.
-% The result is enciphered using the squares to match.
-flag=1; start=1; I=1;
-while flag==1
-    stop=start+K(I)-1;
-    if stop>LT
-        stop=LT;
-        flag=0;
-    end
-    ctext(start:stop)=fliplr(ctext(start:stop));
-    start=stop+1;
-    I=I+1;
-    if I>LK
-        I=1;
-    end
-end
-clear flag start stop I K LK
+        % Ciphertext square: alphabet written vertically in order
+        PS2 = char(reshape(A,5,5));
 
-for I=1:LT
-    [R,C]=find(PS1==ctext(I)); %find row and column of the i-th letter into the Polybius Square 1
-    ctext(I)=PS2(R,C); %change the I-th letter with the corresponding letter into Polybius Square 2
+        % Keyed square from spelled-out number
+        w = upper(num2words(nk));
+        w = regexprep(w,'[^A-Z]','');
+        ckey = unique(w,'stable');
+        ckey = double(ckey);
+        ckey(ckey == 74) = 73; % J -> I if present
+        ckey = unique(ckey,'stable');
+
+        PS1 = reshape([ckey A(~ismember(A,ckey))],[5,5])';
+        PS1 = char(PS1);
 end
-clear R C PS* I LT
+
+% Group reversal governed by key digits (cyclic)
+flag = true;
+startIdx = 1;
+iKey = 1;
+
+while flag
+    stopIdx = startIdx + K(iKey) - 1;
+
+    if stopIdx >= LT
+        stopIdx = LT;
+        flag = false;
+    end
+
+    ctext(startIdx:stopIdx) = fliplr(ctext(startIdx:stopIdx));
+
+    startIdx = stopIdx + 1;
+    iKey = iKey + 1;
+
+    if iKey > LK
+        iKey = 1;
+    end
+end
+
+% Substitution via corresponding coordinates
+for i = 1:LT
+    [R,C] = find(PS1 == ctext(i),1,'first');
+    ctext(i) = PS2(R,C);
+end
 
 switch direction
     case 1
-        out.encrypted=ctext;
+        out.encrypted = ctext;
     case -1
-        out.plain=ctext;
+        out.plain = ctext;
 end
-clear ctext;
+
+end
