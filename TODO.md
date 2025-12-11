@@ -2,6 +2,10 @@
 
 This file tracks the **ACA cipher types still missing** from the current MATLAB set.
 
+Primary reference hub:
+
+https://www.cryptogram.org/resource-area/cipher-types/
+
 ## ✅ Already covered
 AMSCO  
 AUTOKEY  
