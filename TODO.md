@@ -15,7 +15,7 @@ https://www.cryptogram.org/resource-area/cipher-types/
 - BIFID  
 - CADENUS  
 - CHECKERBOARD  
-- COMPLETE COLUMNAR TRANSPOSITION  
+- COMPLETE COLUMNAR TRANSPOSITION (CCT) 
 - CONDI  
 - CM BIFID (Conjugated Matrix Bifid)  
 - FOURSQUARE  
