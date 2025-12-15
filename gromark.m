@@ -48,7 +48,7 @@ function out=gromark(text,key,direction,varargin)
 %        primer: '46975'
 %         plain: 'HIDETHEGOLDINTOTHETREESTUMP'
 %
-% See also gronsfeld
+% See also gronsfeld, periodicgromark
 %
 %           Created by Giuseppe Cardillo
 %           giuseppe.cardillo.75@gmail.com
