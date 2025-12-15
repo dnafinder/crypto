@@ -41,6 +41,8 @@ function out=cct(text,key,direction)
 %
 % out=cct('DEDOTSPEGITRTXHTONHEUIHLTEEM',[3 4 1 2],-1)
 %
+% See also incompletecct
+%
 %           Created by Giuseppe Cardillo
 %           giuseppe.cardillo.75@gmail.com
 %           GitHub (Crypto): https://github.com/dnafinder/crypto
