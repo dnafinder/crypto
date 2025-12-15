@@ -17,7 +17,8 @@ https://www.cryptogram.org/resource-area/cipher-types/
 - CHECKERBOARD  
 - COMPLETE COLUMNAR TRANSPOSITION (CCT) 
 - CONDI  
-- CM BIFID (Conjugated Matrix Bifid)  
+- CM BIFID (Conjugated Matrix Bifid)
+- INCOMPLETE COLUMNAR TRASPOSITION
 - FOURSQUARE  
 - GROMARK  
 - GRONSFELD  
@@ -47,7 +48,6 @@ AFFINE, HILL, ROT, ROT13, KEYWORD, POLYBIUS, etc.)
 ## 🧩 ACA cipher types still to implement
 
 ### Transposition
-- INCOMPLETE COLUMNAR  
 - GRILLE  
 - ROUTE TRANSPOSITION  
 - SEQUENCE TRANSPOSITION  
