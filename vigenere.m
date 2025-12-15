@@ -45,7 +45,7 @@ function out=vigenere(text,key,direction)
 %           key: 'LEPRACHAUN'
 %         plain: 'HIDETHEGOLDINTOTHETREESTUMP'
 %
-% See also autokey, beaufort, dellaporta, gronsfeld, nihilist, trithemius
+% See also autokey, beaufort, dellaporta, gronsfeld, nihilist, trithemius, progressivekey
 %
 %           Created by Giuseppe Cardillo
 %           giuseppe.cardillo.75@gmail.com
