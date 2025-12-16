@@ -18,6 +18,7 @@ https://www.cryptogram.org/resource-area/cipher-types/
 - COMPLETE COLUMNAR TRANSPOSITION (CCT) 
 - CONDI  
 - CM BIFID (Conjugated Matrix Bifid)
+- DIGRAFID
 - INCOMPLETE COLUMNAR TRASPOSITION
 - FOURSQUARE
 - FRACTIONATED MORSE  
@@ -58,7 +59,6 @@ AFFINE, HILL, ROT, ROT13, KEYWORD, POLYBIUS, etc.)
 - VARIANT  
 
 ### Polygraphic / Square-based families
-- DIGRAFID  
 - TWIN BIFID  
 - TWIN TRIFID  
 - SERIATED PLAYFAIR  
