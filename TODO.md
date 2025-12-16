@@ -25,6 +25,7 @@ https://www.cryptogram.org/resource-area/cipher-types/
 - GROMARK  
 - GRONSFELD  
 - KEY PHRASE
+- MONOME-DINOME 
 - MORBIT
 - MYSZKOWSKI
 - NICODEMUS  
@@ -65,8 +66,7 @@ AFFINE, HILL, ROT, ROT13, KEYWORD, POLYBIUS, etc.)
 - SLIDEFAIR  
 
 ### Substitution families
-- HOMOPHONIC  
-- MONOME-DINOME  
+- HOMOPHONIC   
 - PHILLIPS  
 - PHILLIPS-RC  
 - SYLLABARY  
