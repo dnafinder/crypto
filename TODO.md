@@ -41,7 +41,8 @@ https://www.cryptogram.org/resource-area/cipher-types/
 - RUNNING KEY
 - SWAGMAN  
 - TRI-SQUARE  
-- TRIFID  
+- TRIFID
+- TWIN BIFID  
 - TWO-SQUARE  
 - VIGENÈRE  
 
@@ -60,7 +61,6 @@ AFFINE, HILL, ROT, ROT13, KEYWORD, POLYBIUS, etc.)
 - VARIANT  
 
 ### Polygraphic / Square-based families
-- TWIN BIFID  
 - TWIN TRIFID  
 - SERIATED PLAYFAIR  
 - SLIDEFAIR  
