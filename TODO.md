@@ -24,6 +24,7 @@ https://www.cryptogram.org/resource-area/cipher-types/
 - GROMARK  
 - GRONSFELD  
 - KEY PHRASE
+- MORBIT
 - MYSZKOWSKI
 - NICODEMUS  
 - NIHILIST SUBSTITUTION  
@@ -62,10 +63,6 @@ AFFINE, HILL, ROT, ROT13, KEYWORD, POLYBIUS, etc.)
 - TWIN TRIFID  
 - SERIATED PLAYFAIR  
 - SLIDEFAIR  
-
-### Fractionation / Morse-based
-- MORBIT  
-
 
 ### Substitution families
 - HOMOPHONIC  
