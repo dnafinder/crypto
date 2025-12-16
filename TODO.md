@@ -43,6 +43,7 @@ https://www.cryptogram.org/resource-area/cipher-types/
 - TRI-SQUARE  
 - TRIFID
 - TWIN BIFID  
+- TWIN TRIFID
 - TWO-SQUARE  
 - VIGENÈRE  
 
@@ -61,7 +62,6 @@ AFFINE, HILL, ROT, ROT13, KEYWORD, POLYBIUS, etc.)
 - VARIANT  
 
 ### Polygraphic / Square-based families
-- TWIN TRIFID  
 - SERIATED PLAYFAIR  
 - SLIDEFAIR  
 
