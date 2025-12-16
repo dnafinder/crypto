@@ -1,4 +1,4 @@
-function out = monomedinome(text,key,digitkey,direction)
+⁹function out = monomedinome(text,key,digitkey,direction)
 % MONOMEDINOME Cipher encoder/decoder
 % MONOMEDINOME is an ACA Monome-Dinome fractionating cipher based on:
 %   - a keyed 3x8 box (24 symbols) built from A–Z with two merged pairs:
@@ -40,7 +40,7 @@ function out = monomedinome(text,key,digitkey,direction)
 % 
 %   struct with fields:
 % 
-%           key: 'LEPRACHUN'
+%           key: 'LEPRACHAUN'
 %         plain: 'HIDETHEGOLDINTOTHETREESTUMP'
 %     encrypted: '560698325867311696061323132583228839324649'
 % 
@@ -50,7 +50,7 @@ function out = monomedinome(text,key,digitkey,direction)
 % 
 %   struct with fields:
 % 
-%           key: 'LEPRACHUN'
+%           key: 'LEPRACHAUN'
 %     encrypted: '560698325867311696061323132583228839324649'
 %         plain: 'HIDETHEGOLDINTOTHETREESTUMP'
 %
@@ -126,7 +126,7 @@ rowDigitToRow(rowdigits(2)-'0'+1) = 3;
 clear k
 
 % Store cleaned key
-out.key = char(ckey);
+out.key = key;
 
 % -------------------- Preprocess text --------------------
 switch direction
