@@ -19,7 +19,8 @@ https://www.cryptogram.org/resource-area/cipher-types/
 - CONDI  
 - CM BIFID (Conjugated Matrix Bifid)
 - INCOMPLETE COLUMNAR TRASPOSITION
-- FOURSQUARE  
+- FOURSQUARE
+- FRACTIONATED MORSE  
 - GROMARK  
 - GRONSFELD  
 - KEY PHRASE
@@ -62,7 +63,6 @@ AFFINE, HILL, ROT, ROT13, KEYWORD, POLYBIUS, etc.)
 - SLIDEFAIR  
 
 ### Fractionation / Morse-based
-- FRACTIONATED MORSE  
 - MORBIT  
 - POLLUX  
 
