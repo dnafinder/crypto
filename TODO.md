@@ -29,7 +29,8 @@ https://www.cryptogram.org/resource-area/cipher-types/
 - NIHILIST SUBSTITUTION  
 - NIHILIST TRANSPOSITION
 - PERIODIC GROMARK  
-- PLAYFAIR  
+- PLAYFAIR
+- POLLUX
 - PORTA  
 - PROGRESSIVE KEY
 - RAGBABY  
@@ -64,7 +65,7 @@ AFFINE, HILL, ROT, ROT13, KEYWORD, POLYBIUS, etc.)
 
 ### Fractionation / Morse-based
 - MORBIT  
-- POLLUX  
+
 
 ### Substitution families
 - HOMOPHONIC  
