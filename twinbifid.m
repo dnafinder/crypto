@@ -21,9 +21,9 @@ function out=twinbifid(text,key,period1,period2,direction)
 %
 % Output:
 %   out - structure with fields:
-%         out.plain     : plaintext (processed)
-%         out.key       : used key (processed, stable unique)
-%         out.encrypted : ciphertext (processed)
+%         out.plain     : plaintext
+%         out.key       : used key
+%         out.encrypted : ciphertext
 %
 % Example:
 %
@@ -33,7 +33,7 @@ function out=twinbifid(text,key,period1,period2,direction)
 %
 %   struct with fields:
 %
-%           key: 'LEPRACHUN'
+%           key: 'LEPRACHAUN'
 %         plain: 'HIDETHEGOLDINTOTHETREESTUMP'
 %     encrypted: 'HKRPDCGVONYHMLWZRMEBIYOSRID'
 %
@@ -43,7 +43,7 @@ function out=twinbifid(text,key,period1,period2,direction)
 %
 %   struct with fields:
 %
-%           key: 'LEPRACHUN'
+%           key: 'LEPRACHAUN'
 %     encrypted: 'HKRPDCGVONYHMLWZRMEBIYOSRID'
 %         plain: 'HIDETHEGOLDINTOTHETREESTUMP'
 %
@@ -87,7 +87,7 @@ L = numel(ctext);
 assert(period1 <= L,'Period1 must be <= message length after filtering (%d).',L)
 assert(period2 <= L,'Period2 must be <= message length after filtering (%d).',L)
 
-out.key = char(unique(ckey_raw,'stable'));
+out.key = key;
 
 % -------------------- Delegate to bifid.m --------------------
 switch direction
