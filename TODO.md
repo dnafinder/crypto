@@ -40,6 +40,7 @@ https://www.cryptogram.org/resource-area/cipher-types/
 - RAILFENCE
 - ROUTE TRANSPOSITION  
 - RUNNING KEY
+- SEQUENCE TRANSPOSITION
 - SERIATED PLAYFAIR
 - SLIDEFAIR
 - SWAGMAN  
@@ -58,8 +59,7 @@ AFFINE, HILL, ROT, ROT13, KEYWORD, POLYBIUS, etc.)
 ## 🧩 ACA cipher types still to implement
 
 ### Transposition
-- GRILLE    
-- SEQUENCE TRANSPOSITION  
+- GRILLE      
 - REDEFENCE  
 - VARIANT  
 
