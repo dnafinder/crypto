@@ -37,6 +37,7 @@ https://www.cryptogram.org/resource-area/cipher-types/
 - POLLUX
 - PORTAX
 - PROGRESSIVE KEY
+- QUAGMIRE I  
 - RAGBABY  
 - RAILFENCE
 - REDEFENCE
@@ -74,7 +75,6 @@ AFFINE, HILL, ROT, ROT13, KEYWORD, POLYBIUS, etc.)
 ### Keying / running systems
 - INTERRUPTED KEY  
 - NUMBERED KEY  
-- QUAGMIRE I  
 - QUAGMIRE II  
 - QUAGMIRE III  
 - QUAGMIRE IV    
