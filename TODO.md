@@ -18,6 +18,7 @@ https://www.cryptogram.org/resource-area/cipher-types/
 - COMPLETE COLUMNAR TRANSPOSITION (CCT) 
 - CONDI  
 - CM BIFID (Conjugated Matrix Bifid)
+- DELLA PORTA
 - DIGRAFID
 - INCOMPLETE COLUMNAR TRASPOSITION
 - FOURSQUARE
@@ -34,7 +35,6 @@ https://www.cryptogram.org/resource-area/cipher-types/
 - PERIODIC GROMARK  
 - PLAYFAIR
 - POLLUX
-- PORTA  
 - PROGRESSIVE KEY
 - RAGBABY  
 - RAILFENCE  
