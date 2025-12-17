@@ -37,7 +37,8 @@ https://www.cryptogram.org/resource-area/cipher-types/
 - POLLUX
 - PROGRESSIVE KEY
 - RAGBABY  
-- RAILFENCE  
+- RAILFENCE
+- ROUTE TRANSPOSITION  
 - RUNNING KEY
 - SERIATED PLAYFAIR
 - SLIDEFAIR
@@ -57,8 +58,7 @@ AFFINE, HILL, ROT, ROT13, KEYWORD, POLYBIUS, etc.)
 ## 🧩 ACA cipher types still to implement
 
 ### Transposition
-- GRILLE  
-- ROUTE TRANSPOSITION  
+- GRILLE    
 - SEQUENCE TRANSPOSITION  
 - REDEFENCE  
 - VARIANT  
