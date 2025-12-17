@@ -49,7 +49,8 @@ https://www.cryptogram.org/resource-area/cipher-types/
 - TRIFID
 - TWIN BIFID  
 - TWIN TRIFID
-- TWO-SQUARE  
+- TWO-SQUARE
+- VARIANT
 - VIGENÈRE  
 
 (Plus several non-ACA basics already present in this repository: A1Z26, ATBASH,
@@ -60,8 +61,7 @@ AFFINE, HILL, ROT, ROT13, KEYWORD, POLYBIUS, etc.)
 ## 🧩 ACA cipher types still to implement
 
 ### Transposition
-- GRILLE        
-- VARIANT  
+- GRILLE          
 
 ### Substitution families
 - HOMOPHONIC   
