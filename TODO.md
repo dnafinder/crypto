@@ -35,6 +35,7 @@ https://www.cryptogram.org/resource-area/cipher-types/
 - PERIODIC GROMARK  
 - PLAYFAIR
 - POLLUX
+- PORTAX
 - PROGRESSIVE KEY
 - RAGBABY  
 - RAILFENCE
@@ -73,7 +74,6 @@ AFFINE, HILL, ROT, ROT13, KEYWORD, POLYBIUS, etc.)
 ### Keying / running systems
 - INTERRUPTED KEY  
 - NUMBERED KEY  
-- PORTAX    
 - QUAGMIRE I  
 - QUAGMIRE II  
 - QUAGMIRE III  
