@@ -38,6 +38,7 @@ https://www.cryptogram.org/resource-area/cipher-types/
 - PROGRESSIVE KEY
 - RAGBABY  
 - RAILFENCE
+- REDEFENCE
 - ROUTE TRANSPOSITION  
 - RUNNING KEY
 - SEQUENCE TRANSPOSITION
@@ -59,8 +60,7 @@ AFFINE, HILL, ROT, ROT13, KEYWORD, POLYBIUS, etc.)
 ## 🧩 ACA cipher types still to implement
 
 ### Transposition
-- GRILLE      
-- REDEFENCE  
+- GRILLE        
 - VARIANT  
 
 ### Substitution families
