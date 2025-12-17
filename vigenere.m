@@ -217,10 +217,6 @@ else
 end
 
 % Map text letters to indices in the PlainAlphabet
-[tfP,pPos] = ismember(char(ctext),plainAlphabet);
-assert(all(tfP),'Text contains letters not in PlainAlphabet.')
-pIdx = pPos - 1; % 0..25
-
 % Compute output indices
 switch mode
     case 'add'
@@ -230,11 +226,23 @@ switch mode
 end
 
 if direction == 1
+    % Encrypt: input is plaintext -> map against PlainAlphabet
+    [tfIn,inPos] = ismember(char(ctext),plainAlphabet);
+    assert(all(tfIn),'Text contains letters not in PlainAlphabet.')
+    pIdx = inPos - 1; % 0..25
+
     cIdx = mod(pIdx + sEnc.*shiftStream, 26);
     out.encrypted = cipherAlphabet(cIdx + 1);
+
 else
-    pIdx2 = mod(pIdx - sEnc.*shiftStream, 26);
-    out.plain = plainAlphabet(pIdx2 + 1);
+    % Decrypt: input is ciphertext -> map against CipherAlphabet
+    [tfIn,inPos] = ismember(char(ctext),cipherAlphabet);
+    assert(all(tfIn),'Text contains letters not in CipherAlphabet.')
+    cIdx = inPos - 1; % 0..25
+
+    pIdx = mod(cIdx - sEnc.*shiftStream, 26);
+    out.plain = plainAlphabet(pIdx + 1);
 end
+
 
 end
