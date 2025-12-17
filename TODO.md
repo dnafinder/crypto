@@ -39,6 +39,7 @@ https://www.cryptogram.org/resource-area/cipher-types/
 - RAGBABY  
 - RAILFENCE  
 - RUNNING KEY
+- SERIATED PLAYFAIR
 - SWAGMAN  
 - TRI-SQUARE  
 - TRIFID
@@ -62,7 +63,6 @@ AFFINE, HILL, ROT, ROT13, KEYWORD, POLYBIUS, etc.)
 - VARIANT  
 
 ### Polygraphic / Square-based families
-- SERIATED PLAYFAIR  
 - SLIDEFAIR  
 
 ### Substitution families
