@@ -22,6 +22,7 @@ https://www.cryptogram.org/resource-area/cipher-types/
 - DIGRAFID
 - HEADLINES 
 - INCOMPLETE COLUMNAR TRASPOSITION
+- INTERRUPTED KEY  
 - FOURSQUARE
 - FRACTIONATED MORSE  
 - GROMARK  
@@ -77,7 +78,6 @@ AFFINE, HILL, ROT, ROT13, KEYWORD, POLYBIUS, etc.)
 - SYLLABARY FOREIGN CHARTS  
 
 ### Keying / running systems
-- INTERRUPTED KEY  
 - NUMBERED KEY  
 
 ### Other / competition categories
