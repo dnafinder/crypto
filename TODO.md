@@ -20,6 +20,7 @@ https://www.cryptogram.org/resource-area/cipher-types/
 - CM BIFID (Conjugated Matrix Bifid)
 - DELLA PORTA
 - DIGRAFID
+- HEADLINES 
 - INCOMPLETE COLUMNAR TRASPOSITION
 - FOURSQUARE
 - FRACTIONATED MORSE  
@@ -81,7 +82,6 @@ AFFINE, HILL, ROT, ROT13, KEYWORD, POLYBIUS, etc.)
 
 ### Other / competition categories
 - COMPRESSOCRAT  
-- GRANDPRÉ  
-- HEADLINES  
+- GRANDPRÉ   
 - NULL  
 - TRIDIGITAL  
