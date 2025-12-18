@@ -34,6 +34,7 @@ https://www.cryptogram.org/resource-area/cipher-types/
 - NICODEMUS  
 - NIHILIST SUBSTITUTION  
 - NIHILIST TRANSPOSITION
+- NUMBERED KEY  
 - PERIODIC GROMARK  
 - PLAYFAIR
 - POLLUX
@@ -76,9 +77,6 @@ AFFINE, HILL, ROT, ROT13, KEYWORD, POLYBIUS, etc.)
 - PHILLIPS-RC  
 - SYLLABARY  
 - SYLLABARY FOREIGN CHARTS  
-
-### Keying / running systems
-- NUMBERED KEY  
 
 ### Other / competition categories
 - COMPRESSOCRAT  
