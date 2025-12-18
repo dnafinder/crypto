@@ -40,6 +40,7 @@ https://www.cryptogram.org/resource-area/cipher-types/
 - QUAGMIRE I
 - QUAGMIRE II
 - QUAGMIRE III
+- QUAGMIRE IV
 - RAGBABY  
 - RAILFENCE
 - REDEFENCE
@@ -77,7 +78,6 @@ AFFINE, HILL, ROT, ROT13, KEYWORD, POLYBIUS, etc.)
 ### Keying / running systems
 - INTERRUPTED KEY  
 - NUMBERED KEY  
-- QUAGMIRE IV    
 
 ### Other / competition categories
 - COMPRESSOCRAT  
