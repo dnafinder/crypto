@@ -213,11 +213,9 @@ end
 function tok = coordPair(r,c,n)
 % Encode (r,c) as two digits
 if n == 10
-    a = mod(r,10); if a==0, a = 0; end
-    b = mod(c,10); if b==0, b = 0; end
-    if r == 10, a = 0; else, a = r; end
-    if c == 10, b = 0; else, b = c; end
-    tok = sprintf('%d%d',a,b);
+    d1 = r; if d1 == 10, d1 = 0; end
+    d2 = c; if d2 == 10, d2 = 0; end
+    tok = sprintf('%d%d',d1,d2);
 else
     tok = sprintf('%d%d',r,c);
 end
