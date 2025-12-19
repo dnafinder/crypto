@@ -22,7 +22,8 @@ https://www.cryptogram.org/resource-area/cipher-types/
 - CHAOCIPHER  
 - CHECKERBOARD 1
 - CHECKERBOARD 2  
-- COMPLETE COLUMNAR TRANSPOSITION (CCT) 
+- COMPLETE COLUMNAR TRANSPOSITION (CCT)
+- COMPRESSOCRAT
 - CM BIFID (Conjugated Matrix Bifid)
 - CONDI  
 - DELLA PORTA
@@ -88,6 +89,5 @@ https://www.cryptogram.org/resource-area/cipher-types/
 - SYLLABARY FOREIGN CHARTS  
 
 ### Other / competition categories
-- COMPRESSOCRAT   
 - NULL  
 - TRIDIGITAL  
