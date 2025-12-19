@@ -28,7 +28,8 @@ https://www.cryptogram.org/resource-area/cipher-types/
 - DELLA PORTA
 - DIGRAFID
 - FOUR SQUARE
-- FRACTIONATED MORSE  
+- FRACTIONATED MORSE
+- GRILLE
 - GROMARK  
 - GRONSFELD
 - HEADLINES
@@ -79,10 +80,7 @@ https://www.cryptogram.org/resource-area/cipher-types/
 
 ---
 
-## 🧩 ACA cipher types still to implement
-
-### Transposition
-- GRILLE          
+## 🧩 ACA cipher types still to implement  
 
 ### Substitution families
 - SYLLABARY  
