@@ -29,6 +29,7 @@ https://www.cryptogram.org/resource-area/cipher-types/
 - DIGRAFID
 - FOUR SQUARE
 - FRACTIONATED MORSE
+- GRANDPRE
 - GRILLE
 - GROMARK  
 - GRONSFELD
@@ -87,7 +88,6 @@ https://www.cryptogram.org/resource-area/cipher-types/
 - SYLLABARY FOREIGN CHARTS  
 
 ### Other / competition categories
-- COMPRESSOCRAT  
-- GRANDPRÉ   
+- COMPRESSOCRAT   
 - NULL  
 - TRIDIGITAL  
